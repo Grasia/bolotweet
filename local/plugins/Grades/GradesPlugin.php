@@ -15,8 +15,8 @@ if (!defined('STATUSNET')) {
     exit(1);
 }
 
-require_once INSTALLDIR.'/plugins/Grades/gradeform.php';
-require_once INSTALLDIR.'/plugins/Grades/Grades.php';
+require_once INSTALLDIR.'/local/plugins/Grades/lib/gradeform.php';
+require_once INSTALLDIR.'/local/plugins/Grades/classes/Grades.php';
 require_once INSTALLDIR.'/lib/util.php';
 
 class GradesPlugin extends Plugin
