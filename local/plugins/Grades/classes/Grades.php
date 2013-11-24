@@ -243,25 +243,20 @@ static function getGradedNoticesAndUsersWithinGroup($groupid){
         $ngrade = new Grades();
 
         $ngrade->userid = $userid;
-
+        
+// HAY QUE HACER QUE EL ID SEA GENERADO $ngrade->id 
+        $ngrade->id = UUID::gen(); // !!!!!!!! PREGUNTAR A JORGE
+        
         $ngrade->cdate = common_sql_now();
         $ngrade->grade = $grade;
         $ngrade->noticeid = $noticeid;
 
-
-        $ngrade->query('BEGIN');
+ $result = $ngrade->insert();
         
-        $result = $ngrade->insert();
-        
-        
-            if (!$result) {
-                common_log_db_error($user, 'INSERT', __FILE__);
-                return false;
-            }
-        
-
-            $ngrade->query('COMMIT');
-        
+        if (!$result) {
+            common_log_db_error($user, 'INSERT', __FILE__);
+            return false;
+        }
 
         return $ngrade;
     }
