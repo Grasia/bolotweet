@@ -106,14 +106,15 @@ class GradesPlugin extends Plugin
          }
     }
     
-    function onEndPrimaryNav($action)
+ function onStartPrimaryNav($action)
 {
     // '''common_local_url()''' gets the correct URL for the action name we provide
     $user=common_current_user();
-    if (!empty($user))
+    if (!empty($user)){
      $action->menuItem(common_local_url('gradereport'),
                       _m('Grade Reports'), _m('Reports on user behaviors '), false, 'nav_gradereport');
-                     
+    }   
+    
     return true;
 }
 
@@ -156,7 +157,11 @@ class GradesPlugin extends Plugin
         return true;
     }
 
-
+   function onEndShowStyles($action)
+    {
+        $action->cssLink($this->path('css/grades.css'));
+        return true;
+    }
 
 
 }
