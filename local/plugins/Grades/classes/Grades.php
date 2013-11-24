@@ -33,8 +33,6 @@ if (!defined('STATUSNET') && !defined('LACONICA')) {
 }
 
 
-require_once INSTALLDIR.'/classes/Memcached_DataObject.php';
-
 
 /**
  * Form for favoring a notice
@@ -49,7 +47,7 @@ require_once INSTALLDIR.'/classes/Memcached_DataObject.php';
  * @see      DisfavorForm
  */
 
-class Grades extends Memcached_DataObject
+class Grades extends Managed_DataObject
 {
     
     /**
