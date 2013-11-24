@@ -70,6 +70,49 @@ class Grades extends Memcached_DataObject
      /* Static get */
     function staticGet($k,$v=NULL) { return Memcached_DataObject::staticGet('Grades',$k,$v); }
     
+          function pkeyGet($kv)
+    {
+        return Memcached_DataObject::pkeyGet('Grades', $kv);
+    }
+    
+    /**
+     * Data definition for email reminders
+     */
+    public static function schemaDef() {
+        return array(
+        'description' => 'Grade notices',
+         'fields' => array(
+            'noticeid' => array(
+                'type' => 'int',
+                'not null' => true,
+                 'description' => 'ID of the notice'
+            ),
+            'userid' => array(
+            'type' => 'varchar',
+            'not null' => true,
+            'length' => 255,
+            'description' => 'ID del usuario'
+            ),
+            'grade' => array(
+            'type' => 'int',
+            'not null' => true,
+            'description' => 'Puntuation given'
+            ),
+            'id' => array(
+            'type' => 'int',
+            'not null' => true,
+            'description' => 'Puntuation ID'
+            ),
+            'cdate' => array(
+            'type' => 'timestamp',
+            'not null' => true,
+            'description' => 'Date and time the puntuation was sent'
+            ),
+        ),
+        'primary key' => array('id'),
+        );
+    }
+    
 static function getGroupsWithGrades(){
   $grade= new Grades();
           if(common_config('db','quote_identifiers'))
