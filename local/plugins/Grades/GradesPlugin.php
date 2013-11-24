@@ -37,17 +37,10 @@ class GradesPlugin extends Plugin
 
  function onCheckSchema()
 {
-    $schema = Schema::get();
+      $schema = Schema::get();
 
-    $schema->ensureTable('grades',
-                          array(new ColumnDef('id', 'integer', null,
-                                              true, 'PRI'),
-                                new ColumnDef('noticeid', 'integer',null, false),
-                                new ColumnDef('userid','varchar','255', false),
-                                new ColumnDef('grade', 'integer',null,false),
-                                new ColumnDef('cdate', 'timestamp',null,false),
-                                ));
-
+    $schema->ensureTable('grades', Grades::schemaDef());
+    
     return true;
 }
 
