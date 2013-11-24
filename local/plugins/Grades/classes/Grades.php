@@ -1,4 +1,5 @@
 <?php
+
 /**
  * StatusNet, the distributed open-source microblogging tool
  *
@@ -27,12 +28,12 @@
  * @license   http://www.fsf.org/licensing/licenses/agpl-3.0.html GNU Affero General Public License version 3.0
  * @link      http://status.net/
  */
-
 if (!defined('STATUSNET') && !defined('LACONICA')) {
     exit(1);
 }
 
 
+// require_once INSTALLDIR . '/classes/Memcached_DataObject.php'; // QUITARRRRRRRRRRRRRRRr
 
 /**
  * Form for favoring a notice
@@ -46,85 +47,78 @@ if (!defined('STATUSNET') && !defined('LACONICA')) {
  *
  * @see      DisfavorForm
  */
+class Grades extends Managed_DataObject {
 
-class Grades extends Managed_DataObject
-{
-    
     /**
      * Notice to favor
      */
-     
-    public $__table = 'grades'; 
+    public $__table = 'grades';
     public $id;
     public $noticeid = null; // graded notice
+    public $userid = null; // user who created the grade
+    public $cdate = null; // date where the grade was created
+    public $grade = 0; // default grade
 
-    public $userid=null; // user who created the grade
-    
-    public $cdate=null; // date where the grade was created
-    
-    public $grade=0; // default grade
-    
-    
-     /* Static get */
-    function staticGet($k,$v=NULL) { return Memcached_DataObject::staticGet('Grades',$k,$v); }
-    
-          function pkeyGet($kv)
-    {
+    function staticGet($k, $v = null) {
+        return Memcached_DataObject::staticGet('Grades', $k, $v);
+    }
+
+    function pkeyGet($kv) {
         return Memcached_DataObject::pkeyGet('Grades', $kv);
     }
-    
+
     /**
      * Data definition for email reminders
      */
     public static function schemaDef() {
         return array(
-        'description' => 'Grade notices',
-         'fields' => array(
-            'noticeid' => array(
-                'type' => 'int',
-                'not null' => true,
-                 'description' => 'ID of the notice'
+            'description' => 'Grade notices',
+            'fields' => array(
+                'noticeid' => array(
+                    'type' => 'int',
+                    'not null' => true,
+                    'description' => 'ID of the notice'
+                ),
+                'userid' => array(
+                    'type' => 'varchar',
+                    'not null' => true,
+                    'length' => 255,
+                    'description' => 'ID del usuario'
+                ),
+                'grade' => array(
+                    'type' => 'int',
+                    'not null' => true,
+                    'description' => 'Puntuation given'
+                ),
+                'id' => array(
+                    'type' => 'int',
+                    'not null' => true,
+                    'description' => 'Puntuation ID'
+                ),
+                'cdate' => array(
+                    'type' => 'timestamp',
+                    'not null' => true,
+                    'description' => 'Date and time the puntuation was sent'
+                ),
             ),
-            'userid' => array(
-            'type' => 'varchar',
-            'not null' => true,
-            'length' => 255,
-            'description' => 'ID del usuario'
-            ),
-            'grade' => array(
-            'type' => 'int',
-            'not null' => true,
-            'description' => 'Puntuation given'
-            ),
-            'id' => array(
-            'type' => 'int',
-            'not null' => true,
-            'description' => 'Puntuation ID'
-            ),
-            'cdate' => array(
-            'type' => 'timestamp',
-            'not null' => true,
-            'description' => 'Date and time the puntuation was sent'
-            ),
-        ),
-        'primary key' => array('id'),
+            'primary key' => array('id'),
         );
     }
-    
-static function getGroupsWithGrades(){
-  $grade= new Grades();
-          if(common_config('db','quote_identifiers'))
-          $user_table = '"grades"';
-        else $user_table = 'grades';
 
-        $qry =
-        'SELECT notice_tag.tag as userid' .
-        ' FROM grades, notice_tag, local_group WHERE ' .
-        ' notice_tag.notice_id = grades.noticeid and ' .
-        ' notice_tag.tag = local_group.nickname ' .
-        ' group by notice_tag.tag'; 
-      
-        
+    static function getGroupsWithGrades() {
+        $grade = new Grades();
+        if (common_config('db', 'quote_identifiers'))
+            $user_table = '"grades"';
+        else
+            $user_table = 'grades';
+
+        $qry = 'SELECT notice_tag.tag as userid' .
+                ' FROM grades, notice_tag, local_group WHERE ' .
+                ' notice_tag.notice_id = grades.noticeid and ' .
+                ' notice_tag.tag = local_group.nickname ' .
+                ' group by notice_tag.tag';
+
+
         $grade->query($qry); // all select fields will
         // be written to fields of the Grade object. It is required that
         // select fields are named after the Grade fields.
@@ -132,31 +126,30 @@ static function getGroupsWithGrades(){
         $foundgroups = array();
 
         while ($grade->fetch()) {
-          $foundgroups[] = $grade->userid;
+            $foundgroups[] = $grade->userid;
         }
-        
+
         $grade->free();
         return $foundgroups;
-  
-}
+    }
 
-static function getGradedNoticesAndUsersWithinGroup($groupid){
-    $grade= new Grades();
-          if(common_config('db','quote_identifiers'))
-          $user_table = '"grades"';
-        else $user_table = 'grades';
+    static function getGradedNoticesAndUsersWithinGroup($groupid) {
+        $grade = new Grades();
+        if (common_config('db', 'quote_identifiers'))
+            $user_table = '"grades"';
+        else
+            $user_table = 'grades';
 
-        $qry =
-        'SELECT profile.nickname as userid, sum(grades.grade) as grade' .
-        ' FROM (select * from ' .
-        '(SELECT grades.noticeid, grades.grade,cdate FROM grades   order by cdate DESC) as grades group by grades.noticeid) as grades, notice, profile, notice_tag WHERE ' .
-        ' notice_tag.tag = "%s" and ' .
-        ' notice_tag.notice_id = grades.noticeid and ' .
-        ' notice_tag.notice_id = notice.id and ' .
-        ' profile.id = notice.profile_id  ' .
-        ' group by notice.profile_id'; 
-        
-        
+        $qry = 'SELECT profile.nickname as userid, sum(grades.grade) as grade' .
+                ' FROM (select * from ' .
+                '(SELECT grades.noticeid, grades.grade,cdate FROM grades   order by cdate DESC) as grades group by grades.noticeid) as grades, notice, profile, notice_tag WHERE ' .
+                ' notice_tag.tag = "%s" and ' .
+                ' notice_tag.notice_id = grades.noticeid and ' .
+                ' notice_tag.notice_id = notice.id and ' .
+                ' profile.id = notice.profile_id  ' .
+                ' group by notice.profile_id';
+
+
         $grade->query(sprintf($qry, $groupid)); // all select fields will
         // be written to fields of the Grade object. It is required that
         // select fields are named after the Grade fields.
@@ -164,72 +157,68 @@ static function getGradedNoticesAndUsersWithinGroup($groupid){
         $obtainedgrade = array();
 
         while ($grade->fetch()) {
-          $obtainedgrade[$grade->userid] = $grade->grade;
+            $obtainedgrade[$grade->userid] = $grade->grade;
         }
-        
+
         $grade->free();
         return $obtainedgrade;
-}
+    }
 
+    static function getNoticeGrade($noticeid) {
 
+        $grade = new Grades();
+        if (common_config('db', 'quote_identifiers'))
+            $user_table = '"grades"';
+        else
+            $user_table = 'grades';
 
- static   function getNoticeGrade($noticeid){
-          
-          $grade= new Grades();
-          if(common_config('db','quote_identifiers'))
-          $user_table = '"grades"';
-        else $user_table = 'grades';
+        $qry = 'SELECT grade ' .
+                'FROM ' . $user_table . ' ' .
+                'WHERE grades.noticeid = %d order by grades.cdate DESC';
 
-        $qry =
-          'SELECT grade ' .
-          'FROM '. $user_table . ' ' .
-          'WHERE grades.noticeid = %d order by grades.cdate DESC';
+        // print sprintf($qry, $noticeid);
 
-       // print sprintf($qry, $noticeid);
-        
         $grade->query(sprintf($qry, $noticeid));
 
         $obtainedgrade = null;
 
         if ($grade->fetch()) {
-          $obtainedgrade = $grade->grade;
-        } 
-        else
-          $obtainedgrade =  '?';
+            $obtainedgrade = $grade->grade;
+        } else
+            $obtainedgrade = '?';
 
 //print $obtainedgrades->length();
         $grade->free();
         return $obtainedgrade;
- }
- 
-  static   function getNoticeGradeUserId($noticeid){
-          
-          $grade= new Grades();
-          if(common_config('db','quote_identifiers'))
-          $user_table = '"grades"';
-        else $user_table = 'grades';
+    }
 
-        $qry =
-          'SELECT grade, userid ' .
-          'FROM '. $user_table . ' ' .
-          'WHERE grades.noticeid = %d order by grades.cdate DESC';
+    static function getNoticeGradeUserId($noticeid) {
 
-       // print sprintf($qry, $noticeid);
-        
+        $grade = new Grades();
+        if (common_config('db', 'quote_identifiers'))
+            $user_table = '"grades"';
+        else
+            $user_table = 'grades';
+
+        $qry = 'SELECT grade, userid ' .
+                'FROM ' . $user_table . ' ' .
+                'WHERE grades.noticeid = %d order by grades.cdate DESC';
+
+        // print sprintf($qry, $noticeid);
+
         $grade->query(sprintf($qry, $noticeid));
 
         $obtainedgrade = null;
 
         if ($grade->fetch()) {
-          $obtainedgrade = $grade->userid;
-        } 
-        else
-          $obtainedgrade =  '?';
+            $obtainedgrade = $grade->userid;
+        } else
+            $obtainedgrade = '?';
 
 //print $obtainedgrades->length();
         $grade->free();
         return $obtainedgrade;
- }
+    }
 
     static function register($fields) {
 
@@ -237,20 +226,18 @@ static function getGradedNoticesAndUsersWithinGroup($groupid){
 
         extract($fields);
 
-     
+
         $ngrade = new Grades();
 
         $ngrade->userid = $userid;
-        
-// HAY QUE HACER QUE EL ID SEA GENERADO $ngrade->id 
+        // HAY QUE HACER QUE EL ID SEA GENERADO $ngrade->id 
         $ngrade->id = UUID::gen(); // !!!!!!!! PREGUNTAR A JORGE
-        
         $ngrade->cdate = common_sql_now();
         $ngrade->grade = $grade;
         $ngrade->noticeid = $noticeid;
 
- $result = $ngrade->insert();
-        
+        $result = $ngrade->insert();
+
         if (!$result) {
             common_log_db_error($user, 'INSERT', __FILE__);
             return false;
@@ -259,6 +246,4 @@ static function getGradedNoticesAndUsersWithinGroup($groupid){
         return $ngrade;
     }
 
-    
-    
 }

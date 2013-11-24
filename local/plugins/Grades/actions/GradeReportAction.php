@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Give a warm greeting to our friendly user
  *
@@ -26,7 +27,6 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 if (!defined('STATUSNET')) {
     exit(1);
 }
@@ -46,10 +46,10 @@ if (!defined('STATUSNET')) {
  * @license  http://www.fsf.org/licensing/licenses/agpl.html AGPLv3
  * @link     http://status.net/
  */
+class GradeReportAction extends Action {
 
-class GradeReportAction extends Action
-{
     var $user = null;
+
     /**
      * Take arguments for running
      *
@@ -65,9 +65,7 @@ class GradeReportAction extends Action
      *
      * @return boolean success flag
      */
-
-    function prepare($args)
-    {
+    function prepare($args) {
         parent::prepare($args);
 
         $this->user = common_current_user();
@@ -87,9 +85,7 @@ class GradeReportAction extends Action
      *
      * @return void
      */
-
-    function handle($args)
-    {
+    function handle($args) {
         parent::handle($args);
 
         $this->showPage();
@@ -102,10 +98,8 @@ class GradeReportAction extends Action
      *
      * @return string Title of the page
      */
-
-    function title()
-    {
-      return _m('Grade Reports');
+    function title() {
+        return _m('Grade Reports');
     }
 
     /**
@@ -120,40 +114,37 @@ class GradeReportAction extends Action
      *
      * @return void
      */
-
-    function showContent()
-    {
+    function showContent() {
         if (empty($this->user)) {
-            $this->element('p', array('class' => 'grade-report-error'),
-                           _m('Login first!'));
+            $this->element('p', array('class' => 'grade-report-error'), _m('Login first!'));
         } else {
-          $groupswithgrades=Grades::getGroupsWithGrades();
-           $this->elementStart('ul',array('class' => 'grade-report-group'));
-          foreach ($groupswithgrades as $groupid){
-            $this->elementStart('li', array('class' => 'grade-report-group-item'));
-            $this->element('a', array('class' => 'grade-report-group-link','href' =>
-           '#' . $groupid ), sprintf(_m('%s'), $groupid));
-            $this->elementEnd('li');
-          }
-           $this->elementEnd('ul');
-          $this->element('h2', null, sprintf(_m('Group notices'), $groupid));
-          foreach ($groupswithgrades as $groupid){
-          $gradespergroup=Grades::getGradedNoticesAndUsersWithinGroup($groupid);
-           $this->elementStart('p', array('class' => 'grade-report-group'));
-           $this->element('a', array('class' => 'grade-report-group-link','href' =>
-           common_root_url() .  'group/' . $groupid ), sprintf(_m('Group  %s'), $groupid));
-            $this->elementEnd('p');
-          $this->elementStart('ul',array('class' => 'grade-report-groupmembers'));
-          foreach ($gradespergroup as $login => $sumnoticegrades) {
-            
-            $this->elementStart('li', array('class' => 'grade-report-groupmembers-item'));
-            $this->element('a', array('class' => 'grade-report-group-link','name' =>
-            $groupid ));
-            $this->element('a', array('class' => 'grade-report-group-link','href' =>
-             common_root_url() . $login ),sprintf(_m('%s, %s'), $login,$sumnoticegrades));
-            $this->elementEnd('li');
+            $groupswithgrades = Grades::getGroupsWithGrades();
+            $this->elementStart('ul', array('class' => 'grade-report-group'));
+            foreach ($groupswithgrades as $groupid) {
+                $this->elementStart('li', array('class' => 'grade-report-group-item'));
+                $this->element('a', array('class' => 'grade-report-group-link', 'href' =>
+                    '#' . $groupid), sprintf(_m('%s'), $groupid));
+                $this->elementEnd('li');
             }
-           $this->elementEnd('ul');
+            $this->elementEnd('ul');
+            $this->element('h2', null, sprintf(_m('Group notices'), $groupid));
+            foreach ($groupswithgrades as $groupid) {
+                $gradespergroup = Grades::getGradedNoticesAndUsersWithinGroup($groupid);
+                $this->elementStart('p', array('class' => 'grade-report-group'));
+                $this->element('a', array('class' => 'grade-report-group-link', 'href' =>
+                    common_root_url() . 'group/' . $groupid), sprintf(_m('Group  %s'), $groupid));
+                $this->elementEnd('p');
+                $this->elementStart('ul', array('class' => 'grade-report-groupmembers'));
+                foreach ($gradespergroup as $login => $sumnoticegrades) {
+
+                    $this->elementStart('li', array('class' => 'grade-report-groupmembers-item'));
+                    $this->element('a', array('class' => 'grade-report-group-link', 'name' =>
+                        $groupid));
+                    $this->element('a', array('class' => 'grade-report-group-link', 'href' =>
+                        common_root_url() . $login), sprintf(_m('%s, %s'), $login, $sumnoticegrades));
+                    $this->elementEnd('li');
+                }
+                $this->elementEnd('ul');
             }
         }
     }
@@ -173,9 +164,8 @@ class GradeReportAction extends Action
      *
      * @return boolean is read only action?
      */
-
-    function isReadOnly($args)
-    {
+    function isReadOnly($args) {
         return false;
     }
+
 }

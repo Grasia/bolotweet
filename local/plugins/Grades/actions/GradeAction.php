@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Give a warm greeting to our friendly user
  *
@@ -26,7 +27,6 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 if (!defined('STATUSNET')) {
     exit(1);
 }
@@ -46,15 +46,13 @@ if (!defined('STATUSNET')) {
  * @license  http://www.fsf.org/licensing/licenses/agpl.html AGPLv3
  * @link     http://status.net/
  */
- 
-require_once INSTALLDIR.'/local/plugins/Grades/classes/Grades.php';
-require_once INSTALLDIR.'/classes/User.php';
-require_once INSTALLDIR.'/classes/Notice.php';
+require_once INSTALLDIR . '/local/plugins/Grades/classes/Grades.php';
+require_once INSTALLDIR . '/classes/User.php';
+require_once INSTALLDIR . '/classes/Notice.php';
 
-class GradeAction extends Action
-{
+class GradeAction extends Action {
+
     var $user = null;
-    
 
     /**
      * Take arguments for running
@@ -71,14 +69,12 @@ class GradeAction extends Action
      *
      * @return boolean success flag
      */
-
-   function prepare($args)
-    {
+    function prepare($args) {
         parent::prepare($args);
 
         $this->user = common_current_user();
 
-    
+
         return true;
     }
 
@@ -89,9 +85,8 @@ class GradeAction extends Action
      *
      * @return void
      */
-    function handle($args)
-    {
-      
+    function handle($args) {
+
         parent::handle($args);
         if (!common_logged_in()) {
             $this->clientError(_('Not logged in.'));
@@ -99,49 +94,44 @@ class GradeAction extends Action
         }
         $user = common_current_user();
         if ($_SERVER['REQUEST_METHOD'] != 'POST') {
-            common_redirect(common_local_url('all',
-                array('nickname' => $user->nickname)));
+            common_redirect(common_local_url('all', array('nickname' => $user->nickname)));
             return;
         }
-        $noticeid     = $this->trimmed('notice');
+        $noticeid = $this->trimmed('notice');
         $notice = Notice::staticGet($noticeid);
-        $token  = $this->trimmed('token-'.$notice->id);
+        $token = $this->trimmed('token-' . $notice->id);
         if (!$token || $token != common_session_token()) {
             $this->clientError(_('There was a problem with your session token. Try again, please.'));
             return;
         }
-        
-     
-        
-        
+
+
+
+
         $gradevalue = $this->trimmed('value');
-        
+
         Grades::register(array('userid' => $user->nickname,
-                                 'noticeid' => $noticeid,
-                                 'grade' => $gradevalue));
-        
-      //  $this->notify($notice, $user);
+            'noticeid' => $noticeid,
+            'grade' => $gradevalue));
+
+        //  $this->notify($notice, $user);
         //$user->blowFavesCache();
-       if ($this->boolean('ajax')) {
-            
+        if ($this->boolean('ajax')) {
+
             $this->startHTML('application/xml,text/xml;charset=utf-8');
             $this->elementStart('head');
             $this->element('title', null, _('Disfavor favorite'));
             $this->elementEnd('head');
             $this->elementStart('body');
-           $this->element('p', array('class' => 'notice-current-grade-value'),' '.$gradevalue);
-     
+            $this->element('p', array('class' => 'notice-current-grade-value'), ' ' . $gradevalue);
+
             $this->elementEnd('body');
             $this->elementEnd('html');
         } else {
-             
-            common_redirect(common_local_url('all',
-                                             array('nickname' => $user->nickname)),
-                            303);
-             
-       }
-    }
 
+            common_redirect(common_local_url('all', array('nickname' => $user->nickname)), 303);
+        }
+    }
 
     /**
      * Notifies a user when their notice is favorited.
@@ -151,15 +141,15 @@ class GradeAction extends Action
      *
      * @return void
      */
-    /*function notify($notice, $user)
-    {
-        $other = User::staticGet('id', $notice->profile_id);
-        if ($other && $other->id != $user->id) {
-            if ($other->email && $other->emailnotifyfav) {
-                mail_notify_fave($other, $user, $notice);
-            }
-            // XXX: notify by IM
-            // XXX: notify by SMS
-        }
-    }*/
+    /* function notify($notice, $user)
+      {
+      $other = User::staticGet('id', $notice->profile_id);
+      if ($other && $other->id != $user->id) {
+      if ($other->email && $other->emailnotifyfav) {
+      mail_notify_fave($other, $user, $notice);
+      }
+      // XXX: notify by IM
+      // XXX: notify by SMS
+      }
+      } */
 }
