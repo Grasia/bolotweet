@@ -1,0 +1,110 @@
+.notice-current-grade .notice-current-grade-value {
+float: none;
+position: relative;
+padding: 2px;
+top: 60px;
+border-color: #dcdcdc;
+border-style:solid;
+border-width:1px;
+width : 40px;
+text-align:center;
+display: inline-block;
+text-wrap:lowercase;
+border-radius: 5px;
+font-size: 10px;
+}
+
+.notice-current-grade .notice-current-grade-empty {
+float: none;
+left: 0px;
+position: relative;
+top: 55px;
+border-color: red;
+border-style:solid;
+border-width:5px;
+width : 40px;
+height : 20px;
+background-color: red;
+text-align:center;
+display: inline-block;
+border-radius: 15px;
+}
+
+.notice-grades .form_grade#grade-0 input.submit{
+  background-position: 0 100;
+}
+.notice-grades .form_grade#grade-1 input.submit{
+  background-position: 100 100;
+}
+.notice-grades .form_grade#grade-2 input.submit{
+  background-position: 200 100;
+}
+.notice-grades .form_grade#grade-3 input.submit{
+  background-position: 300 100;
+}
+.notice-grades {
+position:relative;
+font-size:0.5em;
+float:right;
+margin-top:3px;
+margin-right:4px;
+width: 400px;
+box-lines: single;
+box-direction: normal;
+box-align: center;
+}
+.notice-grades a {
+float:left;
+}
+
+.notice-grades .form_grade,
+.notice-grades .repeated {
+float:right;
+}
+
+.notice-grades input,
+.notice-grades a,
+.notice-grades .repeated {
+outline:none;
+}
+.notice-grades input.submit {
+display:list-item;
+
+}
+.notice-grades .form_grade ol {
+list-style-position: outside;
+}
+
+
+.notice-grades .form_grade input.submit {
+width:50px;
+height:30px;
+font: "Arial Black";
+font-size:12;
+margin-left: 25px;
+margin-right: 25px;
+border-radius:23;
+-moz-border-radius:0;
+-webkit-border-radius:0;
+}
+.notice-grades .form_grade legend{
+display:none;
+}
+.notice-grades .form_grade fieldset{
+border:0;
+padding:0;
+}
+.notice-grades a,
+.notice-grades .repeated {
+width:16px;
+height:16px;
+}
+
+.notices div.notice-grades {
+opacity:0.4;
+}
+
+.notices li:hover div.notice-grades
+ {
+opacity:1;
+}
