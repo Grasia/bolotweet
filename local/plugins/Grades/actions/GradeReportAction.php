@@ -47,7 +47,7 @@ if (!defined('STATUSNET')) {
  * @link     http://status.net/
  */
 
-class GradereportAction extends Action
+class GradeReportAction extends Action
 {
     var $user = null;
     /**

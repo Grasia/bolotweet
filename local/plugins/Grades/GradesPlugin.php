@@ -163,5 +163,14 @@ class GradesPlugin extends Plugin
         return true;
     }
 
+    /*
+      function onEndShowScripts($action)
+    {
+        $action->script($this->path('js/grades.js'));
+        return true;
+    }
+
+    */
+
 
 }

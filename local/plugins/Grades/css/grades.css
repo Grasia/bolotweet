@@ -6,7 +6,7 @@ top: 60px;
 border-color: #dcdcdc;
 border-style:solid;
 border-width:1px;
-width : 40px;
+//width : 40px;
 text-align:center;
 display: inline-block;
 text-wrap:lowercase;
@@ -19,15 +19,15 @@ float: none;
 left: 0px;
 position: relative;
 top: 55px;
-border-color: red;
-border-style:solid;
-border-width:5px;
+//border-color: red;
+//border-style:solid;
+//border-width:5px;
 width : 40px;
 height : 20px;
-background-color: red;
+//background-color: red;
 text-align:center;
 display: inline-block;
-border-radius: 15px;
+//border-radius: 15px;
 }
 
 .notice-grades .form_grade#grade-0 input.submit{
