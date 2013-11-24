@@ -33,7 +33,7 @@ END_OF_REGISTERUSER_HELP;
 
 require_once INSTALLDIR.'/scripts/commandline.inc';
 
-require_once INSTALLDIR.'/plugins/Grades/Grades.php';
+require_once INSTALLDIR.'/local/plugins/Grades/classes/Grades.php';
 
 $noticeid = get_option_value('n', 'noticeid');
 

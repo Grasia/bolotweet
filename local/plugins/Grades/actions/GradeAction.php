@@ -47,7 +47,7 @@ if (!defined('STATUSNET')) {
  * @link     http://status.net/
  */
  
-require_once INSTALLDIR.'/plugins/Grades/Grades.php';
+require_once INSTALLDIR.'/local/plugins/Grades/classes/Grades.php';
 require_once INSTALLDIR.'/classes/User.php';
 require_once INSTALLDIR.'/classes/Notice.php';
 
