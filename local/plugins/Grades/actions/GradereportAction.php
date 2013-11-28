@@ -46,7 +46,7 @@ if (!defined('STATUSNET')) {
  * @license  http://www.fsf.org/licensing/licenses/agpl.html AGPLv3
  * @link     http://status.net/
  */
-class GradeReportAction extends Action {
+class GradereportAction extends Action {
 
     var $user = null;
 

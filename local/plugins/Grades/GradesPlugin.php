@@ -61,7 +61,7 @@ class GradesPlugin extends Plugin {
             case 'GradeAction':
                 include_once $dir . '/actions/' . $cls . '.php';
                 return false;
-            case 'GradeReportAction':
+            case 'GradereportAction':
                 include_once $dir . '/actions/' . $cls . '.php';
                 return false;
             default:
