@@ -105,17 +105,22 @@ class GradeAction extends Action {
             return;
         }
 
-
-
-
         $gradevalue = $this->trimmed('value');
 
+        $exist = Grades::getNoticeGrade($noticeid);
+        
+        if($exist != '?'){
+            
+            Grades::updateNotice(array('noticeid' => $noticeid,
+            'grade' => $gradevalue));
+        }
+        
+        else{
         Grades::register(array('userid' => $user->nickname,
             'noticeid' => $noticeid,
             'grade' => $gradevalue));
+        }
 
-        //  $this->notify($notice, $user);
-        //$user->blowFavesCache();
         if ($this->boolean('ajax')) {
 
             $this->startHTML('application/xml,text/xml;charset=utf-8');

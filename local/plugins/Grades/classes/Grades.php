@@ -91,7 +91,7 @@ class Grades extends Managed_DataObject {
                     'description' => 'Puntuation given'
                 ),
                 'id' => array(
-                    'type' => 'int',
+                    'type' => 'serial',
                     'not null' => true,
                     'description' => 'Puntuation ID'
                 ),
@@ -230,8 +230,6 @@ class Grades extends Managed_DataObject {
         $ngrade = new Grades();
 
         $ngrade->userid = $userid;
-        // HAY QUE HACER QUE EL ID SEA GENERADO $ngrade->id 
-        $ngrade->id = UUID::gen(); // !!!!!!!! PREGUNTAR A JORGE
         $ngrade->cdate = common_sql_now();
         $ngrade->grade = $grade;
         $ngrade->noticeid = $noticeid;
@@ -244,6 +242,37 @@ class Grades extends Managed_DataObject {
         }
 
         return $ngrade;
+    }
+    
+    static function updateNotice($fields) {
+
+        // MAGICALLY put fields into current scope
+
+        extract($fields);
+        
+        $gradeBD = new Grades();
+
+
+        if (common_config('db', 'quote_identifiers'))
+            $user_table = '"grades"';
+        else
+            $user_table = 'grades';
+        
+        $time = common_sql_now();
+        
+        $qry = 'UPDATE ' . $user_table .
+              ' SET grade=' . $grade .
+              ', cdate=\'' . $time .'\'' .
+              ' WHERE noticeid=' . $noticeid;
+
+            $result = $gradeBD->query($qry);
+
+            if (!$result) {
+                common_log_db_error($user, 'UPDATE', __FILE__);
+             }
+             
+          $gradeBD->free();
+
     }
 
 }
