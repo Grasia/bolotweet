@@ -112,11 +112,11 @@ class Grades extends Managed_DataObject {
         else
             $user_table = 'grades';
 
-        $qry = 'SELECT notice_tag.tag as userid' .
-                ' FROM grades, notice_tag, local_group WHERE ' .
-                ' notice_tag.notice_id = grades.noticeid and ' .
-                ' notice_tag.tag = local_group.nickname ' .
-                ' group by notice_tag.tag';
+        $qry = 'SELECT local_group.nickname as userid' .
+                ' FROM grades, group_inbox, local_group WHERE ' .
+                ' group_inbox.notice_id = grades.noticeid and ' .
+                ' group_inbox.group_id = local_group.group_id ' .
+                ' group by local_group.nickname';
 
 
         $grade->query($qry); // all select fields will
