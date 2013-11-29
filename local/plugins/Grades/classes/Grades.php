@@ -133,24 +133,24 @@ class Grades extends Managed_DataObject {
         return $foundgroups;
     }
 
-    static function getGradedNoticesAndUsersWithinGroup($groupid) {
+    static function getGradedNoticesAndUsersWithinGroup($groupnick) {
         $grade = new Grades();
         if (common_config('db', 'quote_identifiers'))
             $user_table = '"grades"';
         else
             $user_table = 'grades';
 
-        $qry = 'SELECT profile.nickname as userid, sum(grades.grade) as grade' .
-                ' FROM (select * from ' .
-                '(SELECT grades.noticeid, grades.grade,cdate FROM grades   order by cdate DESC) as grades group by grades.noticeid) as grades, notice, profile, notice_tag WHERE ' .
-                ' notice_tag.tag = "%s" and ' .
-                ' notice_tag.notice_id = grades.noticeid and ' .
-                ' notice_tag.notice_id = notice.id and ' .
-                ' profile.id = notice.profile_id  ' .
-                ' group by notice.profile_id';
+        $qry = 'select p.nickname as userid, sum(g.grade) as grade' .
+                ' from grades g, group_inbox gr, notice n, profile p, local_group lg' .
+                ' where g.noticeid = gr.notice_id' .
+                ' and lg.nickname = \'' . $groupnick . '\'' .
+                ' and gr.group_id = lg.group_id ' .
+                ' and g.noticeid = n.id ' .
+                ' and n.profile_id = p.id' .
+                ' group by p.nickname';
 
 
-        $grade->query(sprintf($qry, $groupid)); // all select fields will
+        $grade->query($qry); // all select fields will
         // be written to fields of the Grade object. It is required that
         // select fields are named after the Grade fields.
 
@@ -243,13 +243,13 @@ class Grades extends Managed_DataObject {
 
         return $ngrade;
     }
-    
+
     static function updateNotice($fields) {
 
         // MAGICALLY put fields into current scope
 
         extract($fields);
-        
+
         $gradeBD = new Grades();
 
 
@@ -257,22 +257,21 @@ class Grades extends Managed_DataObject {
             $user_table = '"grades"';
         else
             $user_table = 'grades';
-        
+
         $time = common_sql_now();
-        
+
         $qry = 'UPDATE ' . $user_table .
-              ' SET grade=' . $grade .
-              ', cdate=\'' . $time .'\'' .
-              ' WHERE noticeid=' . $noticeid;
+                ' SET grade=' . $grade .
+                ', cdate=\'' . $time . '\'' .
+                ' WHERE noticeid=' . $noticeid;
 
-            $result = $gradeBD->query($qry);
+        $result = $gradeBD->query($qry);
 
-            if (!$result) {
-                common_log_db_error($user, 'UPDATE', __FILE__);
-             }
-             
-          $gradeBD->free();
+        if (!$result) {
+            common_log_db_error($user, 'UPDATE', __FILE__);
+        }
 
+        $gradeBD->free();
     }
 
 }
