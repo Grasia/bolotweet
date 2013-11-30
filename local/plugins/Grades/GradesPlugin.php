@@ -7,6 +7,7 @@ if (!defined('STATUSNET')) {
 require_once INSTALLDIR . '/local/plugins/Grades/lib/gradeform.php';
 require_once INSTALLDIR . '/local/plugins/Grades/classes/Grades.php';
 require_once INSTALLDIR . '/lib/util.php';
+require_once INSTALLDIR . '/local/plugins/Grades/js/grades.js';
 
 class GradesPlugin extends Plugin {
 
@@ -90,7 +91,10 @@ class GradesPlugin extends Plugin {
         return true;
     }
 
+    
     function onStartShowNoticeItem($args) {
+        
+        
         $noticeid = $args->notice->id;
         $gradevalue = Grades::getNoticeGrade($noticeid);
         $userid = Grades::getNoticeGradeUserId($noticeid);
@@ -125,14 +129,14 @@ class GradesPlugin extends Plugin {
     function onEndShowStyles($action) {
         $action->cssLink($this->path('css/grades.css'));
         return true;
+    
     }
-
-    /*
+    
       function onEndShowScripts($action)
       {
       $action->script($this->path('js/grades.js'));
       return true;
       }
 
-     */
+     
 }

@@ -1,3 +1,18 @@
+#showstream .notice-current-grade .notice-current-grade-value {
+    float: none;
+    position: relative;
+    top:0px;
+    padding: 2px;
+    border-color: #dcdcdc;
+    border-style:solid;
+    border-width:1px;
+    text-align:center;
+    display: inline-block;
+    text-wrap:lowercase;
+    border-radius: 5px;
+    font-size: 10px;
+}
+
 .notice-current-grade .notice-current-grade-value {
     float: none;
     position: relative;
@@ -6,7 +21,6 @@
     border-color: #dcdcdc;
     border-style:solid;
     border-width:1px;
-    //width : 40px;
     text-align:center;
     display: inline-block;
     text-wrap:lowercase;
@@ -19,15 +33,11 @@
     left: 0px;
     position: relative;
     top: 55px;
-    //border-color: red;
-    //border-style:solid;
-    //border-width:5px;
     width : 40px;
     height : 20px;
-    //background-color: red;
     text-align:center;
     display: inline-block;
-    //border-radius: 15px;
+
 }
 
 .notice-grades .form_grade#grade-0 input.submit{
