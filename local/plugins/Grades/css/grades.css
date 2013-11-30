@@ -1,8 +1,9 @@
 #showstream .notice-current-grade .notice-current-grade-value {
-    float: none;
+    float: left;
     position: relative;
     top:0px;
     padding: 2px;
+    margin-right: 11px;
     border-color: #dcdcdc;
     border-style:solid;
     border-width:1px;
