@@ -113,6 +113,11 @@ class GradesPlugin extends Plugin {
     }
 
     function onEndShowNoticeItem($args) {
+        
+        $noticeid = $args->notice->id;
+        $gradevalue = Grades::getNoticeGrade($noticeid);
+        
+        if ($gradevalue == '?') {
         // $hook = substr(__FUNCTION__, 2);
         $args->out->elementStart('div', array('class' => 'notice-grades'));
         $this->showNumbers($args, 0);
@@ -121,6 +126,7 @@ class GradesPlugin extends Plugin {
         $this->showNumbers($args, 3);
         $args->out->elementEnd('div');
 
+        }
 
         return true;
     }
