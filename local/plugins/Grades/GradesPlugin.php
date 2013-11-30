@@ -103,12 +103,8 @@ class GradesPlugin extends Plugin {
             $args->out->raw($userid . '<br>' . $gradevalue);
             $args->out->elementEnd('p');
             $args->out->elementEnd('div');
-        } else {
-            $args->out->elementStart('div', array('class' => 'notice-current-grade'));
-            $args->out->elementStart('p', array('class' => 'notice-current-grade-empty'));
-            $args->out->elementEnd('p');
-            $args->out->elementEnd('div');
-        }
+        } 
+        
         return true;
     }
 

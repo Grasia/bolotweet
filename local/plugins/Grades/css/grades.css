@@ -15,7 +15,7 @@
 }
 
 .notice-current-grade .notice-current-grade-value {
-    float: none;
+    float: left;
     position: relative;
     padding: 2px;
     top: 60px;
@@ -27,18 +27,6 @@
     text-wrap:lowercase;
     border-radius: 5px;
     font-size: 10px;
-}
-
-.notice-current-grade .notice-current-grade-empty {
-    float: none;
-    left: 0px;
-    position: relative;
-    top: 55px;
-    width : 40px;
-    height : 20px;
-    text-align:center;
-    display: inline-block;
-
 }
 
 .notice-grades .form_grade#grade-0 input.submit{
