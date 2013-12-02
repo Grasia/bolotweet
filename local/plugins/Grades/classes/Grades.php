@@ -107,16 +107,11 @@ class Grades extends Managed_DataObject {
 
     static function getGroupsWithGrades() {
         $grade = new Grades();
-        if (common_config('db', 'quote_identifiers'))
-            $user_table = '"grades"';
-        else
-            $user_table = 'grades';
 
-        $qry = 'SELECT local_group.nickname as userid' .
-                ' FROM grades, group_inbox, local_group WHERE ' .
-                ' group_inbox.notice_id = grades.noticeid and ' .
-                ' group_inbox.group_id = local_group.group_id ' .
-                ' group by local_group.nickname';
+        $qry = 'SELECT gi.group_id as groupsIDs' .
+                ' FROM grades, group_inbox gi WHERE ' .
+                ' gi.notice_id = grades.noticeid' .
+                ' group by gi.group_id';
 
 
         $grade->query($qry); // all select fields will
@@ -126,14 +121,16 @@ class Grades extends Managed_DataObject {
         $foundgroups = array();
 
         while ($grade->fetch()) {
-            $foundgroups[] = $grade->userid;
+            $foundgroups[] = $grade->groupsIDs;
         }
 
         $grade->free();
-        return $foundgroups;
+        
+        return User_group::multiGet('id', $foundgroups);
+
     }
 
-    static function getGradedNoticesAndUsersWithinGroup($groupnick) {
+    static function getGradedNoticesAndUsersWithinGroup($groupID) {
         $grade = new Grades();
         if (common_config('db', 'quote_identifiers'))
             $user_table = '"grades"';
@@ -141,10 +138,9 @@ class Grades extends Managed_DataObject {
             $user_table = 'grades';
 
         $qry = 'select p.nickname as userid, sum(g.grade) as grade' .
-                ' from grades g, group_inbox gr, notice n, profile p, local_group lg' .
+                ' from grades g, group_inbox gr, notice n, profile p' .
                 ' where g.noticeid = gr.notice_id' .
-                ' and lg.nickname = \'' . $groupnick . '\'' .
-                ' and gr.group_id = lg.group_id ' .
+                ' and gr.group_id = ' . $groupID .
                 ' and g.noticeid = n.id ' .
                 ' and n.profile_id = p.id' .
                 ' group by p.nickname';

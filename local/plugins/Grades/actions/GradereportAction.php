@@ -118,28 +118,20 @@ class GradereportAction extends Action {
         if (empty($this->user)) {
             $this->element('p', array('class' => 'grade-report-error'), _m('Login first!'));
         } else {
-            $groupswithgrades = Grades::getGroupsWithGrades();
-            $this->elementStart('ul', array('class' => 'grade-report-group'));
-            foreach ($groupswithgrades as $groupnick) {
-                $this->elementStart('li', array('class' => 'grade-report-group-item'));
-                $this->element('a', array('class' => 'grade-report-group-link', 'href' =>
-                    '#' . $groupnick), sprintf(_m('%s'), $groupnick));
-                $this->elementEnd('li');
-            }
-            $this->elementEnd('ul');
-            $this->element('h2', null, sprintf(_m('Group notices'), $groupnick));
-            foreach ($groupswithgrades as $groupnick) {
-                $gradespergroup = Grades::getGradedNoticesAndUsersWithinGroup($groupnick);
+            $groupswithgrades = Grades::getGroupsWithGrades()->fetchAll();
+
+            foreach ($groupswithgrades as $group) {
+                $gradespergroup = Grades::getGradedNoticesAndUsersWithinGroup($group->id);
                 $this->elementStart('p', array('class' => 'grade-report-group'));
                 $this->element('a', array('class' => 'grade-report-group-link', 'href' =>
-                    common_root_url() . 'group/' . $groupnick), sprintf(_m('Group  %s'), $groupnick));
+                    common_root_url() . 'group/' . $group->nickname), $group->getBestName());
                 $this->elementEnd('p');
                 $this->elementStart('ul', array('class' => 'grade-report-groupmembers'));
                 foreach ($gradespergroup as $login => $sumnoticegrades) {
 
                     $this->elementStart('li', array('class' => 'grade-report-groupmembers-item'));
                     $this->element('a', array('class' => 'grade-report-group-link', 'name' =>
-                        $groupnick));
+                        $group->nickname));
                     $this->element('a', array('class' => 'grade-report-group-link', 'href' =>
                         common_root_url() . $login), sprintf(_m('%s, %s'), $login, $sumnoticegrades));
                     $this->elementEnd('li');
