@@ -105,6 +105,31 @@ class Grades extends Managed_DataObject {
         );
     }
 
+    static function getIDsGroupsWithGrades() {
+        $grade = new Grades();
+
+        $qry = 'SELECT gi.group_id as groupsIDs' .
+                ' FROM grades, group_inbox gi WHERE ' .
+                ' gi.notice_id = grades.noticeid' .
+                ' group by gi.group_id';
+
+
+        $grade->query($qry); // all select fields will
+        // be written to fields of the Grade object. It is required that
+        // select fields are named after the Grade fields.
+
+        $foundgroups = array();
+
+        while ($grade->fetch()) {
+            $foundgroups[] = $grade->groupsIDs;
+        }
+
+        $grade->free();
+        
+        return $foundgroups;
+
+    }
+
     static function getGroupsWithGrades() {
         $grade = new Grades();
 
@@ -130,6 +155,7 @@ class Grades extends Managed_DataObject {
 
     }
 
+    
     static function getGradedNoticesAndUsersWithinGroup($groupID) {
         $grade = new Grades();
         if (common_config('db', 'quote_identifiers'))
