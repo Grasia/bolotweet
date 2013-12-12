@@ -33,7 +33,6 @@ if (!defined('STATUSNET') && !defined('LACONICA')) {
 }
 
 
-// require_once INSTALLDIR . '/classes/Memcached_DataObject.php'; // QUITARRRRRRRRRRRRRRRr
 
 /**
  * Form for favoring a notice
