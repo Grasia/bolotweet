@@ -71,3 +71,14 @@
     word-wrap: break-word;
     padding:10px;
 }
+
+.notes-combo-manual{
+    
+    float:right;
+    width:90px;
+}
+
+.notes-manual-option{
+    
+    display:inline-block;
+}
