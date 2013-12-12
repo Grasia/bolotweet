@@ -53,6 +53,7 @@ class Notesoptionsform extends Form {
 
         $tags = NotesPDF::getTagsGradedinGroup($this->idGroup);
 
+        $this->out->element('option',null, 'Todos');
         for ($i = 0; $i < sizeof($tags); $i++) {
             $this->out->elementStart('option');
             $this->out->raw($tags[$i]);
@@ -61,18 +62,16 @@ class Notesoptionsform extends Form {
 
         $this->out->elementEnd('select');
 
-        $this->out->elementStart('p', array('class' => 'notes-personalizado'));
-        $this->out->raw('Seleccionar tweets únicamente del usuario: ');
-        $this->out->elementEnd('p');
+        $this->out->element('p','notes-personalizado','Seleccionar tweets únicamente del usuario: ');
         $this->out->elementStart('select', array('class' => 'notes-personalizado'));
 
         $tags = NotesPDF::getTagsGradedinGroup($this->idGroup);
+        
+        $this->out->element('option',null, 'Todos');
 
         for ($i = 0; $i < sizeof($tags); $i++) {
-            $this->out->elementStart('option');
-            $this->out->raw($tags[$i]);
-            $this->out->elementEnd('option');
-        }
+            $this->out->element('option',null, $tags[$i]);
+         }
 
         $this->out->elementEnd('select');
         
