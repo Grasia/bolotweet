@@ -1,0 +1,73 @@
+.notespdf-group-item {
+    
+    list-style: none;
+    border-style: solid;
+    padding: 5px 5px 0px 5px;
+    margin-bottom: 2px;
+    border-radius: 5px;
+    border-width:1px;
+    border-color: #E8E8E8; 
+}
+
+.notespdf-group-item>p{
+    
+    position: relative;
+    bottom: 19px;
+    display:inline;
+    
+}
+
+.notespdf-group-item>img{
+    
+    margin-right: 11px;
+}
+
+.form_notes_generate {
+    
+    float: right;
+    top: 10px;
+    position:relative;
+}
+
+.notes-error-group{
+    
+    float:left;
+    position:relative;
+    top:3px;
+    margin-right: 5px;
+}
+
+.notes-error-group-text {
+    
+    display:inline-block;
+}
+
+.prueba {
+    
+    display:block;
+}
+
+.notes-div-auto {
+    
+    float:left;
+    border-style: solid;
+    border-radius: 5px;
+    border-width:1px;
+    border-color: #E8E8E8; 
+    width: 230px;
+    word-wrap: break-word;
+    padding: 10px;
+    
+}
+
+.notes-div-manual{
+    
+    float:right;
+    border-style: solid;
+    border-radius: 5px;
+    border-width:1px;
+    border-color: #E8E8E8; 
+    width: 230px;
+    word-wrap: break-word;
+    padding:10px;
+}
