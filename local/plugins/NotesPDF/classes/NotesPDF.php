@@ -17,6 +17,9 @@ class NotesPDF extends Memcached_DataObject {
         return User_group::staticGet($idGroup);
     }
 
+    /*
+     * Devuelve los hashtag puntuados de un grupo dado.
+     */
     static function getTagsGradedinGroup($idGroup) {
 
         $notes = new NotesPDF();
@@ -42,7 +45,13 @@ class NotesPDF extends Memcached_DataObject {
 
         return $foundTags;
     }
+    
+    
 
+    /*
+     * Devuelve los nickname de los usuarios de un grupo dado, y que tengan
+     * tweets puntuados en ese grupo con un cierto hashtag.
+     */
     static function getUsersinGroupGradedWithHashtag($idGroup, $hashtag) {
 
         $notes = new NotesPDF();
@@ -73,6 +82,10 @@ class NotesPDF extends Memcached_DataObject {
         return $foundUsers;
     }
 
+     /*
+     * Devuelve los hashtag de tweets puntuados que un usuario concreto
+      *  haya hecho en un grupo dado.
+     */
     static function getTagsinGroupGradedOfUser($idGroup, $nickName) {
 
         $notes = new NotesPDF();
@@ -102,5 +115,37 @@ class NotesPDF extends Memcached_DataObject {
 
         return $foundTags;
     }
+    
+    /*
+     * Devuelve los ID's de los tweets puntuados con 2 y 3 de un grupo dado.
+     * Es la función utilizada para obtener los apuntes en modo automático.
+     */
+     static function getNoticeIDsInAGroupModeAuto($idGroup) {
+
+        $notes = new NotesPDF();
+
+        $qry = 'select g.noticeid as noticeID' .
+                ' from grades g, group_inbox gr' .
+                ' where g.noticeid = gr.notice_id' .
+                ' and gr.group_id = ' . $idGroup .
+                ' and g.grade = 2 or g.grade = 3' .
+                ' order by g.noticeid';
+
+
+        $notes->query($qry); // all select fields will
+// be written to fields of the Grade object. It is required that
+// select fields are named after the Grade fields.
+
+        $noticesids = array();
+
+        while ($notes->fetch()) {
+            $noticesids[] = $notes->noticeID;
+        }
+
+        $notes->free();
+
+        return $noticesids;
+    }
+    
 
 }

@@ -28,31 +28,33 @@ class NotesPDFPlugin extends Plugin {
 
         switch ($cls) {
 
-            case 'NotespdfAction':
+            case 'NotesgroupsAction':
                 include_once $dir . '/actions/' . $cls . '.php';
                 return false;
-            case 'NotesoptionsAction':
+            case 'NotescustomizeAction':
                 include_once $dir . '/actions/' . $cls . '.php';
                 return false;
-
-            case 'Notesgenerateform':
-            case 'Notesoptionsform':
+            case 'NotesgenerateAction':
+                include_once $dir . '/actions/' . $cls . '.php';
+                return false;
+            case 'Notesgroupsform':
+            case 'Notescustomizeform':
                 include_once $dir . '/lib/' . $cls . '.php';
                 break;
-            
-            case 'NotesPDF':
-            include_once $dir . '/classes/' . $cls.'.php';
-            return false;
-            break;
 
-        default:
+            case 'NotesPDF':
+                include_once $dir . '/classes/' . $cls . '.php';
+                return false;
+                break;
+
+            default:
                 return true;
         }
     }
 
     function onRouterInitialized($m) {
-        $m->connect('main/notespdf', array('action' => 'notespdf'));
-        $m->connect('main/notespdf/options', array('action' => 'notesoptions'));
+        $m->connect('main/notespdf', array('action' => 'notesgroups'));
+        $m->connect('main/notespdf/customize', array('action' => 'notescustomize'));
         $m->connect('main/notespdf/generate', array('action' => 'notesgenerate'));
         return true;
     }
@@ -64,7 +66,7 @@ class NotesPDFPlugin extends Plugin {
             $action->out->elementStart('li');
             $action->out->element('h3', null, 'Tools');
             $action->out->elementStart('ul', array('class' => 'nav'));
-            $action->menuItem(common_local_url('notespdf'), _m('Apuntes'), _m('Apuntes en PDF'), false, 'nav_notespdf');
+            $action->menuItem(common_local_url('notesgroups'), _m('Apuntes'), _m('Apuntes en PDF'), false, 'nav_notespdf');
             $action->out->elementEnd('ul');
             $action->out->elementEnd('li');
         }
@@ -85,10 +87,10 @@ class NotesPDFPlugin extends Plugin {
             _m('A plugin to export notes in PDF'));
         return true;
     }
-    
-      /*function onEndShowScripts($action)
+
+    /* function onEndShowScripts($action)
       {
       $action->script($this->path('js/notespdf.js'));
       return true;
-      }*/
+      } */
 }

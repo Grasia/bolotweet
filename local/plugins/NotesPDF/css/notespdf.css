@@ -22,7 +22,7 @@
     margin-right: 11px;
 }
 
-.form_notes_generate {
+.form_notes_groups {
     
     float: right;
     top: 10px;
@@ -41,7 +41,6 @@
     
     display:inline-block;
 }
-
 
 
 .notes-div-auto {
@@ -75,7 +74,7 @@
     width:90px;
 }
 
-.notes-manual-option{
+.notes-manual-option {
     
     display:inline-block;
 }

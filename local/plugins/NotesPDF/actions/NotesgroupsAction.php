@@ -10,7 +10,7 @@ if (!defined('STATUSNET')) {
     exit(1);
 }
 
-class NotespdfAction extends Action {
+class NotesgroupsAction extends Action {
 
     var $user = null;
 
@@ -78,7 +78,7 @@ class NotespdfAction extends Action {
                     // Si el grupo no tiene puntuaciones no se pueden generar apuntes
                     if (!in_array($group->id, $groupsGraded)) {
 
-                        $butGenerate = new Notesgenerateform($this, $group->id, 'true');
+                        $butGenerate = new Notesgroupsform($this, $group->id, 'true');
                         $butGenerate->show();
 
                         $this->elementStart('div', array('class' => 'prueba'));
@@ -90,7 +90,7 @@ class NotespdfAction extends Action {
                         $this->elementEnd('div');
                     } else {
 
-                        $butGenerate = new Notesgenerateform($this, $group->id);
+                        $butGenerate = new Notesgroupsform($this, $group->id);
                         $butGenerate->show();
                     }
 

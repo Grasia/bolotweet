@@ -4,7 +4,7 @@ if (!defined('STATUSNET') && !defined('LACONICA')) {
     exit(1);
 }
 
-class Notesoptionsform extends Form {
+class Notescustomizeform extends Form {
 
     protected $idGroup = null;
 
@@ -17,7 +17,7 @@ class Notesoptionsform extends Form {
 
     function id() {
 
-        return 'notes-options' . $this->idGroup;
+        return 'notes-customize' . $this->idGroup;
     }
 
     function action() {
@@ -30,7 +30,7 @@ class Notesoptionsform extends Form {
     }
 
     function formClass() {
-        return 'form_notes_options';
+        return 'form_notes_customize';
     }
 
     function formData() {

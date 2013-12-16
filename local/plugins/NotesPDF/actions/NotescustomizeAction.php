@@ -50,7 +50,7 @@ require_once INSTALLDIR . '/local/plugins/Grades/classes/Grades.php';
 require_once INSTALLDIR . '/classes/User.php';
 require_once INSTALLDIR . '/classes/Notice.php';
 
-class NotesoptionsAction extends Action {
+class NotescustomizeAction extends Action {
 
     var $user = null;
 
@@ -117,7 +117,7 @@ function title() {
     
  function showContent() {
         if (empty($this->user)) {
-            $this->element('p', array('class' => 'notespdf-options-error'), _m('Login first!'));
+            $this->element('p', array('class' => 'notespdf-customize-error'), _m('Login first!'));
         } else {
 
 
@@ -131,7 +131,7 @@ function title() {
             $this->raw('A continuación personalice los apuntes.');
             $this->elementEnd('p');
             
-            $optionsForm = new Notesoptionsform($this, $group->id);
+            $optionsForm = new Notescustomizeform($this, $group->id);
             $optionsForm->show();
             
 
