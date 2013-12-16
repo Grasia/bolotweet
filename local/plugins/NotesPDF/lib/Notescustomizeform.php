@@ -34,9 +34,10 @@ class Notescustomizeform extends Form {
     }
 
     function formData() {
-        $this->out->elementStart('fieldset', array('id' => 'new-apuntes'));
-
-
+        
+        $this->out->hidden('group-h-' . $this->idGroup, $this->idGroup, 'idGroup');
+         
+   
         // Box para apuntes automáticos
         $this->out->elementStart('div', array('class' => 'notes-div-auto'));
         $this->out->element('p', 'notes-text-auto', 'Generar Apuntes Automáticos');
@@ -98,7 +99,7 @@ class Notescustomizeform extends Form {
         
         $this->out->elementEnd('div');
 
-        $this->out->elementEnd('fieldset');
+        
     }
 
 }
