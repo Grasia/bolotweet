@@ -6,8 +6,6 @@
  * and open the template in the editor.
  */
 
-require_once INSTALLDIR . '/local/plugins/NotesPDF/lib/fpdf/fpdf.php';
-
 if (!defined('STATUSNET')) {
     exit(1);
 }
@@ -29,11 +27,7 @@ class NotesPDFPlugin extends Plugin {
         switch ($cls) {
 
             case 'NotesgroupsAction':
-                include_once $dir . '/actions/' . $cls . '.php';
-                return false;
             case 'NotescustomizeAction':
-                include_once $dir . '/actions/' . $cls . '.php';
-                return false;
             case 'NotesgenerateAction':
                 include_once $dir . '/actions/' . $cls . '.php';
                 return false;
@@ -41,8 +35,8 @@ class NotesPDFPlugin extends Plugin {
             case 'Notescustomizeform':
                 include_once $dir . '/lib/' . $cls . '.php';
                 break;
-
             case 'NotesPDF':
+            case 'GenerarPDF':
                 include_once $dir . '/classes/' . $cls . '.php';
                 return false;
                 break;
