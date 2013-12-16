@@ -43,7 +43,7 @@ class Notescustomizeform extends Form {
         $this->out->element('p', 'notes-text-auto', 'Generar Apuntes Automáticos');
         $this->out->element('p', null, 'Se seleccionarán los tweets con la máxima puntuación hasta la fecha.');
         $this->out->elementStart('div');
-        $this->out->submit('notes-submit-auto', _m('BUTTON', 'Aceptar'), 'submit', 'submit');
+        $this->out->submit('notes-submit-auto', _m('BUTTON', 'Aceptar'), 'submit-auto', 'submit');
          $this->out->elementEnd('div');
         $this->out->elementEnd('div');
 
@@ -95,7 +95,7 @@ class Notescustomizeform extends Form {
         $this->out->elementEnd('select');
         $this->out->elementEnd('div');
         
-        $this->out->submit('notes-submit-manual', _m('BUTTON', 'Aceptar'), 'submit', 'submit');
+        $this->out->submit('notes-submit-manual', _m('BUTTON', 'Aceptar'), 'submit-custom', 'submit');
         
         $this->out->elementEnd('div');
 

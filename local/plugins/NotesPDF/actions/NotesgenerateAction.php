@@ -53,7 +53,7 @@ require_once INSTALLDIR . '/classes/Notice.php';
 class NotesgenerateAction extends Action {
 
     var $user = null;
-
+    var $msg;
     /**
      * Take arguments for running
      *
@@ -107,12 +107,26 @@ class NotesgenerateAction extends Action {
         }
 
 
+        if($this->trimmed('submit-auto') != null){
+            
+
         $groupids = NotesPDF::getNoticeIDsInAGroupModeAuto($idGroup);
 
         $notices = Notice::multiGet('id', $groupids)->fetchAll();
 
-        $this->generarPDF($notices);
-
+        $this->generarPDF($idGroup,$notices, 'Automáticos');
+        
+        }
+        
+        else if (($this->trimmed('submit-custom') != null)){
+            
+            
+        }
+        
+        else {
+            
+            $this->showForm('Error al generar los apuntes. Inténtelo de nuevo en unos minutos.');
+        }
     }
 
     /*
@@ -124,6 +138,44 @@ class NotesgenerateAction extends Action {
         
         GenerarPDF::content();
       
+    }
+    
+     function showForm($msg=null)
+    {
+        $this->msg = $msg;
+        $this->showPage();
+    }
+    
+    function showContent()
+    
+    {
+        
+         $idGroup = $this->trimmed('idGroup');
+         
+            $group = NotesPDF::getGroupByID($idGroup);
+            
+            $this->element('h2', null, 'Apuntes para el grupo ' . $group->getBestName());
+
+            $this->elementStart('p');
+            $this->raw('A continuación personalice los apuntes.');
+            $this->elementEnd('p');
+            
+            $optionsForm = new Notescustomizeform($this, $group->id);
+            $optionsForm->show();
+            
+    }
+
+    function showPageNotice()
+    {
+        if ($this->msg) {
+            $this->element('p', 'error', $this->msg);
+        } 
+        
+        
+    }
+    
+    function title() {
+       return _m('Personalización de Apuntes');
     }
 
 
