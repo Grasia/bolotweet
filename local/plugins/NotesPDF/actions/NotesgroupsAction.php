@@ -81,7 +81,7 @@ class NotesgroupsAction extends Action {
                         $butGenerate = new Notesgroupsform($this, $group->id, 'true');
                         $butGenerate->show();
 
-                        $this->elementStart('div', array('class' => 'prueba'));
+                        $this->elementStart('div');
                         $this->elementStart('p', array('class' => 'notes-error-group-text'));
                         $this->raw("No es posible generar apuntes. Grupo sin puntuaciones.");
                         $this->elementEnd('p');
