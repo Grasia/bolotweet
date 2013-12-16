@@ -38,9 +38,9 @@ class Notesgenerateform extends Form {
     
         function formData(){
            
-            $this->out->hidden('group-h-' . $this->idGroup, $this->idGroup, 'idGroup');
-            //$this->out->hidden('value-notice-n' . $this->notice->id, $this->value, 'value');
             
+            $this->out->hidden('group-h-' . $this->idGroup, $this->idGroup, 'idGroup');
+                
              if($this->disabled=='true'){
              $this->out->element('input', array('type' => 'submit',
                                       'id' => 'notes-submit-' . $this->idGroup,

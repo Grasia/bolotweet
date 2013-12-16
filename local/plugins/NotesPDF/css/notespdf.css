@@ -42,10 +42,7 @@
     display:inline-block;
 }
 
-.prueba {
-    
-    display:block;
-}
+
 
 .notes-div-auto {
     
@@ -81,4 +78,10 @@
 .notes-manual-option{
     
     display:inline-block;
+}
+
+.notes-text-auto, .notes-text-manual{
+    
+    font-weight:bold;
+    background: url("brdr_black_dot.png") repeat-x scroll left bottom transparent;
 }

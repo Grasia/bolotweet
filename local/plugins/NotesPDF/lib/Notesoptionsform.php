@@ -7,7 +7,7 @@ if (!defined('STATUSNET') && !defined('LACONICA')) {
 class Notesoptionsform extends Form {
 
     protected $idGroup = null;
-    protected $disabled = null;
+
 
     function __construct($out = null, $id) {
         parent::__construct($out);
@@ -36,26 +36,28 @@ class Notesoptionsform extends Form {
     function formData() {
         $this->out->elementStart('fieldset', array('id' => 'new-apuntes'));
 
-        
+
         // Box para apuntes automáticos
-        $this->out->elementStart('div',array('class' => 'notes-div-auto'));
-        $this->out->element('p', 'notes-text-auto','Generar Apuntes Automáticos');
+        $this->out->elementStart('div', array('class' => 'notes-div-auto'));
+        $this->out->element('p', 'notes-text-auto', 'Generar Apuntes Automáticos');
         $this->out->element('p', null, 'Se seleccionarán los tweets con la máxima puntuación hasta la fecha.');
-        $this->out->submit('new-notes-submit', _m('BUTTON', 'Aceptar'), 'submit', 'submit');
-        $this->out->elementEnd('div');
-        
-        
-        // Box para apuntes personalizados
-         $this->out->elementStart('div',array('class' => 'notes-div-manual'));
-        $this->out->element('p', 'notes-text-manual','Generar Apuntes Personalizados');
-        
         $this->out->elementStart('div');
-        $this->out->element('p', 'notes-manual-option' ,'Hashtag: ');
-        $this->out->elementStart('select', array('class' => 'notes-combo-manual'));
+        $this->out->submit('notes-submit-auto', _m('BUTTON', 'Aceptar'), 'submit', 'submit');
+         $this->out->elementEnd('div');
+        $this->out->elementEnd('div');
+
+
+        // Box para apuntes personalizados
+        $this->out->elementStart('div', array('class' => 'notes-div-manual'));
+        $this->out->element('p', 'notes-text-manual', 'Generar Apuntes Personalizados');
+
+        $this->out->elementStart('div');
+        $this->out->element('p', 'notes-manual-option', 'Hashtag: ');
+        $this->out->elementStart('select', array('id' => 'notes-combo-hashtag', 'class' => 'notes-combo-manual'));
 
         $tags = NotesPDF::getTagsGradedinGroup($this->idGroup);
 
-        $this->out->element('option',null, 'Todos');
+        $this->out->element('option', null, 'Todos');
         for ($i = 0; $i < sizeof($tags); $i++) {
             $this->out->elementStart('option');
             $this->out->raw($tags[$i]);
@@ -63,26 +65,26 @@ class Notesoptionsform extends Form {
         }
 
         $this->out->elementEnd('select');
-$this->out->elementEnd('div');
+        $this->out->elementEnd('div');
         $this->out->elementStart('div');
-        $this->out->element('p','notes-manual-option','Usuario: ');
-        $this->out->elementStart('select', array('class' => 'notes-combo-manual'));
+        $this->out->element('p', 'notes-manual-option', 'Usuario: ');
+        $this->out->elementStart('select', array('id' => 'notes-combo-user', 'class' => 'notes-combo-manual'));
 
         $tags = NotesPDF::getTagsGradedinGroup($this->idGroup);
-        
-        $this->out->element('option',null, 'Todos');
+
+        $this->out->element('option', null, 'Todos');
 
         for ($i = 0; $i < sizeof($tags); $i++) {
-            $this->out->element('option',null, $tags[$i]);
-         }
+            $this->out->element('option', null, $tags[$i]);
+        }
 
         $this->out->elementEnd('select');
-         $this->out->elementEnd('div');
+        $this->out->elementEnd('div');
         $this->out->elementStart('div');
-        $this->out->element('p', 'notes-manual-option','Puntuación: ');
-        $this->out->elementStart('select', array('class' => 'notes-combo-manual'));
+        $this->out->element('p', 'notes-manual-option', 'Puntuación: ');
+        $this->out->elementStart('select', array('id' => 'notes-combo-grade', 'class' => 'notes-combo-manual'));
 
-        $this->out->element('option',null, 'Todos');
+        $this->out->element('option', null, 'Todos');
         for ($i = 0; $i < 4; $i++) {
             $this->out->elementStart('option');
             $this->out->raw($i);
@@ -91,11 +93,12 @@ $this->out->elementEnd('div');
 
         $this->out->elementEnd('select');
         $this->out->elementEnd('div');
-        $this->out->elementEnd('div');
         
+        $this->out->submit('notes-submit-manual', _m('BUTTON', 'Aceptar'), 'submit', 'submit');
+        
+        $this->out->elementEnd('div');
+
         $this->out->elementEnd('fieldset');
     }
-
-
 
 }

@@ -91,5 +91,4 @@ class NotesPDFPlugin extends Plugin {
       $action->script($this->path('js/notespdf.js'));
       return true;
       }*/
-
 }
