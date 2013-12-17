@@ -10,11 +10,19 @@ require_once INSTALLDIR . '/local/plugins/NotesPDF/lib/fpdf/fpdf.php';
 
 class GenerarPDF extends FPDF {
 
-    static function contentAuto($idGroup, $notices, $modo) {
+   var $modo;
+   
+    function __construct($modo = '') {
+        parent::FPDF();
 
-        $pdf = new GenerarPDF();
+        $this->modo = $modo;
 
-        $pdf->AddPage();
+    }
+    
+     static function contentAuto($idGroup, $notices, $modo) {
+
+        $pdf = new GenerarPDF($modo);
+        $pdf->Portada($idGroup);
         $pdf->SetFont('Times', '', 12);
 
         foreach ($notices as $notice) {
@@ -28,9 +36,12 @@ class GenerarPDF extends FPDF {
 
     static function contentCustom($idGroup, $notices, $modo) {
 
+        global $tipoApuntes;
+        $tipoApuntes = $modo;
+        
+        
         $pdf = new GenerarPDF();
 
-        $pdf->AddPage();
         $pdf->SetFont('Times', '', 12);
 
         foreach ($notices as $notice) {
@@ -52,12 +63,12 @@ class GenerarPDF extends FPDF {
         // Movernos a la derecha
         $this->Cell(80);
         // Título
-        $this->Cell(0, 0, 'Apuntes Automáticos', 0, 1, 'C');
+        $this->Cell(0, 0, 'Apuntes '. $this->modo, 0, 1, 'R');
         $this->Ln(10);
 
         $this->SetFont('Arial', 'I', 12);
         $this->SetTextColor(199, 199, 199);
-        $this->Write(5, 'Este documento es únicamente una recopilación de ideas. En ningún momento sustituye a los apuntes impartidos por el profesor.');
+        $this->MultiCell(0,6, 'Este documento es únicamente una recopilación de ideas. En ningún caso sustituye al material proporcionado por el profesor.',0);
     }
 
     //Pie de página
@@ -70,7 +81,18 @@ class GenerarPDF extends FPDF {
         $this->Cell(0, 10, 'Page ' . $this->PageNo(), 0, 0, 'C');
     }
     
-    function Portada() {
+    function Portada($idGroup) {
+        
+        $groupName = NotesPDF::getGroupByID($idGroup)->getBestName();
+        
+        $this->AddPage();
+        $this->Ln(20);
+        $this->SetFont('Arial', 'I', 12);
+        $this->Cell(0, 0, $groupName . ' - ' . date('dS \of F Y'), 0, 0, 'R');
+        $this->Ln(10);
+        $this->SetFont('Arial', 'B', 14);
+        $this->Cell(0,7, 'Ideas más relevantes',1,0,'C');
+        $this->Ln(10);
         
         
     }
