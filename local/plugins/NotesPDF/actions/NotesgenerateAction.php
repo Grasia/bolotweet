@@ -114,13 +114,15 @@ class NotesgenerateAction extends Action {
 
         $notices = Notice::multiGet('id', $groupids)->fetchAll();
 
-        $this->generarPDF($idGroup,$notices, 'Automáticos');
+        GenerarPDF::contentAuto($idGroup,$notices,'Automáticos');
         
         }
         
         else if (($this->trimmed('submit-custom') != null)){
             
             
+            
+            GenerarPDF::contentCustom($idGroup,$notices,'Personalizados');
         }
         
         else {
@@ -129,16 +131,7 @@ class NotesgenerateAction extends Action {
         }
     }
 
-    /*
-     * Esta función se encarga de generar el PDF a partir de los tweets seleccionados.
-     */
-
-    function generarPDF($notices) {
-
-        
-        GenerarPDF::content();
-      
-    }
+   
     
      function showForm($msg=null)
     {
