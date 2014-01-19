@@ -1,0 +1,591 @@
+<?php
+
+/**
+ * StatusNet - the distributed open-source microblogging tool
+ * Copyright (C) 2011, StatusNet, Inc.
+ *
+ * @category  Secure Registration
+ * @package   StatusNet
+ * @author    Alvaro Ortego
+ * @copyright 2011 StatusNet, Inc.
+ * @link      http://status.net/
+ */
+if (!defined('STATUSNET')) {
+    // This check helps protect against security problems;
+    // your code file can't be executed directly from the web.
+    exit(1);
+}
+
+require_once(INSTALLDIR . '/local/plugins/SecureRegistration/lib/recaptchalib.php');
+
+class SecureregisterAction extends Action {
+
+    /**
+     * Has there been an error?
+     */
+    var $error = null;
+
+    /**
+     * Have we registered?
+     */
+    var $registered = false;
+
+    /**
+     * Are we processing an invite?
+     */
+    var $invite = null;
+
+    /**
+     * Prepare page to run
+     *
+     *
+     * @param $args
+     * @return string title
+     */
+    function prepare($args) {
+        parent::prepare($args);
+        $this->code = $this->trimmed('code');
+
+        if (empty($this->code)) {
+            common_ensure_session();
+            if (array_key_exists('invitecode', $_SESSION)) {
+                $this->code = $_SESSION['invitecode'];
+            }
+        }
+
+        if (common_config('site', 'inviteonly') && empty($this->code)) {
+            // TRANS: Client error displayed when trying to register to an invite-only site without an invitation.
+            $this->clientError(_('Sorry, only invited people can register.'));
+            return false;
+        }
+
+        if (!empty($this->code)) {
+            $this->invite = Invitation::staticGet('code', $this->code);
+            if (empty($this->invite)) {
+                // TRANS: Client error displayed when trying to register to an invite-only site without a valid invitation.
+                $this->clientError(_('Sorry, invalid invitation code.'));
+                return false;
+            }
+            // Store this in case we need it
+            common_ensure_session();
+            $_SESSION['invitecode'] = $this->code;
+        }
+
+        return true;
+    }
+
+    /**
+     * Title of the page
+     *
+     * @return string title
+     */
+    function title() {
+        if ($this->registered) {
+            // TRANS: Title for registration page after a succesful registration.
+            return _('Registration successful');
+        } else {
+            // TRANS: Title for registration page.
+            return _m('TITLE', 'Register');
+        }
+    }
+
+    /**
+     * Handle input, produce output
+     *
+     * Switches on request method; either shows the form or handles its input.
+     *
+     * Checks if registration is closed and shows an error if so.
+     *
+     * @param array $args $_REQUEST data
+     *
+     * @return void
+     */
+    function handle($args) {
+        parent::handle($args);
+
+        if (common_config('site', 'closed')) {
+            // TRANS: Client error displayed when trying to register to a closed site.
+            $this->clientError(_('Registration not allowed.'));
+        } else if (common_logged_in()) {
+            // TRANS: Client error displayed when trying to register while already logged in.
+            $this->clientError(_('Already logged in.'));
+        } else if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $this->tryRegister();
+        } else {
+            $this->showForm();
+        }
+    }
+
+    function showScripts() {
+        parent::showScripts();
+        $this->autofocus('nickname');
+    }
+
+    /**
+     * Try to register a user
+     *
+     * Validates the input and tries to save a new user and profile
+     * record. On success, shows an instructions page.
+     *
+     * @return void
+     */
+    function tryRegister() {
+        if (Event::handle('StartRegistrationTry', array($this))) {
+            $token = $this->trimmed('token');
+            if (!$token || $token != common_session_token()) {
+                // TRANS: Client error displayed when the session token does not match or is not given.
+                $this->showForm(_('There was a problem with your session token. ' .
+                                'Try again, please.'));
+                return;
+            }
+
+            $privatekey = "6LfbNe0SAAAAAMlC0ByC2IHKH8LKatPNX8HaMGGH";
+            $resp = recaptcha_check_answer($privatekey, $_SERVER["REMOTE_ADDR"], $_POST["recaptcha_challenge_field"], $_POST["recaptcha_response_field"]);
+
+            if (!$resp->is_valid) {
+                // What happens when the CAPTCHA was entered incorrectly
+                $this->showForm(_("The reCAPTCHA wasn't entered correctly."));
+            } else {
+
+                $nickname = $this->trimmed('nickname');
+                $email = $this->trimmed('email');
+                $fullname = $this->trimmed('fullname');
+
+                // We don't trim these... whitespace is OK in a password!
+                $password = $this->arg('password');
+                $confirm = $this->arg('confirm');
+
+                // invitation code, if any
+                $code = $this->trimmed('code');
+
+                if ($code) {
+                    $invite = Invitation::staticGet($code);
+                }
+
+                if (common_config('site', 'inviteonly') && !($code && $invite)) {
+                    // TRANS: Client error displayed when trying to register to an invite-only site without an invitation.
+                    $this->clientError(_('Sorry, only invited people can register.'));
+                    return;
+                }
+
+                // Input scrubbing
+                try {
+                    $nickname = Nickname::normalize($nickname);
+                } catch (NicknameException $e) {
+                    $this->showForm($e->getMessage());
+                    return;
+                }
+                $email = common_canonical_email($email);
+
+                if (!$this->boolean('license')) {
+                    // TRANS: Form validation error displayed when trying to register without agreeing to the site license.
+                    $this->showForm(_('You cannot register if you do not ' .
+                                    'agree to the license.'));
+                } else if (!$email) {
+                    $this->showForm(_("Email can't be empty"));
+                } else if ($email && !Validate::email($email, common_config('email', 'check_domain'))) {
+                    // TRANS: Form validation error displayed when trying to register without a valid e-mail address.
+                    $this->showForm(_('Not a valid email address.'));
+                } else if ($this->nicknameExists($nickname)) {
+                    // TRANS: Form validation error displayed when trying to register with an existing nickname.
+                    $this->showForm(_('Nickname already in use. Try another one.'));
+                } else if (!User::allowed_nickname($nickname)) {
+                    // TRANS: Form validation error displayed when trying to register with an invalid nickname.
+                    $this->showForm(_('Not a valid nickname.'));
+                } else if ($this->emailExists($email)) {
+                    // TRANS: Form validation error displayed when trying to register with an already registered e-mail address.
+                    $this->showForm(_('Email address already exists.'));
+                } else if (!is_null($fullname) && mb_strlen($fullname) > 255) {
+                    // TRANS: Form validation error displayed when trying to register with a too long full name.
+                    $this->showForm(_('Full name is too long (maximum 255 characters).'));
+                    return;
+                } else if (strlen($password) < 6) {
+                    // TRANS: Form validation error displayed when trying to register with too short a password.
+                    $this->showForm(_('Password must be 6 or more characters.'));
+                    return;
+                } else if ($password != $confirm) {
+                    // TRANS: Form validation error displayed when trying to register with non-matching passwords.
+                    $this->showForm(_('Passwords do not match.'));
+                } else if ($user = User::register(array('nickname' => $nickname,
+                            'password' => $password,
+                            'email' => $email,
+                            'fullname' => $fullname,
+                            'homepage' => $homepage,
+                            'bio' => $bio,
+                            'location' => $location,
+                            'code' => $code))) {
+                    if (!$user) {
+                        // TRANS: Form validation error displayed when trying to register with an invalid username or password.
+                        $this->showForm(_('Invalid username or password.'));
+                        return;
+                    }
+                    // success!
+                    if (!common_set_user($user)) {
+                        // TRANS: Server error displayed when saving fails during user registration.
+                        $this->serverError(_('Error setting user.'));
+                        return;
+                    }
+                    // this is a real login
+                    common_real_login(true);
+
+                    // Re-init language env in case it changed (not yet, but soon)
+                    common_init_language();
+
+                    Event::handle('EndRegistrationTry', array($this));
+
+                    $this->showSuccess();
+                } else {
+                    // TRANS: Form validation error displayed when trying to register with an invalid username or password.
+                    $this->showForm(_('Invalid username or password.'));
+                }
+            }
+        }
+    }
+
+    /**
+     * Does the given nickname already exist?
+     *
+     * Checks a canonical nickname against the database.
+     *
+     * @param string $nickname nickname to check
+     *
+     * @return boolean true if the nickname already exists
+     */
+    function nicknameExists($nickname) {
+        $user = User::staticGet('nickname', $nickname);
+        return is_object($user);
+    }
+
+    /**
+     * Does the given email address already exist?
+     *
+     * Checks a canonical email address against the database.
+     *
+     * @param string $email email address to check
+     *
+     * @return boolean true if the address already exists
+     */
+    function emailExists($email) {
+        $email = common_canonical_email($email);
+        if (!$email || strlen($email) == 0) {
+            return false;
+        }
+        $user = User::staticGet('email', $email);
+        return is_object($user);
+    }
+
+    // overrrided to add entry-title class
+    function showPageTitle() {
+        if (Event::handle('StartShowPageTitle', array($this))) {
+            $this->element('h1', array('class' => 'entry-title'), $this->title());
+        }
+    }
+
+    // overrided to add hentry, and content-inner class
+    function showContentBlock() {
+        $this->elementStart('div', array('id' => 'content', 'class' => 'hentry'));
+        $this->showPageTitle();
+        $this->showPageNoticeBlock();
+        $this->elementStart('div', array('id' => 'content_inner',
+            'class' => 'entry-content'));
+        // show the actual content (forms, lists, whatever)
+        $this->showContent();
+        $this->elementEnd('div');
+        $this->elementEnd('div');
+    }
+
+    /**
+     * Instructions or a notice for the page
+     *
+     * Shows the error, if any, or instructions for registration.
+     *
+     * @return void
+     */
+    function showPageNotice() {
+        if ($this->registered) {
+            return;
+        } else if ($this->error) {
+            $this->element('p', 'error', $this->error);
+        } else {
+            $instr = // TRANS: Page notice on registration page.
+                    common_markup_to_html(_('With this form you can create ' .
+                            'a new account. ' .
+                            'You can then post notices and ' .
+                            'link up to friends and colleagues.'));
+
+            $this->elementStart('div', 'instructions');
+            $this->raw($instr);
+            $this->elementEnd('div');
+        }
+    }
+
+    /**
+     * Wrapper for showing a page
+     *
+     * Stores an error and shows the page
+     *
+     * @param string $error Error, if any
+     *
+     * @return void
+     */
+    function showForm($error = null) {
+        $this->error = $error;
+        $this->showPage();
+    }
+
+    /**
+     * Show the page content
+     *
+     * Either shows the registration form or, if registration was successful,
+     * instructions for using the site.
+     *
+     * @return void
+     */
+    function showContent() {
+        if ($this->registered) {
+            $this->showSuccessContent();
+        } else {
+            $this->showFormContent();
+        }
+    }
+
+    /**
+     * Show the registration form
+     *
+     * @return void
+     */
+    function showFormContent() {
+        $code = $this->trimmed('code');
+
+        $invite = null;
+
+        if ($code) {
+            $invite = Invitation::staticGet($code);
+        }
+
+        if (common_config('site', 'inviteonly') && !($code && $invite)) {
+            // TRANS: Client error displayed when trying to register to an invite-only site without an invitation.
+            $this->clientError(_('Sorry, only invited people can register.'));
+            return;
+        }
+
+        $this->elementStart('form', array('method' => 'post',
+            'id' => 'form_register',
+            'class' => 'form_settings',
+            'action' => common_local_url('register')));
+        $this->elementStart('fieldset');
+        // TRANS: Fieldset legend on accout registration page.
+        $this->element('legend', null, 'Account settings');
+        $this->hidden('token', common_session_token());
+
+        if ($this->code) {
+            $this->hidden('code', $this->code);
+        }
+
+        $this->elementStart('ul', 'form_data');
+        if (Event::handle('StartRegistrationFormData', array($this))) {
+            $this->elementStart('li');
+            // TRANS: Field label on account registration page.
+            $this->input('nickname', _('Nickname *'), $this->trimmed('nickname'),
+                    // TRANS: Field title on account registration page.
+                    _('1-64 lowercase letters or numbers, no punctuation or spaces.'));
+            $this->elementEnd('li');
+            $this->elementStart('li');
+            // TRANS: Field label on account registration page.
+            $this->password('password', _('Password *'),
+                    // TRANS: Field title on account registration page.
+                    _('6 or more characters.'));
+            $this->elementEnd('li');
+            $this->elementStart('li');
+            // TRANS: Field label on account registration page. In this field the password has to be entered a second time.
+            $this->password('confirm', _m('PASSWORD', 'Confirm *'),
+                    // TRANS: Field title on account registration page.
+                    _('Same as password above.'));
+            $this->elementEnd('li');
+            $this->elementStart('li');
+            if ($this->invite && $this->invite->address_type == 'email') {
+                // TRANS: Field label on account registration page.
+                $this->input('email', _m('LABEL', 'Email *'), $this->invite->address,
+                        // TRANS: Field title on account registration page.
+                        _('Used only for updates, announcements, ' .
+                                'and password recovery.'));
+            } else {
+                // TRANS: Field label on account registration page.
+                $this->input('email', _m('LABEL', 'Email *'), $this->trimmed('email'),
+                        // TRANS: Field title on account registration page.
+                        _('Used only for updates, announcements, ' .
+                                'and password recovery.'));
+            }
+            $this->elementEnd('li');
+            $this->elementStart('li');
+            // TRANS: Field label on account registration page.
+            $this->input('fullname', _('Full name'), $this->trimmed('fullname'),
+                    // TRANS: Field title on account registration page.
+                    _('Longer name, preferably your "real" name.'));
+            $this->elementEnd('li');
+
+            Event::handle('EndRegistrationFormData', array($this));
+
+            $attrs = array('type' => 'checkbox',
+                'id' => 'license',
+                'class' => 'checkbox',
+                'name' => 'license',
+                'value' => 'true');
+            if ($this->boolean('license')) {
+                $attrs['checked'] = 'checked';
+            }
+
+            $this->elementStart('li');
+            $this->element('input', $attrs);
+            $this->elementStart('label', array('class' => 'checkbox', 'for' => 'license'));
+            $this->raw($this->licenseCheckbox());
+            $this->elementEnd('label');
+            $this->elementEnd('li');
+
+            // CAPTCHA
+            $this->elementStart('li');
+            $publickey = "6LfbNe0SAAAAAMcGjQh8HLN75YZ4Agckygg0bLcV";
+            $this->raw(recaptcha_get_html($publickey));
+            $this->elementEnd('li');
+        }
+        $this->elementEnd('ul');
+
+        // TRANS: Button text to register a user on account registration page.
+        $this->submit('submit', _m('BUTTON', 'Register'));
+        $this->elementEnd('fieldset');
+        $this->elementEnd('form');
+    }
+
+    function licenseCheckbox() {
+        $out = '';
+        switch (common_config('license', 'type')) {
+            case 'private':
+                $out .= htmlspecialchars(sprintf(
+                                // TRANS: Copyright checkbox label in registration dialog, for private sites.
+                                // TRANS: %1$s is the StatusNet sitename.
+                                _('I understand that content and data of %1$s are private and confidential.'), common_config('site', 'name')));
+            // fall through
+            case 'allrightsreserved':
+                if ($out != '') {
+                    $out .= ' ';
+                }
+                if (common_config('license', 'owner')) {
+                    $out .= htmlspecialchars(sprintf(
+                                    // TRANS: Copyright checkbox label in registration dialog, for all rights reserved with a specified copyright owner.
+                                    // TRANS: %1$s is the license owner.
+                                    _('My text and files are copyright by %1$s.'), common_config('license', 'owner')));
+                } else {
+                    // TRANS: Copyright checkbox label in registration dialog, for all rights reserved with ownership left to contributors.
+                    $out .= htmlspecialchars(_('My text and files remain under my own copyright.'));
+                }
+                // TRANS: Copyright checkbox label in registration dialog, for all rights reserved.
+                $out .= ' ' . _('All rights reserved.');
+                break;
+            case 'cc': // fall through
+            default:
+                // TRANS: Copyright checkbox label in registration dialog, for Creative Commons-style licenses.
+                $message = _('My text and files are available under %s ' .
+                        'except this private data: password, ' .
+                        'email address, IM address, and phone number.');
+                $link = '<a href="' .
+                        htmlspecialchars(common_config('license', 'url')) .
+                        '">' .
+                        htmlspecialchars(common_config('license', 'title')) .
+                        '</a>';
+                $out .= sprintf(htmlspecialchars($message), $link);
+        }
+        return $out;
+    }
+
+    /**
+     * Show some information about registering for the site
+     *
+     * Save the registration flag, run showPage
+     *
+     * @return void
+     */
+    function showSuccess() {
+        $this->registered = true;
+        $this->showPage();
+    }
+
+    /**
+     * Show some information about registering for the site
+     *
+     * Gives some information and options for new registrees.
+     *
+     * @return void
+     */
+    function showSuccessContent() {
+        if (Event::handle('StartRegisterSuccess', array($this))) {
+            $nickname = $this->arg('nickname');
+
+            $profileurl = common_local_url('showstream', array('nickname' => $nickname));
+
+            $this->elementStart('div', 'success');
+            // TRANS: Text displayed after successful account registration.
+            // TRANS: %1$s is the registered nickname, %2$s is the profile URL.
+            // TRANS: This message contains Markdown links in the form [link text](link)
+            // TRANS: and variables in the form %%%%variable%%%%. Please mind the syntax.
+            $instr = sprintf(_('Congratulations, %1$s! And welcome to %%%%site.name%%%%. ' .
+                            'From here, you may want to...' . "\n\n" .
+                            '* Go to [your profile](%2$s) ' .
+                            'and post your first message.' . "\n" .
+                            '* Add a [Jabber/GTalk address]' .
+                            '(%%%%action.imsettings%%%%) ' .
+                            'so you can send notices ' .
+                            'through instant messages.' . "\n" .
+                            '* [Search for people](%%%%action.peoplesearch%%%%) ' .
+                            'that you may know or ' .
+                            'that share your interests. ' . "\n" .
+                            '* Update your [profile settings]' .
+                            '(%%%%action.profilesettings%%%%)' .
+                            ' to tell others more about you. ' . "\n" .
+                            '* Read over the [online docs](%%%%doc.help%%%%)' .
+                            ' for features you may have missed. ' . "\n\n" .
+                            'Thanks for signing up and we hope ' .
+                            'you enjoy using this service.'), $nickname, $profileurl);
+
+            $this->raw(common_markup_to_html($instr));
+
+            $have_email = $this->trimmed('email');
+            if ($have_email) {
+                // TRANS: Instruction text on how to deal with the e-mail address confirmation e-mail.
+                $emailinstr = _('(You should receive a message by email ' .
+                        'momentarily, with ' .
+                        'instructions on how to confirm ' .
+                        'your email address.)');
+                $this->raw(common_markup_to_html($emailinstr));
+            }
+            $this->elementEnd('div');
+
+            Event::handle('EndRegisterSuccess', array($this));
+        }
+    }
+
+    /**
+     * Show the login group nav menu
+     *
+     * @return void
+     */
+    function showLocalNav() {
+        if (common_logged_in()) {
+            parent::showLocalNav();
+        } else {
+            $nav = new LoginGroupNav($this);
+            $nav->show();
+        }
+    }
+
+    /**
+     * Show a bit of login context
+     *
+     * @return nothing
+     */
+    function showProfileBlock() {
+        if (common_logged_in()) {
+            parent::showProfileBlock();
+        }
+    }
+
+}
