@@ -127,17 +127,20 @@ class GradesPlugin extends Plugin {
         if (!empty($user)) {
             if ($user->hasRole('grader')) {
 
-                $noticeid = $args->notice->id;
-                $gradevalue = Grades::getNoticeGrade($noticeid);
+                if (!$args->notice->getProfile()->getUser()->hasRole('grader')) {
+                    
+                    $noticeid = $args->notice->id;
+                    $gradevalue = Grades::getNoticeGrade($noticeid);
 
-                if ($gradevalue == '?') {
+                    if ($gradevalue == '?') {
 
-                    $args->out->elementStart('div', array('class' => 'notice-grades'));
-                    $this->showNumbers($args, 0);
-                    $this->showNumbers($args, 1);
-                    $this->showNumbers($args, 2);
-                    $this->showNumbers($args, 3);
-                    $args->out->elementEnd('div');
+                        $args->out->elementStart('div', array('class' => 'notice-grades'));
+                        $this->showNumbers($args, 0);
+                        $this->showNumbers($args, 1);
+                        $this->showNumbers($args, 2);
+                        $this->showNumbers($args, 3);
+                        $args->out->elementEnd('div');
+                    }
                 }
             }
         }
