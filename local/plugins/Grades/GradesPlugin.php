@@ -70,14 +70,9 @@ class GradesPlugin extends Plugin {
     }
 
     function showNumbers($args, $value) {
-        $user = common_current_user();
-        if (!empty($user)) {
-            if ($user->hasRole('grader')) {
 
-                $favor = new GradeForm($args->out, $args->notice, $value);
-                $favor->show();
-            }
-        }
+        $grade = new GradeForm($args->out, $args->notice, $value);
+        $grade->show();
     }
 
     function onStartPrimaryNav($action) {
@@ -90,10 +85,28 @@ class GradesPlugin extends Plugin {
         return true;
     }
 
-    
+    function onEndShowNoticeOptions($item) {
+        $user = common_current_user();
+        $noticeid = $item->getNotice()->id;
+        $gradevalue = Grades::getNoticeGrade($noticeid);
+
+        if (!empty($user)) {
+
+
+            if ($user->hasRole('grader') && $gradevalue != '?') {
+
+                $item->out->elementStart('div', 'notice-options');
+                $item->out->raw('Hola');
+                $item->out->elementEnd('div');
+            }
+        }
+
+        return true;
+    }
+
     function onStartShowNoticeItem($args) {
-        
-        
+
+
         $noticeid = $args->notice->id;
         $gradevalue = Grades::getNoticeGrade($noticeid);
         $userid = Grades::getNoticeGradeUserId($noticeid);
@@ -103,41 +116,44 @@ class GradesPlugin extends Plugin {
             $args->out->raw($userid . '<br>' . $gradevalue);
             $args->out->elementEnd('p');
             $args->out->elementEnd('div');
-        } 
-        
+        }
+
         return true;
     }
 
     function onEndShowNoticeItem($args) {
-        
-        $noticeid = $args->notice->id;
-        $gradevalue = Grades::getNoticeGrade($noticeid);
-        
-        if ($gradevalue == '?') {
-        // $hook = substr(__FUNCTION__, 2);
-        $args->out->elementStart('div', array('class' => 'notice-grades'));
-        $this->showNumbers($args, 0);
-        $this->showNumbers($args, 1);
-        $this->showNumbers($args, 2);
-        $this->showNumbers($args, 3);
-        $args->out->elementEnd('div');
 
+        $user = common_current_user();
+        if (!empty($user)) {
+            if ($user->hasRole('grader')) {
+
+                $noticeid = $args->notice->id;
+                $gradevalue = Grades::getNoticeGrade($noticeid);
+
+                if ($gradevalue == '?') {
+
+                    $args->out->elementStart('div', array('class' => 'notice-grades'));
+                    $this->showNumbers($args, 0);
+                    $this->showNumbers($args, 1);
+                    $this->showNumbers($args, 2);
+                    $this->showNumbers($args, 3);
+                    $args->out->elementEnd('div');
+                }
+            }
         }
-
         return true;
     }
 
     function onEndShowStyles($action) {
         $action->cssLink($this->path('css/grades.css'));
         return true;
-    
     }
+
     /*
       function onEndShowScripts($action)
       {
       $action->script($this->path('js/grades.js'));
       return true;
       }
-*/
-     
+     */
 }
