@@ -13,6 +13,7 @@
     border-radius: 5px;
     font-size: 10px;
     margin-bottom: 0px;
+    background-color: #B8D9B4;
 }
 
 .notice-current-grade .notice-current-grade-value {
@@ -29,6 +30,7 @@
     border-radius: 5px;
     font-size: 10px;
     margin-bottom: 35px;
+    background-color: #B8D9B4;
 }
 
 .notice-grades .form_grade#grade-0 input.submit{
