@@ -147,6 +147,9 @@ class SecureregisterAction extends Action {
                 $this->showForm(_("The reCAPTCHA wasn't entered correctly."));
             } else {
 
+                if($this->trimmed('phoneLbl')!=""){
+                return;
+                }
                 $nickname = $this->trimmed('nickname');
                 $email = $this->trimmed('email');
                 $fullname = $this->trimmed('fullname');
@@ -424,6 +427,10 @@ class SecureregisterAction extends Action {
                     _('Longer name, preferably your "real" name.'));
             $this->elementEnd('li');
 
+            $this->elementStart('li', array('id' => 'phone'));
+            // TRANS: Field label on account registration page.
+            $this->input('phoneLbl', _('Phone'), $this->trimmed('phone'));
+            $this->elementEnd('li');
             Event::handle('EndRegistrationFormData', array($this));
 
             $attrs = array('type' => 'checkbox',
