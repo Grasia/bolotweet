@@ -31,7 +31,7 @@ class GenerarPDF extends FPDF {
             $pdf->Write(5, $filterContent);
         }
 
-        $pdf->Output('apuntes', 'D');
+        $pdf->Output('apuntes.pdf', 'D');
     }
 
     static function contentCustom($idGroup, $notices, $modo) {
