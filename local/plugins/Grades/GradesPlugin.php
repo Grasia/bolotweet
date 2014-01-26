@@ -85,24 +85,34 @@ class GradesPlugin extends Plugin {
         return true;
     }
 
-    function onEndShowNoticeOptions($item) {
-        $user = common_current_user();
-        $noticeid = $item->getNotice()->id;
-        $gradevalue = Grades::getNoticeGrade($noticeid);
+    /*
+      function onEndProfileListItemActionElements($item){
 
-        if (!empty($user)) {
+      $item->action->elementStart('li', array('class' => 'entity_block'));
+      $item->action->raw('explota');
+      $item->action->elementEnd('li');
+      }
+
+      function onStartShowNoticeOptionItems($item) {
+      $user = common_current_user();
+      $noticeid = $item->getNotice()->id;
+      $gradevalue = Grades::getNoticeGrade($noticeid);
+
+      if (!empty($user)) {
 
 
-            if ($user->hasRole('grader') && $gradevalue != '?') {
+      if ($user->hasRole('grader') && $gradevalue != '?') {
 
-                $item->out->elementStart('div', 'notice-options');
-                $item->out->raw('Hola');
-                $item->out->elementEnd('div');
-            }
-        }
+      $item->out->elementStart('p', array('onclick' => 'prueba('.$gradevalue.');'));
+      $item->out->raw('M');
+      $item->out->elementEnd('p');
 
-        return true;
-    }
+      }
+      }
+
+      return true;
+      }
+     */
 
     function onStartShowNoticeItem($args) {
 
@@ -113,7 +123,7 @@ class GradesPlugin extends Plugin {
         if ($gradevalue != '?') {
             $args->out->elementStart('div', array('class' => 'notice-current-grade'));
             $args->out->elementStart('p', array('class' => 'notice-current-grade-value'));
-            $args->out->raw($userid . '<br>' . $gradevalue);
+            $args->out->raw($userid . '<br/>' . $gradevalue);
             $args->out->elementEnd('p');
             $args->out->elementEnd('div');
         }
@@ -128,7 +138,7 @@ class GradesPlugin extends Plugin {
             if ($user->hasRole('grader')) {
 
                 if (!$args->notice->getProfile()->getUser()->hasRole('grader')) {
-                    
+
                     $noticeid = $args->notice->id;
                     $gradevalue = Grades::getNoticeGrade($noticeid);
 
@@ -152,11 +162,9 @@ class GradesPlugin extends Plugin {
         return true;
     }
 
-    /*
-      function onEndShowScripts($action)
-      {
-      $action->script($this->path('js/grades.js'));
-      return true;
-      }
-     */
+    /*function onEndShowScripts($action) {
+        $action->script($this->path('js/grades.js'));
+        return true;
+    }*/
+
 }
