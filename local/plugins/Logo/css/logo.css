@@ -1,0 +1,13 @@
+#logoNav {
+    margin-left: 8px;
+    padding: 5px;
+    border-radius: 10px;
+    box-shadow: 2px 2px 5px rgb(66, 66, 66);
+    border: 0px solid rgb(220, 220, 220);
+    margin-bottom: 30px;
+}
+
+#nav_local_default .vcard a:hover {
+
+    background: none;
+}
