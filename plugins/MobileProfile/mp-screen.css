@@ -356,8 +356,22 @@ label[for=blog-entry-content] {
   max-width: 150px;
 }
 
-/** Modificado para que funcione LogoPlugin **/
+/** Modificado para BoloTweet **/
 
 li#liLogoPlugin {
     display: none;
+}
+
+#aside_primary_wrapper {
+   margin-top: 20px;
+}   
+
+address img + .fn {
+margin-top: 22px;
+}
+
+#header-search #search-q {
+
+margin-bottom: 3px;
+
 }
