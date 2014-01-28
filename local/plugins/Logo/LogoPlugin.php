@@ -28,7 +28,7 @@ class LogoPlugin extends Plugin {
 
 
         // Agregamos el logo al Nav.
-        $action->elementStart('li');
+        $action->elementStart('li', array('id' => 'liLogoPlugin'));
         $action->element('img', array('id' => 'logoNav', 'class' => 'logo photo', 'alt' => 'Bolotweet 2.0', 'src' => $path));
         $action->elementEnd('li');
 
@@ -50,7 +50,7 @@ class LogoPlugin extends Plugin {
 
         // Agregamos el logo al Nav.
 
-        $action->out->elementStart('li');
+        $action->out->elementStart('li', array('id' => 'liLogoPlugin'));
         $action->out->elementStart('address', array('class' => 'vcard'));
         $action->out->elementStart('a', array('class' => 'url home bookmark', 'href' => $url));
         $action->out->element('img', array('id' => 'logoNav', 'class' => 'logo photo', 'alt' => 'Bolotweet 2.0', 'src' => $path));

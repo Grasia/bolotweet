@@ -355,3 +355,9 @@ label[for=blog-entry-content] {
 .user_in .notice div.entry-content {
   max-width: 150px;
 }
+
+/** Modificado para que funcione LogoPlugin **/
+
+li#liLogoPlugin {
+    display: none;
+}
