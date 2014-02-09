@@ -931,11 +931,11 @@ class Action extends HTMLOutputter // lawsuit
      */
     function showExportData()
     {
-        $feeds = $this->getFeeds();
+       /* $feeds = $this->getFeeds();
         if ($feeds) {
             $fl = new FeedList($this);
             $fl->show($feeds);
-        }
+        }*/
     }
 
     /**
