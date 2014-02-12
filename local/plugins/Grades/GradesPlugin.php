@@ -116,18 +116,28 @@ class GradesPlugin extends Plugin {
 
     function onStartShowNoticeItem($args) {
 
+        // Si la noticia es de un profesor, mostramos el birrete.
+        if ($args->notice->getProfile()->getUser()->hasRole('grader')) {
 
-        $noticeid = $args->notice->id;
-        $gradevalue = Grades::getNoticeGrade($noticeid);
-        $userid = Grades::getNoticeGradeUserId($noticeid);
-        if ($gradevalue != '?') {
-            $args->out->elementStart('div', array('class' => 'notice-current-grade'));
-            $args->out->elementStart('p', array('class' => 'notice-current-grade-value'));
-            $args->out->raw($userid . '<br/>' . $gradevalue);
-            $args->out->elementEnd('p');
-            $args->out->elementEnd('div');
+             $path = $this->path('css/birrete-small.png');
+             $args->out->element('img', array('id' => 'birrete-grades', 'alt' => 'Profesor', 'src' => $path));
+
+        } 
+        
+        else {
+            $noticeid = $args->notice->id;
+            $gradevalue = Grades::getNoticeGrade($noticeid);
+            $userid = Grades::getNoticeGradeUserId($noticeid);
+            
+            if ($gradevalue != '?') {
+                $args->out->elementStart('div', array('class' => 'notice-current-grade'));
+                $args->out->elementStart('p', array('class' => 'notice-current-grade-value'));
+                $args->out->raw($userid . '<br/>' . $gradevalue);
+                $args->out->elementEnd('p');
+                $args->out->elementEnd('div');
+            }
         }
-
+        
         return true;
     }
 
@@ -157,14 +167,36 @@ class GradesPlugin extends Plugin {
         return true;
     }
 
+        function onStartShowAccountProfileBlock($out,$profile){
+        
+        if ($profile->getUser()->hasRole('grader')) {
+
+            // Ponemos la imagen del birrete
+            $path = $this->path('css/birrete-small.png');
+            $out->element('img', array('id' => 'birrete-profile', 'alt' => 'Profesor', 'src' => $path));
+            
+            // La etiqueta de profesor
+            $out->elementStart('p', array('id' => 'label-profesor'));
+            $out->raw('PROFESOR');
+            $out->elementEnd('p');
+        
+        }
+        
+        return true;
+    }
+    
+    
     function onEndShowStyles($action) {
         $action->cssLink($this->path('css/grades.css'));
         return true;
     }
 
-    /*function onEndShowScripts($action) {
-        $action->script($this->path('js/grades.js'));
-        return true;
-    }*/
+    
 
+    
+    
+    /* function onEndShowScripts($action) {
+      $action->script($this->path('js/grades.js'));
+      return true;
+      } */
 }

@@ -208,7 +208,6 @@ class Grades extends Managed_DataObject {
         } else
             $obtainedgrade = '?';
 
-//print $obtainedgrades->length();
         $grade->free();
         return $obtainedgrade;
     }
