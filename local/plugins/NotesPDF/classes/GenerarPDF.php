@@ -25,12 +25,18 @@ class GenerarPDF extends FPDF {
         $pdf->Portada($idGroup);
         $pdf->SetFont('Times', '', 12);
 
+        $i = 1;
         foreach ($notices as $notice) {
             $pdf->Ln(10);
             $filterContent = $pdf->filtrarContenido($notice->content);
+            $filterContent = $filterContent . " [" . $i . "]";
             $pdf->Write(5, $filterContent);
+            
+            $i = $i + 1;
         }
 
+        $pdf->Fuentes($idGroup, $notices);
+        
         $pdf->Output('apuntes.pdf', 'D');
     }
 
@@ -88,10 +94,11 @@ class GenerarPDF extends FPDF {
         $this->AddPage();
         $this->Ln(20);
         $this->SetFont('Arial', 'I', 12);
-        $this->Cell(0, 0, $groupName . ' - ' . date('dS \of F Y'), 0, 0, 'R');
+        setlocale(LC_ALL,"es_ES");
+        $this->Cell(0, 0, $groupName . ' - ' . strftime("%d de %B del %Y"), 0, 0, 'R');
         $this->Ln(10);
         $this->SetFont('Arial', 'B', 14);
-        $this->Cell(0,7, 'Ideas más relevantes',1,0,'C');
+        $this->Cell(0,7, 'Ideas Seleccionadas',1,0,'C');
         $this->Ln(10);
         
         
@@ -102,4 +109,27 @@ class GenerarPDF extends FPDF {
         return ltrim(preg_replace('/(?:^|\s)!\w{1,64}/', '', $content));
     }
 
+     function Fuentes($idGroup, $notices) {
+         
+         
+         $this->addPage();
+         $this->SetFont('Arial', 'B', 15);
+         
+         $this->Ln(10);
+        
+         $this->Cell(0, 7, 'Autores', 1, 0,'C');
+         $this->Ln(5);
+         $this->SetFont('Times', '', 12);
+         
+         $i = 1;
+          
+        foreach ($notices as $notice) {
+            $this->Ln(10);
+            $content = "[".$i."]  " . $notice->getProfile()->getBestName();
+            $this->Write(5, $content);
+            $i = $i + 1;
+        }
+        
+     }    
+             
 }
