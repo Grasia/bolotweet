@@ -177,7 +177,7 @@ class GradesPlugin extends Plugin {
             
             // La etiqueta de profesor
             $out->elementStart('p', array('id' => 'label-profesor'));
-            $out->raw('PROFESOR');
+            $out->raw(_m('PROFESOR'));
             $out->elementEnd('p');
         
         }

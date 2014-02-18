@@ -58,7 +58,7 @@ class NotesPDFPlugin extends Plugin {
         $user = common_current_user();
         if (!empty($user)) {
             $action->out->elementStart('li');
-            $action->out->element('h3', null, 'Tools');
+            $action->out->element('h3', null, 'Herramientas');
             $action->out->elementStart('ul', array('class' => 'nav'));
             $action->menuItem(common_local_url('notesgroups'), _m('Apuntes'), _m('Apuntes en PDF'), false, 'nav_notespdf');
             $action->out->elementEnd('ul');
