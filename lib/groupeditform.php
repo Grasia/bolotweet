@@ -144,7 +144,7 @@ class GroupEditForm extends Form
             $this->out->elementStart('li');
             $this->out->hidden('groupid', $id);
             // TRANS: Field label on group edit form.
-            $this->out->input('newnickname', _('Nickname'),
+            $this->out->input('newnickname', 'Nickname',
                               ($this->out->arg('newnickname')) ? $this->out->arg('newnickname') : $nickname,
                               // TRANS: Field title on group edit form.
                               _('1-64 lowercase letters or numbers, no punctuation or spaces.'));
