@@ -375,3 +375,14 @@ margin-top: 22px;
 margin-bottom: 3px;
 
 }
+
+.notice .notice-grades .form_grade input.submit{
+   
+    margin-left: 0px;
+    margin-right: 10px;
+}
+
+.notice .notice-grades #grade-0 input.submit{
+ 
+    margin-right:40px;
+}
