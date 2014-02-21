@@ -364,7 +364,14 @@ h6 {font-size: 1em;}
 }
 
 .section ul.entities {
-    width: 240px;
+    width: 220px;
+}
+
+.section #div-members-scroll{
+
+	overflow-y: auto; 
+	overflow-x: hidden; 
+	max-height: 116px;
 }
 
 .section .entities li {

@@ -95,9 +95,7 @@ class ProfileList extends Widget
 
         $cnt = count($profiles);
 
-        $max = min($cnt, $this->maxProfiles());
-
-        for ($i = 0; $i < $max; $i++) {
+        for ($i = 0; $i < $cnt; $i++) {
             $pli = $this->newListItem($profiles[$i]);
             $pli->show();
         }

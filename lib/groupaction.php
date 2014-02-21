@@ -133,7 +133,7 @@ class GroupAction extends Action
      */
     function showMembers()
     {
-        $member = $this->group->getMembers(0, MEMBERS_PER_SECTION);
+        $member = $this->group->getMembers(0);
 
         if (!$member) {
             return;
@@ -156,22 +156,16 @@ class GroupAction extends Action
 
             $this->elementEnd('h2');
 
+            $this->elementStart('div', array('id' => 'div-members-scroll'));
+            
             $gmml = new GroupMembersMiniList($member, $this);
             $cnt = $gmml->show();
             if ($cnt == 0) {
                 // TRANS: Description for mini list of group members on a group page when the group has no members.
-                $this->element('p', null, _('(None)'));
+                $this->element('p', null, _('(Ninguno)'));
             }
 
-            // @todo FIXME: Should be shown if a group has more than 27 members, but I do not see it displayed at
-            //              for example http://identi.ca/group/statusnet. Broken?
-            if ($cnt > MEMBERS_PER_SECTION) {
-                $this->element('a', array('href' => common_local_url('groupmembers',
-                                                                     array('nickname' => $this->group->nickname))),
-                               // TRANS: Link to all group members from mini list of group members if group has more than n members.
-                               _('All members'));
-            }
-
+            $this->elementEnd('div');
             Event::handle('EndShowGroupMembersMiniList', array($this));
         }
 
@@ -190,7 +184,7 @@ class GroupAction extends Action
             return;
         }
 
-        $request = $this->group->getRequests(0, MEMBERS_PER_SECTION);
+        $request = $this->group->getRequests(0);
 
         if (!$request) {
             return;
@@ -206,7 +200,7 @@ class GroupAction extends Action
             $this->element('a', array('href' => common_local_url('groupqueue', array('nickname' =>
                                                                                      $this->group->nickname))),
                            // TRANS: Header for mini list of users with a pending membership request on a group page (h2).
-                           _('Pending'));
+                           _('Pendientes'));
 
             $this->text(' ');
 
@@ -225,7 +219,7 @@ class GroupAction extends Action
 
     function showBlocked()
     {
-        $blocked = $this->group->getBlocked(0, MEMBERS_PER_SECTION);
+        $blocked = $this->group->getBlocked(0);
 
         if (!$blocked) {
             return;
@@ -241,30 +235,25 @@ class GroupAction extends Action
             $this->element('a', array('href' => common_local_url('blockedfromgroup', array('nickname' =>
                                                                                            $this->group->nickname))),
                            // TRANS: Header for mini list of users that are blocked in a group page (h2).
-                           _('Blocked'));
+                           _('Bloqueados'));
 
             $this->text(' ');
 
             $this->text($this->group->getBlockedCount());
 
             $this->elementEnd('h2');
+            
+            $this->elementStart('div', array('id' => 'div-members-scroll'));
 
             $gmml = new GroupBlockedMiniList($blocked, $this);
             $cnt = $gmml->show();
             if ($cnt == 0) {
                 // TRANS: Description for mini list of group members on a group page when the group has no members.
-                $this->element('p', null, _('(None)'));
+                $this->element('p', null, _('(Ninguno)'));
             }
 
-            // @todo FIXME: Should be shown if a group has more than 27 members, but I do not see it displayed at
-            //              for example http://identi.ca/group/statusnet. Broken?
-            if ($cnt > MEMBERS_PER_SECTION) {
-                $this->element('a', array('href' => common_local_url('blockedfromgroup',
-                                                                     array('nickname' => $this->group->nickname))),
-                               // TRANS: Link to all group members from mini list of group members if group has more than n members.
-                               _('All members'));
-            }
 
+            $this->elementEnd('div');
             Event::handle('EndShowGroupBlockedMiniList', array($this));
         }
 
