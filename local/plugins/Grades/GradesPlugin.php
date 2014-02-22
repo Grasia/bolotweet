@@ -6,6 +6,7 @@ if (!defined('STATUSNET')) {
 
 require_once INSTALLDIR . '/local/plugins/Grades/lib/gradeform.php';
 require_once INSTALLDIR . '/local/plugins/Grades/classes/Grades.php';
+require_once INSTALLDIR . '/local/plugins/Grades/classes/Gradesgroup.php';
 require_once INSTALLDIR . '/lib/util.php';
 
 class GradesPlugin extends Plugin {
@@ -24,7 +25,8 @@ class GradesPlugin extends Plugin {
         $schema = Schema::get();
 
         $schema->ensureTable('grades', Grades::schemaDef());
-
+        $schema->ensureTable('grades_group', Gradesgroup::schemaDef());
+        
         return true;
     }
 
