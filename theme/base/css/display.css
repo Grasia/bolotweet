@@ -1383,10 +1383,14 @@ float:left;
     margin-top: 0px;
 }
 
+.form_settings .form_data li#settings_attach input {
+width:auto;
+}
 
 .form_settings .form_data input {
-width:100%;
+width:39%;
 }
+
 .form_settings .form_data input.submit,
 .form_settings .form_data input.checkbox,
 .form_settings .form_data input.radio {
