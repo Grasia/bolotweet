@@ -296,8 +296,8 @@ msgid ""
 "Try subscribing to more people, [join a group](%%action.groups%%) or post "
 "something yourself."
 msgstr ""
-"Esta es la línea temporal de %s y amistades, pero nadie ha publicado nada "
-"todavía."
+"Prueba suscribiéndote a más gente, [úniendote a algún grupo](%%action.groups%%), "
+" o posteando tu mismo."
 
 #. TRANS: %1$s is user nickname, %2$s is user nickname, %2$s is user nickname prefixed with "@".
 #. TRANS: This message contains Markdown links. Keep "](" together.
@@ -6914,7 +6914,7 @@ msgstr "Inicio"
 #. TRANS: Header in administrator navigation panel.
 msgctxt "HEADER"
 msgid "Admin"
-msgstr "Administración"
+msgstr "Admin"
 
 #. TRANS: Menu item title in administrator navigation panel.
 msgid "Basic site configuration"

@@ -153,6 +153,7 @@ class AllAction extends ProfileAction
             if ($this->user->id === $current_user->id) {
                 // TRANS: Encouragement displayed on logged in user's empty timeline.
                 // TRANS: This message contains Markdown links. Keep "](" together.
+                $message.="\n\n\n";
                 $message .= _('Try subscribing to more people, [join a group](%%action.groups%%) or post something yourself.');
             } else {
                 // TRANS: %1$s is user nickname, %2$s is user nickname, %2$s is user nickname prefixed with "@".
