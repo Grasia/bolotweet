@@ -52,7 +52,7 @@ try {
     $user = User::staticGet('nickname', $nickname);
 
     if (!empty($user)) {
-        throw new Exception("A user named '$nickname' already exists.");
+        throw new Exception("El usuario '$nickname' ya existe.");
     }
 
     $user = User::register(array('nickname' => $nickname,
@@ -74,6 +74,8 @@ try {
             throw new Exception("Can't update email address.");
         }
     }
+
+print "Registrado usuario '$user->nickname'\n";
 
 } catch (Exception $e) {
     print $e->getMessage() . "\n";

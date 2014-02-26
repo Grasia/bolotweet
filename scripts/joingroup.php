@@ -50,8 +50,17 @@ try {
         throw new Exception("No such local group: $gnick");
     }
     $group = User_group::staticGet('id', $lgroup->group_id);
+    
+    if($user->isMember($group)){
+        
+        throw new Exception("'$user->nickname' ya pertenece al grupo '$group->nickname'");
+    }
+    
+    else{
     $user->joinGroup($group);
-    print "OK\n";
+    print "'$user->nickname' unido al grupo '$group->nickname'\n";
+    }
+
 } catch (Exception $e) {
     print $e->getMessage()."\n";
     exit(1);
