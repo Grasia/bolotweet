@@ -1124,26 +1124,26 @@ class User extends Managed_DataObject
         }
 
          // @todo FIXME: needs i18n.
-        $body = "Hey, $user->nickname.";
+        $body = "Hola, $user->nickname.";
         $body .= "\n\n";
-        $body .= 'Someone just asked for a new password ' .
-                 'for this account on ' . common_config('site', 'name') . '.';
+        $body .= 'Alguien ha solicitado una nueva contraseña ' .
+                 'para esta cuenta en ' . common_config('site', 'name') . '.';
         $body .= "\n\n";
-        $body .= 'If it was you, and you want to confirm, use the URL below:';
+        $body .= 'Si has sido tú, y quieres modificarla, pulsa en el enlace de abajo:';
         $body .= "\n\n";
         $body .= "\t".common_local_url('recoverpassword',
                                    array('code' => $confirm->code));
         $body .= "\n\n";
-        $body .= 'If not, just ignore this message.';
+        $body .= 'Si no, puedes ignorar y eliminar este mensaje.';
         $body .= "\n\n";
-        $body .= 'Thanks for your time, ';
+        $body .= 'Gracias por tu tiempo, ';
         $body .= "\n";
         $body .= common_config('site', 'name');
         $body .= "\n";
 
         $headers = _mail_prepare_headers('recoverpassword', $user->nickname, $user->nickname);
         // TRANS: Subject for password recovery e-mail.
-        mail_to_user($user, _('Password recovery requested'), $body, $headers, $confirm->address);
+        mail_to_user($user, _('Solicitud de recuperación de contraseña'), $body, $headers, $confirm->address);
     }
 
     function streamModeOnly()
