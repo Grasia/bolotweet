@@ -2,7 +2,7 @@
 <?php
 define('INSTALLDIR', realpath(dirname(__FILE__) . '/..'));
 
-$shortoptions = 'i:n:g:G';
+$shortoptions = 'i:n:g:G:a';
 $longoptions = array('id=', 'nickname=', 'group=', 'group-id=');
 
 $helptext = <<<END_OF_USERROLE_HELP
@@ -13,78 +13,98 @@ Send a welcome email with instructions.
   -n --nickname nickname of the user to send email
   -g --group    Nickname or alias of group to send email
   -G --group-id ID of group to send email
+  -a --all      Send email to all members
 
 END_OF_USERROLE_HELP;
 
 require_once INSTALLDIR . '/scripts/commandline.inc';
 
-// Comprobamos usuario
+// Si tiene la opción all
+if (have_option('a', 'all')) {
 
-$user = false;
 
-if (have_option('i', 'id')) {
-    $id = get_option_value('i', 'id');
-    $profile = Profile::staticGet('id', $id);
-    if (empty($profile)) {
-        print "Can't find user with ID $id\n";
-        exit(1);
+    $qry = "SELECT * FROM profile order by id asc";
+    $pflQry = new Profile();
+
+    $pflQry->query($qry);
+
+    $members = array();
+
+    while ($pflQry->fetch()) {
+        $members[] = clone($pflQry);
     }
 
-    $members = array($profile);
-    $user = true;
-} else if (have_option('n', 'nickname')) {
-    $nickname = get_option_value('n', 'nickname');
-    $user = User::staticGet('nickname', $nickname);
-    if (empty($user)) {
-        print "Can't find user with nickname '$nickname'\n";
-        exit(1);
-    }
-    $profile = $user->getProfile();
-    if (empty($profile)) {
-        print "User with ID $id has no profile\n";
-        exit(1);
-    }
-
-    $members = array($profile);
-    $user = true;
+    $pflQry->free();
 }
 
-// Comprobamos Grupo
+// Si tiene opción de usuario único
+else if (have_option('i', 'id') || have_option('n', 'nickname')) {
 
-if (!$user) {
+    if (have_option('i', 'id')) {
+        $id = get_option_value('i', 'id');
+        $profile = Profile::staticGet('id', $id);
+        if (empty($profile)) {
+            print "Can't find user with ID $id\n";
+            exit(1);
+        }
+
+    } else if (have_option('n', 'nickname')) {
+        $nickname = get_option_value('n', 'nickname');
+        $user = User::staticGet('nickname', $nickname);
+        if (empty($user)) {
+            print "Can't find user with nickname '$nickname'\n";
+            exit(1);
+        }
+        $profile = $user->getProfile();
+        if (empty($profile)) {
+            print "User with ID $id has no profile\n";
+            exit(1);
+        }
+
+    }
+    
+        $members = array($profile);
+}
+
+// Si tiene la opción de grupo
+else if (have_option('G', 'group-id') || have_option('g', 'group')) {
+
     if (have_option('G', 'group-id')) {
         $gid = get_option_value('G', 'group-id');
         $group = User_group::staticGet('id', $gid);
+        
     } else if (have_option('g', 'group')) {
         $gnick = get_option_value('g', 'group');
         $group = User_group::staticGet('nickname', $gnick);
     }
+
     if (empty($group)) {
         print "No such local group: $gnick\n\n";
         exit(1);
     }
 
-    // Existe el grupo
-    else {
+    $nMiembros = $group->getMemberCount();
 
-        $nMiembros = $group->getMemberCount();
+    if ($nMiembros == 0) {
+        print "El grupo $gnick no tiene usuarios.";
+        exit(1);
+    } else {
 
-        if ($nMiembros == 0) {
-            print "El grupo $gnick no tiene usuarios.";
-            exit(1);
-        } else {
+        $profile = $group->getMembers();
 
-            $profile = $group->getMembers();
-
-            while ($profile->fetch()) {
-                $members[] = clone($profile);
-            }
+        while ($profile->fetch()) {
+            $members[] = clone($profile);
         }
     }
 }
+// Si no tiene ninguna de las anteriores.
+else {
+    print "Faltan parámetros\n";
+    exit(1);
+}
+
 
 // Si hemos llegado aquí es que hay usuario o grupo válido.
-
 foreach ($members as $member) {
 
     $user = $member->getUser();
@@ -101,12 +121,12 @@ foreach ($members as $member) {
 
         if (!$confirm->insert()) {
             common_log_db_error($confirm, 'INSERT', __FILE__);
-            // TRANS: Server error displayed if e-mail address confirmation fails in the database on the password recovery form.
+// TRANS: Server error displayed if e-mail address confirmation fails in the database on the password recovery form.
             throw new ServerException(_('Error saving address confirmation.'));
             return;
         }
 
-        //Creamos el correo
+//Creamos el correo
         $subject = "¡Bienvenido a " . common_config('site', 'name') . "!";
         $body = crearEmail($user, $confirm);
 
@@ -122,7 +142,7 @@ foreach ($members as $member) {
 function crearEmail($user, $confirm) {
 
 
-    // Creamos el correo personalizado
+// Creamos el correo personalizado
 
     $body = "Hola, $user->nickname.";
     $body .= "\n\n";
@@ -136,7 +156,7 @@ function crearEmail($user, $confirm) {
     $body .= "\n\n";
     $body .= "\t" . common_local_url('recoverpassword', array('code' => $confirm->code));
     $body .= "\n\n";
-    $body .= "Si ya ha visitado BoloTweet, puede entrar de nuevo con sus datos de siempre.";
+    $body .= "Si ya has visitado BoloTweet, puedes entrar de nuevo con tus datos de siempre.";
     $body .= "\n\n";
     $body .= "Puedes empezar a usar bolotweet desde " . common_local_url('login');
     $body .= "\n\nUtilizando tu nombre de usuario o correo electrónico.\n\n";
