@@ -34,9 +34,9 @@ if [ $? -eq 0 ]; then
 php emailBienvenida.php -n$nick
 fi;
 
-# Ahora vamos a meterle en el grupo que nos han pasado.
-
+# Comprobamos si nos han pasado grupo.
+if [ -n "$2" ];  then
 php joingroup.php -n$nick -g$2
-
+fi
 
 done < $1
