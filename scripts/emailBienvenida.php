@@ -133,6 +133,7 @@ foreach ($members as $member) {
         print "Enviando correo a $user->nickname...";
         if (mail_to_user($user, $subject, $body)) {
             print " Enviado.\n";
+            sleep(5);
         } else {
             print " Fallo.\n";
         }
