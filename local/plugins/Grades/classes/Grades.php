@@ -180,21 +180,16 @@ class Grades extends Managed_DataObject {
         return $obtainedgrade;
     }
 
-    static function getNoticeGrade($noticeid) {
+    static function getNoticeGrade($noticeid, $nickname) {
 
         $grade = new Grades();
-        if (common_config('db', 'quote_identifiers'))
-            $user_table = '"grades"';
-        else
-            $user_table = 'grades';
 
-        $qry = 'SELECT grade ' .
-                'FROM ' . $user_table . ' ' .
-                'WHERE grades.noticeid = %d order by grades.cdate DESC';
+        $qry = 'SELECT g.grade ' .
+                'FROM grades g ' .
+                'WHERE g.noticeid = ' . $noticeid .
+                ' AND g.userid = "' . $nickname . '"';
 
-        // print sprintf($qry, $noticeid);
-
-        $grade->query(sprintf($qry, $noticeid));
+        $grade->query($qry);
 
         $obtainedgrade = null;
 
@@ -207,6 +202,29 @@ class Grades extends Managed_DataObject {
         return $obtainedgrade;
     }
 
+    static function getValidGrader($noticeid, $userid) {
+        
+
+        $grade = new Grades();
+
+        $qry = 'SELECT gg.userid ' .
+                'FROM grades_group gg, group_inbox gi ' .
+                'WHERE gi.notice_id = ' . $noticeid .
+                ' AND gi.group_id = gg.groupid' .
+                ' AND gg.userid = "' . $userid . '"';
+
+        $grade->query($qry);
+
+        if ($grade->fetch()) {
+            $result = true;
+        } else
+            $result = false;
+
+        $grade->free();
+        return $result;
+    }
+    
+    
     static function getNoticeGradesAndGraders($noticeid) {
 
         $grade = new Grades();
