@@ -1,10 +1,9 @@
 #!/usr/bin/env php
 <?php
-
 define('INSTALLDIR', realpath(dirname(__FILE__) . '/..'));
 
 $shortoptions = 'i:n:g:G:d';
-$longoptions = array('id=', 'nickname=','group=', 'group-id=', 'delete');
+$longoptions = array('id=', 'nickname=', 'group=', 'group-id=', 'delete');
 
 $helptext = <<<END_OF_USERROLE_HELP
 createGrader.php [options]
@@ -18,7 +17,7 @@ Create a grader.
 
 END_OF_USERROLE_HELP;
 
-require_once INSTALLDIR.'/scripts/commandline.inc';
+require_once INSTALLDIR . '/scripts/commandline.inc';
 
 // Comprobamos usuario
 
@@ -48,16 +47,16 @@ if (have_option('i', 'id')) {
 
 // Comprobamos Grupo
 
-    if (have_option('G', 'group-id')) {
-        $gid = get_option_value('G', 'group-id');
-        $lgroup = Local_group::staticGet('group_id', $gid);
-    } else if (have_option('g', 'group')) {
-        $gnick = get_option_value('g', 'group');
-        $lgroup = Local_group::staticGet('nickname', $gnick);
-    }
-    if (empty($lgroup)) {
-        throw new Exception("No such local group: $gnick");
-    }
+if (have_option('G', 'group-id')) {
+    $gid = get_option_value('G', 'group-id');
+    $lgroup = Local_group::staticGet('group_id', $gid);
+} else if (have_option('g', 'group')) {
+    $gnick = get_option_value('g', 'group');
+    $lgroup = Local_group::staticGet('nickname', $gnick);
+}
+if (empty($lgroup)) {
+    throw new Exception("No such local group: $gnick");
+}
 
 $role = 'grader';
 
@@ -67,7 +66,7 @@ if (have_option('d', 'delete')) {
     try {
         $profile->revokeRole($role);
         print "OK\n";
-        
+
         print "Desvinculando usuario '$profile->nickname' del Grupo '$lgroup->nickname' ($lgroup->group_id)...";
         Gradesgroup::desvincularGrupo($profile->id, $lgroup->group_id);
         print "OK\n";
@@ -76,17 +75,21 @@ if (have_option('d', 'delete')) {
         print $e->getMessage();
         print "\n";
     }
-    
 } else { // Si no es borrar
     print "Granting role '$role' to user '$profile->nickname' ($profile->id)...";
     try {
-        $profile->grantRole($role);
-        print "OK\n";
-        
+
+        if ($profile->hasRole('grader'))
+            print "Fallo. Ya era grader.\n";
+
+        else {
+            $profile->grantRole($role);
+            print "OK\n";
+        }
+
         print "Vinculando usuario '$profile->nickname' con Grupo '$lgroup->nickname' ($lgroup->group_id)...";
         Gradesgroup::vincularGrupo($profile->id, $lgroup->group_id);
         print "OK\n";
-        
     } catch (Exception $e) {
         print "FAIL\n";
         print $e->getMessage();
