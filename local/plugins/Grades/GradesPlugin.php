@@ -26,7 +26,7 @@ class GradesPlugin extends Plugin {
 
         $schema->ensureTable('grades', Grades::schemaDef());
         $schema->ensureTable('grades_group', Gradesgroup::schemaDef());
-        
+
         return true;
     }
 
@@ -121,20 +121,17 @@ class GradesPlugin extends Plugin {
         // Si la noticia es de un profesor, mostramos el birrete.
         if ($args->notice->getProfile()->getUser()->hasRole('grader')) {
 
-             $path = $this->path('css/birrete-small.png');
-             $args->out->element('img', array('id' => 'birrete-grades', 'alt' => 'Profesor', 'src' => $path));
-
-        } 
-        
-        else {
+            $path = $this->path('css/birrete-small.png');
+            $args->out->element('img', array('id' => 'birrete-grades', 'alt' => 'Profesor', 'src' => $path));
+        } else {
             $noticeid = $args->notice->id;
-            $gradeResult= Grades::devolverGrade($noticeid);
-            
+            $gradeResult = Grades::devolverGrade($noticeid);
+
             if (is_array($gradeResult)) {
-                
+
                 $gradeValue = reset($gradeResult);
                 $grader = key($gradeResult);
-                
+
                 $args->out->elementStart('div', array('class' => 'notice-current-grade'));
                 $args->out->elementStart('p', array('class' => 'notice-current-grade-value'));
                 $args->out->raw($grader . '<br/>' . $gradeValue);
@@ -142,7 +139,7 @@ class GradesPlugin extends Plugin {
                 $args->out->elementEnd('div');
             }
         }
-        
+
         return true;
     }
 
@@ -152,14 +149,25 @@ class GradesPlugin extends Plugin {
         if (!empty($user)) {
             if ($user->hasRole('grader')) {
 
+                // Si la noticia NO es de un profesor, entonces se puede puntuar.
                 if (!$args->notice->getProfile()->getUser()->hasRole('grader')) {
 
                     $noticeid = $args->notice->id;
-                    $gradevalue = Grades::getNoticeGrade($noticeid);
+                    $nickname = $user->nickname;
+                    $userid = $user->id;
 
-                    if ($gradevalue == '?') {
+                    // Si puede puntuar (porque es grader en el grupo del tweet)
+                    if (Grades::getValidGrader($noticeid, $userid)) {
 
-                        $args->out->elementStart('div', array('class' => 'notice-grades'));
+                        $gradevalue = Grades::getNoticeGrade($noticeid, $nickname);
+
+                        if ($gradevalue == '?')
+                            $args->out->elementStart('div', array('class' => 'notice-grades'));
+
+
+                        else if ($gradevalue != '?')
+                            $args->out->elementStart('div', array('class' => 'notice-grades-hidden'));
+
                         $this->showNumbers($args, 0);
                         $this->showNumbers($args, 1);
                         $this->showNumbers($args, 2);
@@ -169,37 +177,32 @@ class GradesPlugin extends Plugin {
                 }
             }
         }
+        
         return true;
     }
 
-        function onStartShowAccountProfileBlock($out,$profile){
-        
+    function onStartShowAccountProfileBlock($out, $profile) {
+
         if ($profile->getUser()->hasRole('grader')) {
 
             // Ponemos la imagen del birrete
             $path = $this->path('css/birrete-small.png');
             $out->element('img', array('id' => 'birrete-profile', 'alt' => 'Profesor', 'src' => $path));
-            
+
             // La etiqueta de profesor
             $out->elementStart('p', array('id' => 'label-profesor'));
             $out->raw(_m('PROFESOR'));
             $out->elementEnd('p');
-        
         }
-        
+
         return true;
     }
-    
-    
+
     function onEndShowStyles($action) {
         $action->cssLink($this->path('css/grades.css'));
         return true;
     }
 
-    
-
-    
-    
     /* function onEndShowScripts($action) {
       $action->script($this->path('js/grades.js'));
       return true;
