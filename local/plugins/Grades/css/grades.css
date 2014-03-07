@@ -162,3 +162,8 @@
     left: 6px;
 
 }
+
+.notice-grades-hidden {
+    
+    display: none;
+}
