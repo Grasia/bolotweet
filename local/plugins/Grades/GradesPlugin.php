@@ -128,13 +128,16 @@ class GradesPlugin extends Plugin {
         
         else {
             $noticeid = $args->notice->id;
-            $gradevalue = Grades::getNoticeGrade($noticeid);
-            $userid = Grades::getNoticeGradeUserId($noticeid);
+            $gradeResult= Grades::devolverGrade($noticeid);
             
-            if ($gradevalue != '?') {
+            if (is_array($gradeResult)) {
+                
+                $gradeValue = reset($gradeResult);
+                $grader = key($gradeResult);
+                
                 $args->out->elementStart('div', array('class' => 'notice-current-grade'));
                 $args->out->elementStart('p', array('class' => 'notice-current-grade-value'));
-                $args->out->raw($userid . '<br/>' . $gradevalue);
+                $args->out->raw($grader . '<br/>' . $gradeValue);
                 $args->out->elementEnd('p');
                 $args->out->elementEnd('div');
             }
