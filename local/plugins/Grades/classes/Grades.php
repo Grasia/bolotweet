@@ -32,8 +32,6 @@ if (!defined('STATUSNET') && !defined('LACONICA')) {
     exit(1);
 }
 
-
-
 /**
  * Form for favoring a notice
  *
@@ -124,9 +122,8 @@ class Grades extends Managed_DataObject {
         }
 
         $grade->free();
-        
-        return $foundgroups;
 
+        return $foundgroups;
     }
 
     static function getGroupsWithGrades() {
@@ -149,12 +146,10 @@ class Grades extends Managed_DataObject {
         }
 
         $grade->free();
-        
-        return User_group::multiGet('id', $foundgroups);
 
+        return User_group::multiGet('id', $foundgroups);
     }
 
-    
     static function getGradedNoticesAndUsersWithinGroup($groupID) {
         $grade = new Grades();
         if (common_config('db', 'quote_identifiers'))
@@ -207,6 +202,34 @@ class Grades extends Managed_DataObject {
             $obtainedgrade = $grade->grade;
         } else
             $obtainedgrade = '?';
+
+        $grade->free();
+        return $obtainedgrade;
+    }
+
+    static function getNoticeGradesAndGraders($noticeid) {
+
+        $grade = new Grades();
+        if (common_config('db', 'quote_identifiers'))
+            $user_table = '"grades"';
+        else
+            $user_table = 'grades';
+
+        $qry = 'SELECT grade as grade, userid as nickname ' .
+                'FROM ' . $user_table . ' ' .
+                'WHERE grades.noticeid = %d order by grades.cdate DESC';
+
+        // print sprintf($qry, $noticeid);
+
+        $grade->query(sprintf($qry, $noticeid));
+
+        while($grade->fetch()){
+                $obtainedgrade[$grade->nickname] = $grade->grade;
+        } 
+        
+        if(empty($obtainedgrade)){
+            $obtainedgrade = '?';
+        }
 
         $grade->free();
         return $obtainedgrade;
@@ -292,6 +315,40 @@ class Grades extends Managed_DataObject {
         }
 
         $gradeBD->free();
+    }
+
+    static function devolverGrade($noticeid, $type = "mean") {
+
+
+        $resultGrade = self::getNoticeGradesAndGraders($noticeid);
+
+        if (!is_array($resultGrade) && $resultGrade == '?') {
+            $grade = $resultGrade;
+        } else if (is_array($resultGrade) && count($resultGrade) > 1) {
+
+            switch ($type) {
+                case 'mean':
+                    $count = count($resultGrade);
+                    $sum = array_sum($resultGrade);
+                    $total = $sum / $count;
+                    break;
+                case 'median':
+                    rsort($resultGrade);
+                    $middle = round(count($resultGrade) / 2);
+                    $total = $resultGrade[$middle - 1];
+                    break;
+            }
+            
+            $grade = array("Puntuación" => $total);
+        }
+        
+        else if(is_array($resultGrade) && count($resultGrade) == 1){
+            
+            $grade = $resultGrade;
+        }
+        
+        return $grade;
+
     }
 
 }
