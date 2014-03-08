@@ -175,3 +175,18 @@
     
     display: none;
 }
+
+.notice-options .notice-modify-grade{
+    
+background-image: url("modify-grade.png");
+background-repeat: no-repeat;
+background-color: transparent;
+background-position: 0px -1px;
+
+
+}
+
+.notice-options .notice-modify-grade-hidden{
+    
+    display:none;
+}

@@ -1,24 +1,6 @@
-function showStream(){
+function editarNota(id){
     
-        if($(document.body).attr('id')=='showstream'){
-            
-        var noticeReplace = document.getElementsByClassName('notice-current-grade-value');
-        
-        for (var i = 0; i < noticeReplace.length; ++i) {
-            
-            var texto = noticeReplace[i].innerHTML;
-            var partes = texto.split("<br>");
-            
-            noticeReplace[i].innerHTML = "Puntuación: " + partes[1] + " por " + partes[0];
-            
-        }
-        
-    }
-        
+    $("#div-grades-hidden-"+id).attr('class','notice-grades');
     
-    
+    $("#button-modify-grade-"+id).attr('class','notice-modify-grade-hidden');
 }
-
-$(document).ready(function() {
-    showStream();
-});

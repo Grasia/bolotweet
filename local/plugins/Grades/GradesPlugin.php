@@ -87,34 +87,44 @@ class GradesPlugin extends Plugin {
         return true;
     }
 
-    /*
-      function onEndProfileListItemActionElements($item){
+    /* function onEndProfileListItemActionElements($item){
 
       $item->action->elementStart('li', array('class' => 'entity_block'));
       $item->action->raw('explota');
       $item->action->elementEnd('li');
-      }
+      } */
 
-      function onStartShowNoticeOptionItems($item) {
-      $user = common_current_user();
-      $noticeid = $item->getNotice()->id;
-      $gradevalue = Grades::getNoticeGrade($noticeid);
+    function onStartShowNoticeOptionItems($item) {
+        $user = common_current_user();
+        if (!empty($user)) {
 
-      if (!empty($user)) {
+            if ($user->hasRole('grader')) {
 
+                // Si la noticia NO es de un profesor, entonces se puede puntuar.
+                if (!$item->notice->getProfile()->getUser()->hasRole('grader')) {
 
-      if ($user->hasRole('grader') && $gradevalue != '?') {
+                    $noticeid = $item->notice->id;
+                    $nickname = $user->nickname;
+                    $userid = $user->id;
 
-      $item->out->elementStart('p', array('onclick' => 'prueba('.$gradevalue.');'));
-      $item->out->raw('M');
-      $item->out->elementEnd('p');
+                    // Si puede puntuar (porque es grader en el grupo del tweet)
+                    if (Grades::getValidGrader($noticeid, $userid)) {
 
-      }
-      }
+                        $gradevalue = Grades::getNoticeGrade($noticeid, $nickname);
 
-      return true;
-      }
-     */
+                        if ($gradevalue != '?') {
+
+                            $item->out->elementStart('a', array('href' => 'javascript:editarNota(' . $noticeid . ');', 'class' => 'notice-modify-grade', 'id' => 'button-modify-grade-' . $noticeid));
+                            $item->out->raw('Modificar Nota');
+                            $item->out->elementEnd('a');
+                        }
+                    }
+                }
+            }
+        }
+
+        return true;
+    }
 
     function onStartShowNoticeItem($args) {
 
@@ -166,7 +176,7 @@ class GradesPlugin extends Plugin {
 
 
                         else if ($gradevalue != '?')
-                            $args->out->elementStart('div', array('class' => 'notice-grades-hidden'));
+                            $args->out->elementStart('div', array('id' => 'div-grades-hidden-' . $noticeid, 'class' => 'notice-grades-hidden'));
 
                         $this->showNumbers($args, 0);
                         $this->showNumbers($args, 1);
@@ -177,7 +187,7 @@ class GradesPlugin extends Plugin {
                 }
             }
         }
-        
+
         return true;
     }
 
@@ -203,8 +213,8 @@ class GradesPlugin extends Plugin {
         return true;
     }
 
-    /* function onEndShowScripts($action) {
+     function onEndShowScripts($action) {
       $action->script($this->path('js/grades.js'));
       return true;
-      } */
+      } 
 }
