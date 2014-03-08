@@ -157,13 +157,15 @@ class Grades extends Managed_DataObject {
         else
             $user_table = 'grades';
 
-        $qry = 'select p.nickname as userid, sum(g.grade) as grade' .
-                ' from grades g, group_inbox gr, notice n, profile p' .
-                ' where g.noticeid = gr.notice_id' .
-                ' and gr.group_id = ' . $groupID .
-                ' and g.noticeid = n.id ' .
-                ' and n.profile_id = p.id' .
-                ' group by p.nickname';
+        $qry = 'select tmp.nickname as userid, sum(tmp.gradeAvg) as grade' .
+               ' from (select p.nickname, avg(g.grade) as gradeAvg' .
+                        ' from grades g, group_inbox gr, notice n, profile p' .
+                        ' where g.noticeid = gr.notice_id' .
+                        ' and gr.group_id = ' . $groupID .
+                        ' and g.noticeid = n.id ' .
+                        ' and n.profile_id = p.id' .
+                        ' group by p.nickname) as tmp' .
+               ' group by tmp.nickname';
 
 
         $grade->query($qry); // all select fields will
@@ -357,7 +359,7 @@ class Grades extends Managed_DataObject {
                     break;
             }
             
-            $grade = array("Puntuación" => $total);
+            $grade = array("Nota" => $total);
         }
         
         else if(is_array($resultGrade) && count($resultGrade) == 1){
