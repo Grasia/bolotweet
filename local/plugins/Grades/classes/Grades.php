@@ -326,7 +326,8 @@ class Grades extends Managed_DataObject {
         $qry = 'UPDATE ' . $user_table .
                 ' SET grade=' . $grade .
                 ', cdate=\'' . $time . '\'' .
-                ' WHERE noticeid=' . $noticeid;
+                ' WHERE noticeid=' . $noticeid .
+                ' AND userid="' . $userid . '"';
 
         $result = $gradeBD->query($qry);
 

@@ -106,17 +106,18 @@ class GradeAction extends Action {
         }
 
         $gradevalue = $this->trimmed('value');
-
-        $exist = Grades::getNoticeGrade($noticeid);
+        $nickname = $user->nickname;
+        
+        $exist = Grades::getNoticeGrade($noticeid, $nickname);
         
         if($exist != '?'){
             
             Grades::updateNotice(array('noticeid' => $noticeid,
-            'grade' => $gradevalue));
+            'grade' => $gradevalue, 'userid' => $nickname));
         }
         
         else{
-        Grades::register(array('userid' => $user->nickname,
+        Grades::register(array('userid' => $nickname,
             'noticeid' => $noticeid,
             'grade' => $gradevalue));
         }
