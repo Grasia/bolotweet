@@ -87,6 +87,41 @@ class GradesPlugin extends Plugin {
         return true;
     }
 
+    function onStartAsideGroupProfile($out, $group) {
+
+        $user = common_current_user();
+        if (!empty($user)) {
+
+            $out->elementStart('div', array("id" => "entity_graders", "class" => "section"));
+            $out->elementStart('h2');
+
+            $out->text('Profesores');
+
+            $out->text(' ');
+
+            $graders = Gradesgroup::getGraders($group->id);
+
+            $out->text($graders->N);
+
+            $out->elementEnd('h2');
+
+            $out->elementStart('div', array('id' => 'div-members-scroll'));
+
+            $gmml = new GroupMembersMiniList($graders, $out);
+            $cnt = $gmml->show();
+            if ($cnt == 0) {
+                // TRANS: Description for mini list of group members on a group page when the group has no members.
+                $out->element('p', null, _('(Ninguno)'));
+            }
+
+            $out->elementEnd('div');
+
+            $out->elementEnd('div');
+        }
+
+        return true;
+    }
+
     /* function onEndProfileListItemActionElements($item){
 
       $item->action->elementStart('li', array('class' => 'entity_block'));
@@ -213,8 +248,9 @@ class GradesPlugin extends Plugin {
         return true;
     }
 
-     function onEndShowScripts($action) {
-      $action->script($this->path('js/grades.js'));
-      return true;
-      } 
+    function onEndShowScripts($action) {
+        $action->script($this->path('js/grades.js'));
+        return true;
+    }
+
 }

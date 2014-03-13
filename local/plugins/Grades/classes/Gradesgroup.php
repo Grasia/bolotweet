@@ -11,7 +11,7 @@ class Gradesgroup extends Managed_DataObject {
      */
     public $__table = 'grades_group';
     public $groupid = null; // group id
-    public $userid = null; // user who created the grade
+    public $userid = null; // user id
 
     function staticGet($k, $v = null) {
         return Memcached_DataObject::staticGet('Gradesgroup', $k, $v);
@@ -76,9 +76,23 @@ class Gradesgroup extends Managed_DataObject {
                 ' WHERE userid=' . $userid .
                 ' AND groupid=' . $groupid;
 
-        $result = $grGroup->query($qry);
+        $grGroup->query($qry);
 
         $grGroup->free();
+    }
+    
+    static function getGraders($groupid) {
+
+        $qry = 'SELECT profile.* ' .
+          'FROM profile JOIN grades_group '.
+          'ON profile.id = grades_group.userid ' .
+          'WHERE grades_group.groupid = ' . $groupid;
+        
+        $graders = new Profile();
+
+        $graders->query($qry);
+        
+        return $graders;
     }
 
 }
