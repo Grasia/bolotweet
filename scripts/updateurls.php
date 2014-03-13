@@ -29,51 +29,59 @@ update stored URLs in the system
 
 END_OF_UPDATEURLS_HELP;
 
-require_once INSTALLDIR.'/scripts/commandline.inc';
+require_once INSTALLDIR . '/scripts/commandline.inc';
 
-function main()
-{
+function main() {
     updateUserUrls();
     updateGroupUrls();
 }
 
-function updateUserUrls()
-{
+function updateUserUrls() {
     printfnq("Updating user URLs...\n");
 
     // XXX: only update user URLs where out-of-date
 
-    $user = new User();
-    if ($user->find()) {
-        while ($user->fetch()) {
-            printfv("Updating user {$user->nickname}...");
-            try {
-                $profile = $user->getProfile();
+    $qry = "SELECT * FROM profile order by id asc";
+    $pflQry = new Profile();
 
-                updateProfileUrl($profile);
-                updateAvatarUrls($profile);
+    $pflQry->query($qry);
 
-                // Broadcast for remote users
+    $members = array();
 
-                common_broadcast_profile($profile);
+    while ($pflQry->fetch()) {
+        $members[] = clone($pflQry);
+    }
 
-            } catch (Exception $e) {
-                printv("Error updating URLs: " . $e->getMessage());
-            }
-            printfv("DONE.");
+    $pflQry->free();
+
+    foreach ($members as $member) {
+
+        $user = $member->getUser();
+
+        printfv("Updating user {$user->nickname}...");
+        try {
+            $profile = $user->getProfile();
+
+            updateProfileUrl($profile);
+            updateAvatarUrls($profile);
+
+            // Broadcast for remote users
+
+            common_broadcast_profile($profile);
+        } catch (Exception $e) {
+            printv("Error updating URLs: " . $e->getMessage());
         }
+        printfv("DONE.");
     }
 }
 
-function updateProfileUrl($profile)
-{
+function updateProfileUrl($profile) {
     $orig = clone($profile);
     $profile->profileurl = common_profile_url($profile->nickname);
     $profile->update($orig);
 }
 
-function updateAvatarUrls($profile)
-{
+function updateAvatarUrls($profile) {
     $avatar = new Avatar();
 
     $avatar->profile_id = $profile->id;
@@ -82,11 +90,10 @@ function updateAvatarUrls($profile)
             $orig_url = $avatar->url;
             $avatar->url = Avatar::url($avatar->filename);
             if ($avatar->url != $orig_url) {
-                $sql =
-                  "UPDATE avatar SET url = '" . $avatar->url . "' ".
-                  "WHERE profile_id = " . $avatar->profile_id . " ".
-                  "AND width = " . $avatar->width . " " .
-                  "AND height = " . $avatar->height . " ";
+                $sql = "UPDATE avatar SET url = '" . $avatar->url . "' " .
+                        "WHERE profile_id = " . $avatar->profile_id . " " .
+                        "AND width = " . $avatar->width . " " .
+                        "AND height = " . $avatar->height . " ";
 
                 if ($avatar->original) {
                     $sql .= "AND original = 1 ";
@@ -102,8 +109,7 @@ function updateAvatarUrls($profile)
     }
 }
 
-function updateGroupUrls()
-{
+function updateGroupUrls() {
     printfnq("Updating group URLs...\n");
 
     $group = new User_group();
@@ -120,16 +126,14 @@ function updateGroupUrls()
                     $group->mini_logo = Avatar::url(basename($group->mini_logo));
                 }
                 // XXX: this is a hack to see if a group is local or not
-                $localUri = common_local_url('groupbyid',
-                                             array('id' => $group->id));
+                $localUri = common_local_url('groupbyid', array('id' => $group->id));
                 if ($group->getUri() != $localUri) {
-                    $group->mainpage = common_local_url('showgroup',
-                                                        array('nickname' => $group->nickname));
+                    $group->mainpage = common_local_url('showgroup', array('nickname' => $group->nickname));
                 }
                 $group->update($orig);
                 printfv("DONE.");
             } catch (Exception $e) {
-                printv("Can't update avatars for group " . $group->nickname . ": ". $e->getMessage());
+                printv("Can't update avatars for group " . $group->nickname . ": " . $e->getMessage());
             }
         }
     }
