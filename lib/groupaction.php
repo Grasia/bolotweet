@@ -111,6 +111,7 @@ class GroupAction extends Action
      */
     function showSections()
     {
+        Event::handle('StartAsideGroupProfile', array($this, $this->group));
         $this->showMembers();
         $cur = common_current_user();
         if ($cur && $cur->isAdmin($this->group)) {
@@ -124,6 +125,8 @@ class GroupAction extends Action
             $cloud = new GroupTagCloudSection($this, $this->group);
             $cloud->show();
         }
+        
+        Event::handle('EndAsideGroupProfile', array($this, $this->group));
     }
 
     /**
