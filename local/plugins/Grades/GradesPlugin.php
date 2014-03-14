@@ -178,7 +178,7 @@ class GradesPlugin extends Plugin {
                 $grader = key($gradeResult);
 
                 $args->out->elementStart('div', array('class' => 'notice-current-grade'));
-                $args->out->elementStart('p', array('class' => 'notice-current-grade-value'));
+                $args->out->elementStart('p', array('class' => 'notice-current-grade-value', 'title' => $grader));
                 $args->out->raw($grader . '<br/>' . $gradeValue);
                 $args->out->elementEnd('p');
                 $args->out->elementEnd('div');
