@@ -123,7 +123,7 @@ class GradeAction extends Action {
         }
 
         // Redirigimos a la página en la que estaba el grader.
-        $url = $this->trimmed('url');
+        $url = $_SERVER["HTTP_REFERER"];
         $url .= '#notice-' . $noticeid;
         common_redirect($url, 303);
     }

@@ -73,10 +73,7 @@ class GradesPlugin extends Plugin {
 
     function showNumbers($args, $value) {
 
-        $request = substr($_SERVER["REQUEST_URI"], 11);
-        $url = common_path() . $request;
-
-        $grade = new GradeForm($args->out, $args->notice, $value, $url);
+        $grade = new GradeForm($args->out, $args->notice, $value);
         $grade->show();
     }
 
