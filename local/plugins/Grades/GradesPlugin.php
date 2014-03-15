@@ -35,7 +35,7 @@ class GradesPlugin extends Plugin {
     }
 
     function onCleanupPlugin() {
-        // A chance to cleanup a plugin at the end of a program
+        // A chance to cleanup a plugin at the end of a program.
     }
 
     function onRouterInitialized($m) {
@@ -73,7 +73,10 @@ class GradesPlugin extends Plugin {
 
     function showNumbers($args, $value) {
 
-        $grade = new GradeForm($args->out, $args->notice, $value);
+        $request = substr($_SERVER["REQUEST_URI"], 11);
+        $url = common_path() . $request;
+
+        $grade = new GradeForm($args->out, $args->notice, $value, $url);
         $grade->show();
     }
 

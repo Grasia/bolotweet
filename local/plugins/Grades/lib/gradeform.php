@@ -53,6 +53,7 @@ class GradeForm extends Form {
      */
     var $notice = null;
     var $value = 0;
+    var $url = null;
 
     /**
      * Constructor
@@ -60,11 +61,12 @@ class GradeForm extends Form {
      * @param HTMLOutputter $out    output channel
      * @param Notice        $notice notice to favor
      */
-    function __construct($out = null, $notice = null, $value = 0) {
+    function __construct($out = null, $notice = null, $value = 0, $url = null) {
         parent::__construct($out);
 
         $this->notice = $notice;
         $this->value = $value;
+        $this->url = $url;
     }
 
     /**
@@ -111,9 +113,7 @@ class GradeForm extends Form {
     function formData() {
         $this->out->hidden('notice-n' . $this->notice->id, $this->notice->id, 'notice');
         $this->out->hidden('value-notice-n' . $this->notice->id, $this->value, 'value');
-        /* $this->out->hidden('ajax',
-          '1',
-          'ajax'); */
+        $this->out->hidden('url-grades', $this->url, 'url');
     }
 
     /**

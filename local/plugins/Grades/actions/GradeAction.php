@@ -99,6 +99,8 @@ class GradeAction extends Action {
         }
         $noticeid = $this->trimmed('notice');
         $notice = Notice::staticGet($noticeid);
+
+
         $token = $this->trimmed('token-' . $notice->id);
         if (!$token || $token != common_session_token()) {
             $this->clientError(_('There was a problem with your session token. Try again, please.'));
@@ -107,36 +109,23 @@ class GradeAction extends Action {
 
         $gradevalue = $this->trimmed('value');
         $nickname = $user->nickname;
-        
+
         $exist = Grades::getNoticeGrade($noticeid, $nickname);
-        
-        if($exist != '?'){
-            
+
+        if ($exist != '?') {
+
             Grades::updateNotice(array('noticeid' => $noticeid,
-            'grade' => $gradevalue, 'userid' => $nickname));
-        }
-        
-        else{
-        Grades::register(array('userid' => $nickname,
-            'noticeid' => $noticeid,
-            'grade' => $gradevalue));
-        }
-
-        if ($this->boolean('ajax')) {
-
-            $this->startHTML('application/xml,text/xml;charset=utf-8');
-            $this->elementStart('head');
-            $this->element('title', null, _('Disfavor favorite'));
-            $this->elementEnd('head');
-            $this->elementStart('body');
-            $this->element('p', array('class' => 'notice-current-grade-value'), ' ' . $gradevalue);
-
-            $this->elementEnd('body');
-            $this->elementEnd('html');
+                'grade' => $gradevalue, 'userid' => $nickname));
         } else {
-
-            common_redirect(common_local_url('all', array('nickname' => $user->nickname)), 303);
+            Grades::register(array('userid' => $nickname,
+                'noticeid' => $noticeid,
+                'grade' => $gradevalue));
         }
+
+        // Redirigimos a la página en la que estaba el grader.
+        $url = $this->trimmed('url');
+        $url .= '#notice-' . $noticeid;
+        common_redirect($url, 303);
     }
 
     /**
