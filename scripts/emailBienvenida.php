@@ -152,18 +152,30 @@ function crearEmail($user, $confirm) {
     $body .= "Gracias por unirte a esta nueva plataforma. Ahora, podrás disfrutar " .
             'de todas sus ventajas.';
     $body .= "\n\n";
-    $body .= "Si es la primera vez que entras al sistema, deberás acceder a la siguiente dirección " .
+    $body .= "Cuando accedas a BoloTweet, dirígete a esta dirección para obtener el " .
+            "manual de uso.";
+    $body .= "\n\n";
+    $body .= "\t" . common_local_url('guiamostrar');
+    $body .= "\n\n";
+    $body .= "Si es la primera vez que entras al sistema, deberás pulsar en el siguiente enlace " .
             "para crear tu contraseña.";
     $body .= "\n\n";
     $body .= "\t" . common_local_url('recoverpassword', array('code' => $confirm->code));
     $body .= "\n\n";
+    $body .= "¡Advertencia! Este enlace es de un sólo uso. Si al acceder no cambias la contraseña, quedará inservible "
+            . "y deberás utilizar el apartado \"¿Contraseña olvidada o perdida?\" para solicitar una nueva.";
+    $body .= "\n\n";
     $body .= "Si ya has visitado BoloTweet, puedes entrar de nuevo con tus datos de siempre.";
     $body .= "\n\n";
-    $body .= "Puedes empezar a usar bolotweet desde " . common_local_url('login');
-    $body .= "\n\nUtilizando tu nombre de usuario o correo electrónico.\n\n";
+    $body .= "Puedes empezar a usarlo utilizando tu nombre de usuario o correo electrónico, "
+            . "desde:\n\n";
+    $body .= "\t" . common_local_url('login');
+    $body .= "\n\n";
+    $body .= "---------------------------------------------------\n";
     $body .= "Nombre de Usuario: $user->nickname\n";
     $body .= "Correo electrónico: $user->email\n";
-    $body .= "\n\n\nCualquier duda pongánse en contacto con su profesor.";
+    $body .= "---------------------------------------------------\n";
+    $body .= "\n\n\nPara cualquier duda, pongánse en contacto con su profesor.";
     $body .= "\n\nUn saludo,\n";
     $body .= "Administrador de " . common_config('site', 'name');
     $body .= "\n\n\n\n";
