@@ -88,6 +88,11 @@ class GradereportAction extends Action {
     function handle($args) {
         parent::handle($args);
 
+         if (!common_logged_in()) {
+            $this->clientError(_('Not logged in.'));
+            return;
+        }
+        
         $this->showPage();
     }
 

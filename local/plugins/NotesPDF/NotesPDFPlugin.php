@@ -34,7 +34,7 @@ class NotesPDFPlugin extends Plugin {
             case 'Notesgroupsform':
             case 'Notescustomizeform':
                 include_once $dir . '/lib/' . $cls . '.php';
-                break;
+                return false;
             case 'NotesPDF':
             case 'GenerarPDF':
                 include_once $dir . '/classes/' . $cls . '.php';
