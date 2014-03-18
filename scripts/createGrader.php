@@ -59,13 +59,28 @@ if (empty($lgroup)) {
 }
 
 $role = 'grader';
+$role2 = 'deleter';
 
 // Comprobamos si se desea borrar.    
 if (have_option('d', 'delete')) {
     print "Revoking role '$role' from user '$profile->nickname' ($profile->id)...";
     try {
-        $profile->revokeRole($role);
-        print "OK\n";
+
+        if ($profile->hasRole('grader')) {
+            $profile->revokeRole($role);
+            print "OK\n";
+        } else {
+            print "Fallo. No era grader.\n";
+        }
+
+        print "Revoking role '$role2' from user '$profile->nickname' ($profile->id)...";
+
+        if ($profile->hasRole('deleter')) {
+            $profile->revokeRole($role2);
+            print "OK\n";
+        } else {
+            print "Fallo. No era deleter.\n";
+        }
 
         print "Desvinculando usuario '$profile->nickname' del Grupo '$lgroup->nickname' ($lgroup->group_id)...";
         Gradesgroup::desvincularGrupo($profile->id, $lgroup->group_id);
@@ -84,6 +99,15 @@ if (have_option('d', 'delete')) {
 
         else {
             $profile->grantRole($role);
+            print "OK\n";
+        }
+
+        print "Granting role '$role2' to user '$profile->nickname' ($profile->id)...";
+        if ($profile->hasRole('deleter'))
+            print "Fallo. Ya era deleter.\n";
+
+        else {
+            $profile->grantRole($role2);
             print "OK\n";
         }
 
