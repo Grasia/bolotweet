@@ -7,7 +7,7 @@ function editarNota(id){
 
 function puntuarNota(noticeid, value){
     
-     $("#notice-"+noticeid+'>.notice-grades').remove();
+     $("#notice-"+noticeid+'>.notice-grades').attr('class','notice-grades-hidden');
     
      $("#notice-"+noticeid).append('<p class="temp-text-grades">Puntuado con un: ' + value + '</p>');
       
