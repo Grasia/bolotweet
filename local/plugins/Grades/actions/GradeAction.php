@@ -122,10 +122,18 @@ class GradeAction extends Action {
                 'grade' => $gradevalue));
         }
 
-        // Redirigimos a la página en la que estaba el grader.
-        $url = $_SERVER["HTTP_REFERER"];
-        $url .= '#notice-' . $noticeid;
-        common_redirect($url, 303);
+       
+         if ($this->boolean('ajax')) {
+
+            $this->startHTML('application/xml,text/xml;charset=utf-8');
+            $this->elementStart('head');
+            $this->element('title', null, _('Disfavor favorite'));
+            $this->elementEnd('head');
+            $this->elementStart('body');
+            $this->element('p');
+            $this->elementEnd('body');
+            $this->elementEnd('html');
+         }
     }
 
     /**

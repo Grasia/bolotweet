@@ -190,3 +190,10 @@ background-position: 0px -1px;
     
     display:none;
 }
+
+.temp-text-grades{
+    
+    margin-left: 35%;
+    float: left;
+    font-weight: bold;
+}

@@ -111,16 +111,16 @@ class GradeForm extends Form {
     function formData() {
         $this->out->hidden('notice-n' . $this->notice->id, $this->notice->id, 'notice');
         $this->out->hidden('value-notice-n' . $this->notice->id, $this->value, 'value');
+        
+        /* VERSION 2 */
+        $this->out->element('input', array('type' => 'submit',
+                                      'id' => 'grade-submit-' . $this->notice->id,
+                                      'class' => 'submit',
+                                      'value' => '' . $this->value,
+                                      'title' => 'Grade this notice',
+                                      'onClick' => 'puntuarNota('.$this->notice->id.','.$this->value.');'));
     }
 
-    /**
-     * Action elements
-     *
-     * @return void
-     */
-    function formActions() {
-        $this->out->submit('grade-submit-' . $this->notice->id, _('' . $this->value), 'submit', $this->value, _('Grade this notice'));
-    }
 
     /**
      * Class of the form.
@@ -128,7 +128,7 @@ class GradeForm extends Form {
      * @return string the form's class
      */
     function formClass() {
-        return 'form_grade';
+        return 'form_grade ajax';
     }
 
 }
