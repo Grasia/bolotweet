@@ -54,7 +54,7 @@ class GuiadescargarAction extends Action {
         $file = basename($this->trimmed('filename'));
 
         $url = common_path() . 'local/plugins/Guia/files/';
-        $dir = $_SERVER['DOCUMENT_ROOT'] . '/bolotweet/local/plugins/Guia/files/';
+        $dir = substr($_SERVER['SCRIPT_FILENAME'],0,-9) . 'local/plugins/Guia/files/';
 
         $pathURL = $url . $file;
         $pathDIR = $dir . $file;
