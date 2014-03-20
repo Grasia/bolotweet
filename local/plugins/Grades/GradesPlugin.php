@@ -177,7 +177,25 @@ class GradesPlugin extends Plugin {
                 $gradeValue = reset($gradeResult);
                 $grader = key($gradeResult);
 
-                $args->out->elementStart('div', array('class' => 'notice-current-grade'));
+                // Si hay más de una puntuación para el tweet, añadimos JavaScript.
+                if ($grader == "Nota") {
+
+                    $gradesAndGraders = Grades::getNoticeGradesAndGraders($noticeid);
+
+                    $args->out->elementStart('div', array('class' => 'div-with-grades-hidden'));
+                    foreach ($gradesAndGraders as $profesor => $nota) {
+
+                        $args->out->elementStart('p');
+                        $args->out->raw($profesor . ': ' . $nota);
+                        $args->out->elementEnd('p');
+                    }
+
+                    $args->out->elementEnd('div');
+
+                    $args->out->elementStart('div', array('class' => 'notice-current-grade', 'onclick' => 'mostrarPuntuacion(' . $noticeid . ');'));
+                } else{
+                    $args->out->elementStart('div', array('class' => 'notice-current-grade'));
+                }
                 $args->out->elementStart('p', array('class' => 'notice-current-grade-value', 'title' => $grader));
                 $args->out->raw($grader . '<br/>' . $gradeValue);
                 $args->out->elementEnd('p');

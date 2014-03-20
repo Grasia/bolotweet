@@ -197,3 +197,22 @@ background-position: 0px -1px;
     float: left;
     font-weight: bold;
 }
+
+.div-with-grades-hidden{
+    
+display:none;
+
+}
+
+.div-with-grades{
+    
+position: relative;
+float: right;
+background-color: rgb(184, 217, 180);
+border-radius: 4px;
+padding: 4px;
+top: 8px;
+border: 1px solid;
+border-color: rgb(220, 220, 220);
+font-size: 10px;
+}
