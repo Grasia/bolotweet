@@ -149,7 +149,7 @@ class GradesPlugin extends Plugin {
 
                         if ($gradevalue != '?') {
 
-                            $item->out->elementStart('a', array('href' => 'javascript:editarNota(' . $noticeid . ');', 'class' => 'notice-modify-grade', 'id' => 'button-modify-grade-' . $noticeid));
+                            $item->out->elementStart('a', array('href' => 'javascript:editarNota(' . $noticeid . ');', 'class' => 'notice-modify-grade', 'id' => 'button-modify-grade-' . $noticeid, 'title' => 'Modificar Puntuación'));
                             $item->out->raw('Modificar Nota');
                             $item->out->elementEnd('a');
                         }
