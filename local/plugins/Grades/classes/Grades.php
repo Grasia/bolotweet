@@ -338,10 +338,7 @@ class Grades extends Managed_DataObject {
         $gradeBD->free();
     }
 
-    static function devolverGrade($noticeid, $type = "mean") {
-
-
-        $resultGrade = self::getNoticeGradesAndGraders($noticeid);
+    static function devolverGrade($resultGrade, $type = "mean") {
 
         if (!is_array($resultGrade) && $resultGrade == '?') {
             $grade = $resultGrade;

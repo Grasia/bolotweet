@@ -170,7 +170,10 @@ class GradesPlugin extends Plugin {
             $args->out->element('img', array('id' => 'birrete-grades', 'alt' => 'Profesor', 'src' => $path));
         } else {
             $noticeid = $args->notice->id;
-            $gradeResult = Grades::devolverGrade($noticeid);
+            
+            $gradesAndGraders = Grades::getNoticeGradesAndGraders($noticeid);
+            
+            $gradeResult = Grades::devolverGrade($gradesAndGraders);
 
             if (is_array($gradeResult)) {
 
@@ -179,8 +182,6 @@ class GradesPlugin extends Plugin {
 
                 // Si hay más de una puntuación para el tweet, añadimos JavaScript.
                 if ($grader == "Nota") {
-
-                    $gradesAndGraders = Grades::getNoticeGradesAndGraders($noticeid);
 
                     $args->out->elementStart('div', array('class' => 'div-with-grades-hidden'));
                     foreach ($gradesAndGraders as $profesor => $nota) {
