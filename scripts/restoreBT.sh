@@ -21,13 +21,6 @@ else
 printf "Fallo. Abortando...\n"
 exit 1
 fi
-sudo service apache2 stop > /dev/null 2>&1
-if [ $? -eq 0 ]; then
-printf "Listo!\n"
-else
-printf "Fallo. Abortando...\n"
-exit 1
-fi
 
 # Nombre del contenedor de los archivos de la web.
 nameFile="web_files.tar.gz";
