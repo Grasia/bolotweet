@@ -1,4 +1,5 @@
 <?php
+
 /**
  * StatusNet - the distributed open-source microblogging tool
  * Copyright (C) 2011, StatusNet, Inc.
@@ -27,7 +28,6 @@
  * @license   http://www.fsf.org/licensing/licenses/agpl-3.0.html AGPL 3.0
  * @link      http://status.net/
  */
-
 if (!defined('STATUSNET')) {
     // This check helps protect against security problems;
     // your code file can't be executed directly from the web.
@@ -48,8 +48,8 @@ if (!defined('STATUSNET')) {
  * @license   http://www.fsf.org/licensing/licenses/agpl-3.0.html AGPL 3.0
  * @link      http://status.net/
  */
-abstract class MicroAppPlugin extends Plugin
-{
+abstract class MicroAppPlugin extends Plugin {
+
     /**
      * Returns a localized string which represents this micro-app,
      * to be shown to users selecting what type of post to make.
@@ -111,7 +111,7 @@ abstract class MicroAppPlugin extends Plugin
      *
      * @return Notice the resulting notice
      */
-    abstract function saveNoticeFromActivity($activity, $actor, $options=array());
+    abstract function saveNoticeFromActivity($activity, $actor, $options = array());
 
     /**
      * Given an existing Notice object, your plugin gets to
@@ -212,8 +212,7 @@ abstract class MicroAppPlugin extends Plugin
      * @param ActivityObject $obj
      * @param XMLOutputter $out to add elements at end of object
      */
-    function activityObjectOutputAtom(ActivityObject $obj, XMLOutputter $out)
-    {
+    function activityObjectOutputAtom(ActivityObject $obj, XMLOutputter $out) {
         // default is a no-op
     }
 
@@ -231,8 +230,7 @@ abstract class MicroAppPlugin extends Plugin
      * @param ActivityObject $obj
      * @param array &$out JSON-targeted array which can be modified
      */
-    public function activityObjectOutputJson(ActivityObject $obj, array &$out)
-    {
+    public function activityObjectOutputJson(ActivityObject $obj, array &$out) {
         // default is a no-op
     }
 
@@ -244,8 +242,7 @@ abstract class MicroAppPlugin extends Plugin
      *
      * @return boolean hook value
      */
-    function onNoticeDeleteRelated($notice)
-    {
+    function onNoticeDeleteRelated($notice) {
         if ($this->isMyNotice($notice)) {
             $this->deleteRelated($notice);
         }
@@ -262,8 +259,7 @@ abstract class MicroAppPlugin extends Plugin
      *
      * @fixme WARNING WARNING WARNING this closes a 'div' that is implicitly opened in BookmarkPlugin's showNotice implementation
      */
-    function onStartShowNoticeItem($nli)
-    {
+    function onStartShowNoticeItem($nli) {
         if (!$this->isMyNotice($nli->notice)) {
             return true;
         }
@@ -290,13 +286,11 @@ abstract class MicroAppPlugin extends Plugin
      *
      * @return NoticeListItemAdapter adapter or null
      */
-    function adaptNoticeListItem($nli)
-    {
-      return null;
+    function adaptNoticeListItem($nli) {
+        return null;
     }
 
-    function oldShowNotice($nli)
-    {
+    function oldShowNotice($nli) {
         $out = $nli->out;
         $notice = $nli->notice;
 
@@ -329,8 +323,7 @@ abstract class MicroAppPlugin extends Plugin
      *
      * @return boolean hook value
      */
-    function onStartActivityObjectFromNotice($notice, &$object)
-    {
+    function onStartActivityObjectFromNotice($notice, &$object) {
         if ($this->isMyNotice($notice)) {
             $object = $this->activityObjectFromNotice($notice);
             return false;
@@ -347,8 +340,7 @@ abstract class MicroAppPlugin extends Plugin
      *
      * @return boolean hook value
      */
-    function onStartHandleFeedEntryWithProfile($activity, $oprofile, &$notice)
-    {
+    function onStartHandleFeedEntryWithProfile($activity, $oprofile, &$notice) {
         if ($this->isMyActivity($activity)) {
 
             $actor = $oprofile->checkAuthorship($activity);
@@ -361,9 +353,9 @@ abstract class MicroAppPlugin extends Plugin
             $object = $activity->objects[0];
 
             $options = array('uri' => $object->id,
-                             'url' => $object->link,
-                             'is_local' => Notice::REMOTE,
-                             'source' => 'ostatus');
+                'url' => $object->link,
+                'is_local' => Notice::REMOTE,
+                'source' => 'ostatus');
 
             // $actor is an ostatus_profile
             $notice = $this->saveNoticeFromActivity($activity, $actor->localProfile(), $options);
@@ -382,9 +374,7 @@ abstract class MicroAppPlugin extends Plugin
      *
      * @return boolean hook value
      */
-
-    function onStartHandleSalmonTarget($activity, $target)
-    {
+    function onStartHandleSalmonTarget($activity, $target) {
         if ($this->isMyActivity($activity)) {
             $this->log(LOG_INFO, "Checking {$activity->id} as a valid Salmon slap.");
 
@@ -396,15 +386,14 @@ abstract class MicroAppPlugin extends Plugin
                     throw new ClientException(_('Bookmark not posted to this group.'));
                 }
             } else if ($target instanceof User) {
-                $uri      = $target->uri;
+                $uri = $target->uri;
                 $original = null;
                 if (!empty($activity->context->replyToID)) {
-                    $original = Notice::staticGet('uri',
-                                                  $activity->context->replyToID);
+                    $original = Notice::staticGet('uri', $activity->context->replyToID);
                 }
                 if (!in_array($uri, $activity->context->attention) &&
-                    (empty($original) ||
-                     $original->profile_id != $target->id)) {
+                        (empty($original) ||
+                        $original->profile_id != $target->id)) {
                     // @todo FIXME: Please document (i18n).
                     // TRANS: Client exception when ...
                     throw new ClientException(_('Object not posted to this user.'));
@@ -419,9 +408,9 @@ abstract class MicroAppPlugin extends Plugin
             $object = $activity->objects[0];
 
             $options = array('uri' => $object->id,
-                             'url' => $object->link,
-                             'is_local' => Notice::REMOTE,
-                             'source' => 'ostatus');
+                'url' => $object->link,
+                'is_local' => Notice::REMOTE,
+                'source' => 'ostatus');
 
             // $actor is an ostatus_profile
             $this->saveNoticeFromActivity($activity, $actor->localProfile(), $options);
@@ -441,16 +430,13 @@ abstract class MicroAppPlugin extends Plugin
      *
      * @return boolean hook value
      */
-    function onStartAtomPubNewActivity(&$activity, $user, &$notice)
-    {
+    function onStartAtomPubNewActivity(&$activity, $user, &$notice) {
         if ($this->isMyActivity($activity)) {
 
             $options = array('source' => 'atompub');
 
             // $user->getProfile() is a Profile
-            $notice = $this->saveNoticeFromActivity($activity,
-                                                    $user->getProfile(),
-                                                    $options);
+            $notice = $this->saveNoticeFromActivity($activity, $user->getProfile(), $options);
 
             return false;
         }
@@ -469,20 +455,17 @@ abstract class MicroAppPlugin extends Plugin
      *
      * @return boolean hook value
      */
-    function onStartImportActivity($user, $author, $activity, $trusted, &$done)
-    {
+    function onStartImportActivity($user, $author, $activity, $trusted, &$done) {
         if ($this->isMyActivity($activity)) {
 
             $obj = $activity->objects[0];
 
             $options = array('uri' => $object->id,
-                             'url' => $object->link,
-                             'source' => 'restore');
+                'url' => $object->link,
+                'source' => 'restore');
 
             // $user->getProfile() is a Profile
-            $saved = $this->saveNoticeFromActivity($activity,
-                                                   $user->getProfile(),
-                                                   $options);
+            $saved = $this->saveNoticeFromActivity($activity, $user->getProfile(), $options);
 
             if (!empty($saved)) {
                 $done = true;
@@ -506,8 +489,7 @@ abstract class MicroAppPlugin extends Plugin
      * @param XMLOutputter $out to add elements at end of object
      * @return boolean hook return value
      */
-    function onEndActivityObjectOutputAtom(ActivityObject $obj, XMLOutputter $out)
-    {
+    function onEndActivityObjectOutputAtom(ActivityObject $obj, XMLOutputter $out) {
         if (in_array($obj->type, $this->types())) {
             $this->activityObjectOutputAtom($obj, $out);
         }
@@ -526,22 +508,33 @@ abstract class MicroAppPlugin extends Plugin
      * @param array &$out JSON-targeted array which can be modified
      * @return boolean hook return value
      */
-    function onEndActivityObjectOutputJson(ActivityObject $obj, array &$out)
-    {
+    function onEndActivityObjectOutputJson(ActivityObject $obj, array &$out) {
         if (in_array($obj->type, $this->types())) {
             $this->activityObjectOutputJson($obj, $out);
         }
         return true;
     }
 
-    function onStartShowEntryForms(&$tabs)
-    {
-        $tabs[$this->tag()] = $this->appTitle();
+    function onStartShowEntryForms(&$tabs) {
+
+
+        if ($this->tag() == "event" || $this->tag() == "poll") {
+
+            $user = common_current_user();
+            
+            if ($user->hasRole('grader')) {
+
+                $tabs[$this->tag()] = $this->appTitle();
+            }
+        } else {
+            
+            $tabs[$this->tag()] = $this->appTitle();
+        }
+
         return true;
     }
 
-    function onStartMakeEntryForm($tag, $out, &$form)
-    {
+    function onStartMakeEntryForm($tag, $out, &$form) {
         if ($tag == $this->tag()) {
             $form = $this->entryForm($out);
             return false;
@@ -550,9 +543,9 @@ abstract class MicroAppPlugin extends Plugin
         return true;
     }
 
-    function showNotice($notice, $out)
-    {
+    function showNotice($notice, $out) {
         // TRANS: Server exception thrown when a micro app plugin developer has not done his job too well.
         throw new ServerException(_('You must implement either adaptNoticeListItem() or showNotice().'));
     }
+
 }
