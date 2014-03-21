@@ -49,7 +49,7 @@ class Notescustomizeform extends Form {
 
 
         // Box para apuntes personalizados
-        $this->out->elementStart('div', array('class' => 'notes-div-manual'));
+        /*$this->out->elementStart('div', array('class' => 'notes-div-manual'));
         $this->out->element('p', 'notes-text-manual', 'Generar Apuntes Personalizados');
 
         $this->out->elementStart('div');
@@ -97,7 +97,7 @@ class Notescustomizeform extends Form {
         
         $this->out->submit('notes-submit-manual', _m('BUTTON', 'Aceptar'), 'submit', 'submit-custom');
         
-        $this->out->elementEnd('div');
+        $this->out->elementEnd('div');*/
 
         
     }
