@@ -27,3 +27,21 @@ function mostrarPuntuacion(noticeid){
         
     }
 }
+
+function mostrarReport(groupid){
+    
+    
+    if($("#grade-report-group-" + groupid + '>.grade-show-report').text() == 'Expandir'){
+        
+        $("#grade-report-group-" + groupid + '>.report-group-hidden').toggle('fade',300);
+        $("#grade-report-group-" + groupid + '>.grade-show-report').text('Ocultar');
+    }
+    
+    else {
+        
+        
+        $("#grade-report-group-" + groupid + '>.report-group-hidden').toggle('fade',300);
+        $("#grade-report-group-" + groupid + '>.grade-show-report').text('Expandir');
+
+    }
+}

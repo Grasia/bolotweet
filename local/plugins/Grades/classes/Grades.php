@@ -165,7 +165,7 @@ class Grades extends Managed_DataObject {
                         ' and g.noticeid = n.id ' .
                         ' and n.profile_id = p.id' .
                         ' group by p.nickname) as tmp' .
-               ' group by tmp.nickname';
+               ' group by tmp.nickname order by grade desc';
 
 
         $grade->query($qry); // all select fields will

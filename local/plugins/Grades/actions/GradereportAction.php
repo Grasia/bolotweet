@@ -88,11 +88,11 @@ class GradereportAction extends Action {
     function handle($args) {
         parent::handle($args);
 
-         if (!common_logged_in()) {
+        if (!common_logged_in()) {
             $this->clientError(_('Not logged in.'));
             return;
         }
-        
+
         $this->showPage();
     }
 
@@ -123,26 +123,106 @@ class GradereportAction extends Action {
         if (empty($this->user)) {
             $this->element('p', array('class' => 'grade-report-error'), _m('Login first!'));
         } else {
-            $groupswithgrades = Grades::getGroupsWithGrades()->fetchAll();
 
-            foreach ($groupswithgrades as $group) {
-                $gradespergroup = Grades::getGradedNoticesAndUsersWithinGroup($group->id);
-                $this->elementStart('p', array('class' => 'grade-report-group'));
-                $this->element('a', array('class' => 'grade-report-group-link', 'href' =>
-                    common_root_url() . 'group/' . $group->nickname), $group->getBestName());
-                $this->elementEnd('p');
-                $this->elementStart('ul', array('class' => 'grade-report-groupmembers'));
-                foreach ($gradespergroup as $login => $sumnoticegrades) {
+            if ($this->user->hasRole('grader')) {
+                $this->showReportGrader();
+            } else {
+                $this->showReportNoGrader();
+            }
+        }
+    }
+
+    function showReportNoGrader() {
+
+        $groupsUser = $this->user->getGroups()->fetchAll();
+
+        foreach ($groupsUser as $group) {
+            $gradespergroup = Grades::getGradedNoticesAndUsersWithinGroup($group->id);
+
+
+            $this->elementStart('div', array('id' => 'grade-report-group-' . $group->id));
+            $this->elementStart('h3', array('class' => 'grade-report-group'));
+            $this->element('a', array('class' => 'grade-report-group-link', 'href' =>
+                common_root_url() . 'group/' . $group->nickname), $group->getBestName());
+            $this->elementEnd('h3');
+            $this->element('a', array('class' => 'grade-show-report', 'href' =>
+                'javascript:mostrarReport(' . $group->id . ');'), 'Expandir');
+
+            $this->element('p', array('class' => 'grade-reports-group-underline'), '');
+
+            $this->elementStart('div', array('class' => 'report-group-hidden'));
+
+            if (empty($gradespergroup))
+                $this->element('p', null, 'Todavía no hay puntuaciones.');
+
+            else {
+                $this->elementStart('ol', array('class' => 'grade-report-groupmembers'));
+
+                foreach ($gradespergroup as $alumno => $puntuacion) {
 
                     $this->elementStart('li', array('class' => 'grade-report-groupmembers-item'));
-                    $this->element('a', array('class' => 'grade-report-group-link', 'name' =>
-                        $group->nickname));
-                    $this->element('a', array('class' => 'grade-report-group-link', 'href' =>
-                        common_root_url() . $login), sprintf(_m('%s, %s'), $login, $sumnoticegrades));
+                    $profile = Profile::staticGet('nickname', $alumno);
+                    $avatar = $profile->getAvatar(AVATAR_MINI_SIZE);
+
+                    if ($avatar) {
+                        $avatar = $avatar->displayUrl();
+                    } else {
+                        $avatar = Avatar::defaultImage(AVATAR_MINI_SIZE);
+                    }
+                    $this->element('img', array('src' => $avatar));
+                    $this->raw('&nbsp;&nbsp;&nbsp;' . $profile->getBestName());
                     $this->elementEnd('li');
                 }
-                $this->elementEnd('ul');
+                $this->elementEnd('ol');
             }
+            $this->elementEnd('div');
+            $this->elementEnd('div');
+        }
+    }
+
+    function showReportGrader() {
+
+        $groupsUser = $this->user->getGroups()->fetchAll();
+
+        foreach ($groupsUser as $group) {
+            $gradespergroup = Grades::getGradedNoticesAndUsersWithinGroup($group->id);
+
+            $this->elementStart('div', array('id' => 'grade-report-group-' . $group->id));
+            $this->elementStart('h3', array('class' => 'grade-report-group'));
+            $this->element('a', array('class' => 'grade-report-group-link', 'href' =>
+                common_root_url() . 'group/' . $group->nickname), $group->getBestName());
+            $this->elementEnd('h3');
+            $this->element('a', array('class' => 'grade-show-report', 'href' =>
+                'javascript:mostrarReport(' . $group->id . ');'), 'Expandir');
+
+            $this->element('p', array('class' => 'grade-reports-group-underline'), '');
+
+            $this->elementStart('div', array('class' => 'report-group-hidden'));
+            if (empty($gradespergroup))
+                $this->element('p', null, 'Todavía no hay puntuaciones.');
+
+            else {
+                $this->elementStart('ol', array('class' => 'grade-report-groupmembers'));
+
+                foreach ($gradespergroup as $alumno => $puntuacion) {
+
+                    $this->elementStart('li', array('class' => 'grade-report-groupmembers-item'));
+                    $profile = Profile::staticGet('nickname', $alumno);
+                    $avatar = $profile->getAvatar(AVATAR_MINI_SIZE);
+
+                    if ($avatar) {
+                        $avatar = $avatar->displayUrl();
+                    } else {
+                        $avatar = Avatar::defaultImage(AVATAR_MINI_SIZE);
+                    }
+                    $this->element('img', array('src' => $avatar));
+                    $this->raw('&nbsp;&nbsp;&nbsp;' . $alumno . ', ' . number_format($puntuacion, 2));
+                    $this->elementEnd('li');
+                }
+                $this->elementEnd('ol');
+            }
+            $this->elementEnd('div');
+            $this->elementEnd('div');
         }
     }
 
