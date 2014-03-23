@@ -357,7 +357,7 @@ class Grades extends Managed_DataObject {
                     break;
             }
             
-            $grade = array("Nota" => $total);
+            $grade = array("Nota" => number_format($total, 2));
         }
         
         else if(is_array($resultGrade) && count($resultGrade) == 1){
