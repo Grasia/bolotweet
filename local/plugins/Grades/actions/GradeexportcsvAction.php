@@ -46,11 +46,7 @@ if (!defined('STATUSNET')) {
  * @license  http://www.fsf.org/licensing/licenses/agpl.html AGPLv3
  * @link     http://status.net/
  */
-
-require_once INSTALLDIR . '/classes/User.php';
-require_once INSTALLDIR . '/classes/Notice.php';
-
-class GradeAction extends Action {
+class GradeexportcsvAction extends Action {
 
     var $user = null;
 
@@ -74,85 +70,87 @@ class GradeAction extends Action {
 
         $this->user = common_current_user();
 
-
         return true;
     }
 
     /**
-     * Class handler.
+     * Handle request
      *
-     * @param array $args query arguments
+     * This is the main method for handling a request. Note that
+     * most preparation should be done in the prepare() method;
+     * by the time handle() is called the action should be
+     * more or less ready to go.
+     *
+     * @param array $args $_REQUEST args; handled in prepare()
      *
      * @return void
      */
     function handle($args) {
-
         parent::handle($args);
+
         if (!common_logged_in()) {
             $this->clientError(_('Not logged in.'));
             return;
         }
-        $user = common_current_user();
-        if ($_SERVER['REQUEST_METHOD'] != 'POST') {
-            common_redirect(common_local_url('all', array('nickname' => $user->nickname)));
-            return;
-        }
-        $noticeid = $this->trimmed('notice');
-        $notice = Notice::staticGet($noticeid);
 
-
-        $token = $this->trimmed('token-' . $notice->id);
-        if (!$token || $token != common_session_token()) {
-            $this->clientError(_('There was a problem with your session token. Try again, please.'));
+        if (!$this->user->hasRole('grader')) {
+            $this->clientError(_('Usted no tiene privilegios para visitar esta página.'));
             return;
         }
 
-        $gradevalue = $this->trimmed('value');
-        $nickname = $user->nickname;
+        $groupid = $this->trimmed('groupid');
+        $delimiter = $this->trimmed('grade-export-delimiter');
+        $separator = $this->trimmed('grade-export-separator');
 
-        $exist = Grades::getNoticeGrade($noticeid, $nickname);
-
-        if ($exist != '?') {
-
-            Grades::updateNotice(array('noticeid' => $noticeid,
-                'grade' => $gradevalue, 'userid' => $nickname));
-        } else {
-            Grades::register(array('userid' => $nickname,
-                'noticeid' => $noticeid,
-                'grade' => $gradevalue));
+        $arrayReport = Grades::getGradedNoticesAndUsersWithinGroup($groupid);
+        
+        $arrayFinal = array();
+        
+        foreach($arrayReport as $alumno => $puntuacion){
+            $arrayFinal[] = array($alumno, number_format($puntuacion,2));
         }
 
-       
-         if ($this->boolean('ajax')) {
+        $this->generarInformeCSV($arrayFinal, 'report_group_' . $groupid . '.csv', $separator, $delimiter);
+    }
 
-            $this->startHTML('application/xml,text/xml;charset=utf-8');
-            $this->elementStart('head');
-            $this->element('title', null, _('Disfavor favorite'));
-            $this->elementEnd('head');
-            $this->elementStart('body');
-            $this->element('p');
-            $this->elementEnd('body');
-            $this->elementEnd('html');
-         }
+    function generarInformeCSV($array, $filename = "report.csv", $separator = ',', $delimiter = '"') {
+
+        header('Content-Type: text/csv; charset=utf-8');
+        header('Content-Disposition: attachement; filename="' . $filename . '";');
+
+        if ($separator == "") {
+            $separator = ',';
+        }
+
+        if ($delimiter == "") {
+            $delimiter = '"';
+        }
+
+
+        $f = fopen('php://output', 'w');
+
+        foreach ($array as $line) {
+            fputcsv($f, $line, $separator, $delimiter);
+        }
     }
 
     /**
-     * Notifies a user when their notice is favorited.
+     * Return true if read only.
      *
-     * @param class $notice favorited notice
-     * @param class $user   user declaring a favorite
+     * Some actions only read from the database; others read and write.
+     * The simple database load-balancer built into StatusNet will
+     * direct read-only actions to database mirrors (if they are configured),
+     * and read-write actions to the master database.
      *
-     * @return void
+     * This defaults to false to avoid data integrity issues, but you
+     * should make sure to overload it for performance gains.
+     *
+     * @param array $args other arguments, if RO/RW status depends on them.
+     *
+     * @return boolean is read only action?
      */
-    /* function notify($notice, $user)
-      {
-      $other = User::staticGet('id', $notice->profile_id);
-      if ($other && $other->id != $user->id) {
-      if ($other->email && $other->emailnotifyfav) {
-      mail_notify_fave($other, $user, $notice);
-      }
-      // XXX: notify by IM
-      // XXX: notify by SMS
-      }
-      } */
+    function isReadOnly($args) {
+        return false;
+    }
+
 }

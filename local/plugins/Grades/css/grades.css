@@ -172,59 +172,86 @@
 }
 
 .notice-grades-hidden {
-    
+
     display: none;
 }
 
 .notice-options .notice-modify-grade{
-    
-background-image: url("modify-grade.png");
-background-repeat: no-repeat;
-background-color: transparent;
-background-position: 0px -1px;
+
+    background-image: url("modify-grade.png");
+    background-repeat: no-repeat;
+    background-color: transparent;
+    background-position: 0px -1px;
 
 
 }
 
 .notice-options .notice-modify-grade-hidden{
-    
+
     display:none;
 }
 
 .temp-text-grades{
-    
+
     margin-left: 35%;
     float: left;
     font-weight: bold;
 }
 
 .div-with-grades-hidden{
-    
-display:none;
+
+    display:none;
 
 }
 
 .div-with-grades{
-    
-position: relative;
-float: right;
-background-color: rgb(184, 217, 180);
-border-radius: 4px;
-padding: 4px;
-top: 8px;
-border: 1px solid;
-border-color: rgb(220, 220, 220);
-font-size: 10px;
+
+    position: relative;
+    float: right;
+    background-color: rgb(184, 217, 180);
+    border-radius: 4px;
+    padding: 4px;
+    top: 8px;
+    border: 1px solid;
+    border-color: rgb(220, 220, 220);
+    font-size: 10px;
 }
 
 .grade-report-group{
-    
+
     display:inline-block;
     margin-bottom: 0px;
 }
 
+.grade-export-report{
+
+    float:right;
+    margin-right: 6px;
+    padding: 4px;
+    height: 1.4em;
+    color:#fff;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.8em;
+    text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.2);
+    border: 1px solid #5298DF;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+
+    background: #7abcff; /* Old browsers */
+    background: -moz-linear-gradient(top, #7abcff 0%, #60abf8 44%, #4096ee 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#7abcff), color-stop(44%,#60abf8), color-stop(100%,#4096ee)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #7abcff 0%,#60abf8 44%,#4096ee 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #7abcff 0%,#60abf8 44%,#4096ee 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #7abcff 0%,#60abf8 44%,#4096ee 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #7abcff 0%,#60abf8 44%,#4096ee 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7abcff', endColorstr='#4096ee',GradientType=0 ); /* IE6-9 */
+
+}
+
 .grade-show-report{
-    
+
     float:right;
     padding: 4px;
     height: 1.4em;
@@ -246,28 +273,81 @@ font-size: 10px;
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff9d63', endColorstr='#fb6104',GradientType=0 );
     background: linear-gradient(top, #ff9d63 0%,#fb6104 100%);
 
-    
+
 }
 
-.grade-show-report:hover{
-    
+.grade-show-report:hover, .grade-export-report:hover{
+
     text-decoration: none;
     color:#fff;
 }
 
 .grade-reports-group-underline{
-    
+
     border-bottom:1px dotted #9999CC;
 }
 
 
 .grade-report-group-link:hover{
-    
+
     text-decoration: none;
     color:rgb(62, 62, 140);
-    
+
 }
 .report-group-hidden{
-    
+
     display:none;
+}
+
+.options-text-csv{
+    
+    display: inline-block;
+    
+}
+
+#grade-export-separator{
+    
+    max-width: 50px;
+    margin-left: 10px;
+}
+
+#grade-export-delimiter{
+    
+    max-width: 50px;
+    margin-left: 20px;
+}
+
+#grade-export-button{
+    
+    height: 1.8em;
+    color:#fff;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 1em;
+    text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.2);
+    border: 1px solid #d7621c;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    background: #FB6104;
+    background: -moz-linear-gradient(top, #ff9d63 0%, #fb6104 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ff9d63), color-stop(100%,#fb6104));
+    background: -webkit-linear-gradient(top, #ff9d63 0%,#fb6104 100%);
+    background: -o-linear-gradient(top, #ff9d63 0%,#fb6104 100%);
+    background: -ms-linear-gradient(top, #ff9d63 0%,#fb6104 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff9d63', endColorstr='#fb6104',GradientType=0 );
+    background: linear-gradient(top, #ff9d63 0%,#fb6104 100%);
+    margin-left: 37%;
+}
+
+.hint-csv-text{
+    
+   font-size: 10px;
+   width: 38%;
+   background-color: #F5D5D5;
+   padding:1px;
+   border-radius: 3px;
+   margin-top: -15px;
+   padding-left: 8px;
+   padding-right: 8px;
 }

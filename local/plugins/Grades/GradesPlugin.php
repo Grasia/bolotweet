@@ -4,9 +4,6 @@ if (!defined('STATUSNET')) {
     exit(1);
 }
 
-require_once INSTALLDIR . '/local/plugins/Grades/lib/gradeform.php';
-require_once INSTALLDIR . '/local/plugins/Grades/classes/Grades.php';
-require_once INSTALLDIR . '/local/plugins/Grades/classes/Gradesgroup.php';
 require_once INSTALLDIR . '/lib/util.php';
 
 class GradesPlugin extends Plugin {
@@ -41,6 +38,9 @@ class GradesPlugin extends Plugin {
     function onRouterInitialized($m) {
         $m->connect('main/grade', array('action' => 'grade'));
         $m->connect('main/gradereport', array('action' => 'gradereport'));
+        $m->connect('main/exportCSV/generate', array('action' => 'gradeexportcsv'));
+        $m->connect('main/exportCSV/options', array('action' => 'gradeoptionscsv'));
+
         return true;
     }
 
@@ -61,11 +61,20 @@ class GradesPlugin extends Plugin {
         switch ($cls) {
 
             case 'GradeAction':
-                include_once $dir . '/actions/' . $cls . '.php';
-                return false;
             case 'GradereportAction':
+            case 'GradeexportcsvAction':
+            case 'GradeoptionscsvAction':
                 include_once $dir . '/actions/' . $cls . '.php';
                 return false;
+            case 'GradeForm':
+            case 'GradecsvForm':
+                include_once $dir . '/lib/' . $cls . '.php';
+                return false;    
+            case 'Grades':
+            case 'Gradesgroup':
+                include_once $dir . '/classes/' . $cls . '.php';
+                return false;
+                break;
             default:
                 return true;
         }
@@ -170,9 +179,9 @@ class GradesPlugin extends Plugin {
             $args->out->element('img', array('id' => 'birrete-grades', 'alt' => 'Profesor', 'src' => $path));
         } else {
             $noticeid = $args->notice->id;
-            
+
             $gradesAndGraders = Grades::getNoticeGradesAndGraders($noticeid);
-            
+
             $gradeResult = Grades::devolverGrade($gradesAndGraders);
 
             if (is_array($gradeResult)) {
@@ -194,7 +203,7 @@ class GradesPlugin extends Plugin {
                     $args->out->elementEnd('div');
 
                     $args->out->elementStart('div', array('class' => 'notice-current-grade', 'onclick' => 'mostrarPuntuacion(' . $noticeid . ');'));
-                } else{
+                } else {
                     $args->out->elementStart('div', array('class' => 'notice-current-grade'));
                 }
                 $args->out->elementStart('p', array('class' => 'notice-current-grade-value', 'title' => $grader));

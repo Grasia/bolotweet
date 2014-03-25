@@ -192,8 +192,10 @@ class GradereportAction extends Action {
             $this->element('a', array('class' => 'grade-report-group-link', 'href' =>
                 common_root_url() . 'group/' . $group->nickname), $group->getBestName());
             $this->elementEnd('h3');
+
             $this->element('a', array('class' => 'grade-show-report', 'href' =>
                 'javascript:mostrarReport(' . $group->id . ');'), 'Expandir');
+                        $this->element('a', array('class' => 'grade-export-report', 'href' => common_local_url('gradeoptionscsv').'?group='.$group->id), 'Exportar CSV');
 
             $this->element('p', array('class' => 'grade-reports-group-underline'), '');
 
