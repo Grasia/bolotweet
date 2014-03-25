@@ -74,7 +74,7 @@ class GroupsNav extends MoreMenu
             $items[] = array('placeholder',
                              array('nickname' => $this->groups->nickname,
                                    'mainpage' => $this->groups->homeUrl()),
-                             $this->groups->getBestName(),
+                             $this->groups->nickname,
                              $this->groups->getBestName()
                             );
         }
