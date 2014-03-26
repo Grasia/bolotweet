@@ -591,6 +591,7 @@ address .poweredby {
 #site_nav_local_views ul#nav_groups a{
     
     box-shadow: 0px 0px 1px rgb(66, 66, 66);
+    text-align: center;
 }
 
 
