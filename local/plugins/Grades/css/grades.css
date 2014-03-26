@@ -41,6 +41,13 @@
     width: 44px;
 }
 
+.threaded-replies .notice-current-grade .notice-current-grade-value {
+
+    padding: 1px;
+    top: 36px;
+    width: 20px;
+}
+
 .label-grader-div .label-grader {
     float: left;
     position: relative;

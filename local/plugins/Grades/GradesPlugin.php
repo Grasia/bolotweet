@@ -69,7 +69,7 @@ class GradesPlugin extends Plugin {
             case 'GradeForm':
             case 'GradecsvForm':
                 include_once $dir . '/lib/' . $cls . '.php';
-                return false;    
+                return false;
             case 'Grades':
             case 'Gradesgroup':
                 include_once $dir . '/classes/' . $cls . '.php';
@@ -130,13 +130,6 @@ class GradesPlugin extends Plugin {
 
         return true;
     }
-
-    /* function onEndProfileListItemActionElements($item){
-
-      $item->action->elementStart('li', array('class' => 'entity_block'));
-      $item->action->raw('explota');
-      $item->action->elementEnd('li');
-      } */
 
     function onStartShowNoticeOptionItems($item) {
         $user = common_current_user();
@@ -206,8 +199,14 @@ class GradesPlugin extends Plugin {
                 } else {
                     $args->out->elementStart('div', array('class' => 'notice-current-grade'));
                 }
+
                 $args->out->elementStart('p', array('class' => 'notice-current-grade-value', 'title' => $grader));
-                $args->out->raw($grader . '<br/>' . $gradeValue);
+
+                if (get_class($args) === 'ThreadedNoticeListSubItem') {
+                    $args->out->raw($gradeValue);
+                } else {
+                    $args->out->raw($grader . '<br/>' . $gradeValue);
+                }
                 $args->out->elementEnd('p');
                 $args->out->elementEnd('div');
             }
