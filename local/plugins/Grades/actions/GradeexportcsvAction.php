@@ -103,11 +103,11 @@ class GradeexportcsvAction extends Action {
         $separator = $this->trimmed('grade-export-separator');
 
         $arrayReport = Grades::getGradedNoticesAndUsersWithinGroup($groupid);
-        
+
         $arrayFinal = array();
-        
-        foreach($arrayReport as $alumno => $puntuacion){
-            $arrayFinal[] = array($alumno, number_format($puntuacion,2));
+
+        foreach ($arrayReport as $alumno => $puntuacion) {
+            $arrayFinal[] = array($alumno, number_format($puntuacion, 2));
         }
 
         $this->generarInformeCSV($arrayFinal, 'report_group_' . $groupid . '.csv', $separator, $delimiter);

@@ -80,18 +80,18 @@ class Gradesgroup extends Managed_DataObject {
 
         $grGroup->free();
     }
-    
+
     static function getGraders($groupid) {
 
         $qry = 'SELECT profile.* ' .
-          'FROM profile JOIN grades_group '.
-          'ON profile.id = grades_group.userid ' .
-          'WHERE grades_group.groupid = ' . $groupid;
-        
+                'FROM profile JOIN grades_group ' .
+                'ON profile.id = grades_group.userid ' .
+                'WHERE grades_group.groupid = ' . $groupid;
+
         $graders = new Profile();
 
         $graders->query($qry);
-        
+
         return $graders;
     }
 

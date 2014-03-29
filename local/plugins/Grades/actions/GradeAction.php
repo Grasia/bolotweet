@@ -46,7 +46,6 @@ if (!defined('STATUSNET')) {
  * @license  http://www.fsf.org/licensing/licenses/agpl.html AGPLv3
  * @link     http://status.net/
  */
-
 require_once INSTALLDIR . '/classes/User.php';
 require_once INSTALLDIR . '/classes/Notice.php';
 
@@ -122,8 +121,8 @@ class GradeAction extends Action {
                 'grade' => $gradevalue));
         }
 
-       
-         if ($this->boolean('ajax')) {
+
+        if ($this->boolean('ajax')) {
 
             $this->startHTML('application/xml,text/xml;charset=utf-8');
             $this->elementStart('head');
@@ -133,7 +132,7 @@ class GradeAction extends Action {
             $this->element('p');
             $this->elementEnd('body');
             $this->elementEnd('html');
-         }
+        }
     }
 
     /**
