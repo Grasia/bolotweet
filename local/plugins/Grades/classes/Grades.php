@@ -152,20 +152,21 @@ class Grades extends Managed_DataObject {
 
     static function getGradedNoticesAndUsersWithinGroup($groupID) {
         $grade = new Grades();
-        if (common_config('db', 'quote_identifiers'))
+        if (common_config('db', 'quote_identifiers')) {
             $user_table = '"grades"';
-        else
+        } else {
             $user_table = 'grades';
+        }
 
         $qry = 'select tmp.nickname as userid, sum(tmp.gradeAvg) as grade' .
-               ' from (select p.nickname, avg(g.grade) as gradeAvg' .
-                        ' from grades g, group_inbox gr, notice n, profile p' .
-                        ' where g.noticeid = gr.notice_id' .
-                        ' and gr.group_id = ' . $groupID .
-                        ' and g.noticeid = n.id ' .
-                        ' and n.profile_id = p.id' .
-                        ' group by p.nickname) as tmp' .
-               ' group by tmp.nickname order by grade desc';
+                ' from (select p.nickname, avg(g.grade) as gradeAvg' .
+                ' from grades g, group_inbox gr, notice n, profile p' .
+                ' where g.noticeid = gr.notice_id' .
+                ' and gr.group_id = ' . $groupID .
+                ' and g.noticeid = n.id ' .
+                ' and n.profile_id = p.id' .
+                ' group by g.noticeid) as tmp' .
+                ' group by tmp.nickname order by grade desc';
 
 
         $grade->query($qry); // all select fields will
@@ -197,15 +198,16 @@ class Grades extends Managed_DataObject {
 
         if ($grade->fetch()) {
             $obtainedgrade = $grade->grade;
-        } else
+        } else {
             $obtainedgrade = '?';
+        }
 
         $grade->free();
         return $obtainedgrade;
     }
 
     static function getValidGrader($noticeid, $userid) {
-        
+
 
         $grade = new Grades();
 
@@ -219,14 +221,14 @@ class Grades extends Managed_DataObject {
 
         if ($grade->fetch()) {
             $result = true;
-        } else
+        } else {
             $result = false;
+        }
 
         $grade->free();
         return $result;
     }
-    
-    
+
     static function getNoticeGradesAndGraders($noticeid) {
 
         $grade = new Grades();
@@ -243,11 +245,11 @@ class Grades extends Managed_DataObject {
 
         $grade->query(sprintf($qry, $noticeid));
 
-        while($grade->fetch()){
-                $obtainedgrade[$grade->nickname] = $grade->grade;
-        } 
-        
-        if(empty($obtainedgrade)){
+        while ($grade->fetch()) {
+            $obtainedgrade[$grade->nickname] = $grade->grade;
+        }
+
+        if (empty($obtainedgrade)) {
             $obtainedgrade = '?';
         }
 
@@ -255,19 +257,42 @@ class Grades extends Managed_DataObject {
         return $obtainedgrade;
     }
 
+    static function getNoticeFromUserInGroup($userid, $groupid) {
+
+        $grade = new Grades();
+
+        $qry = 'select distinct noticeid '
+                . 'from grades g, group_inbox gi, notice n '
+                . 'where g.noticeid = gi.notice_id '
+                . 'and gi.group_id = ' . $groupid
+                . ' and g.noticeid = n.id '
+                . ' and n.profile_id = ' . $userid
+                . ' order by n.created desc';
+
+        $grade->query(sprintf($qry, $noticeid));
+
+
+        while ($grade->fetch()) {
+            $ids[] = $grade->noticeid;
+        }
+
+        $grade->free();
+
+        return $ids;
+    }
+
     static function getNoticeGradeUserId($noticeid) {
 
         $grade = new Grades();
-        if (common_config('db', 'quote_identifiers'))
+        if (common_config('db', 'quote_identifiers')) {
             $user_table = '"grades"';
-        else
+        } else {
             $user_table = 'grades';
+        }
 
         $qry = 'SELECT grade, userid ' .
                 'FROM ' . $user_table . ' ' .
                 'WHERE grades.noticeid = %d order by grades.cdate DESC';
-
-        // print sprintf($qry, $noticeid);
 
         $grade->query(sprintf($qry, $noticeid));
 
@@ -275,8 +300,9 @@ class Grades extends Managed_DataObject {
 
         if ($grade->fetch()) {
             $obtainedgrade = $grade->userid;
-        } else
+        } else {
             $obtainedgrade = '?';
+        }
 
 //print $obtainedgrades->length();
         $grade->free();
@@ -316,10 +342,11 @@ class Grades extends Managed_DataObject {
         $gradeBD = new Grades();
 
 
-        if (common_config('db', 'quote_identifiers'))
+        if (common_config('db', 'quote_identifiers')) {
             $user_table = '"grades"';
-        else
+        } else {
             $user_table = 'grades';
+        }
 
         $time = common_sql_now();
 
@@ -338,6 +365,57 @@ class Grades extends Managed_DataObject {
         $gradeBD->free();
     }
 
+    /** Métodos para estadísticas */
+    static function getNumberTweetsOfUserInGroup($userid, $groupid) {
+
+        $grade = new Grades();
+
+        $qry = 'select count(gi.notice_id) as number'
+                . ' from group_inbox gi, notice n '
+                . 'where gi.notice_id = n.id '
+                . 'and gi.group_id = ' . $groupid
+                . ' and n.profile_id = ' . $userid;
+
+        $grade->query($qry);
+
+
+        if ($grade->fetch()) {
+            $numberTweets = $grade->number;
+        }
+
+        $grade->free();
+
+        return $numberTweets;
+    }
+
+    static function getNotaMediaYTotalofUserinGroup($userid, $groupid) {
+
+        $grade = new Grades();
+
+        $qry = 'select avg(tmp.gradeAvg) as media, sum(tmp.gradeAvg) as total '
+                . 'from (select avg(g.grade) as gradeAvg '
+                . 'from grades g, group_inbox gr, notice n '
+                . 'where g.noticeid = gr.notice_id '
+                . 'and gr.group_id = ' . $groupid
+                . ' and g.noticeid = n.id '
+                . 'and n.profile_id = ' . $userid
+                . ' group by g.noticeid) as tmp';
+
+        $grade->query($qry);
+
+
+        $notas = array();
+
+        if ($grade->fetch()) {
+            $notas[$grade->total] = $grade->media;
+        }
+
+        $grade->free();
+
+        return $notas;
+    }
+
+    /** Otras funciones */
     static function devolverGrade($resultGrade, $type = "mean") {
 
         if (!is_array($resultGrade) && $resultGrade == '?') {
@@ -356,17 +434,14 @@ class Grades extends Managed_DataObject {
                     $total = $resultGrade[$middle - 1];
                     break;
             }
-            
+
             $grade = array("Nota" => number_format($total, 2));
-        }
-        
-        else if(is_array($resultGrade) && count($resultGrade) == 1){
-            
+        } else if (is_array($resultGrade) && count($resultGrade) == 1) {
+
             $grade = $resultGrade;
         }
-        
-        return $grade;
 
+        return $grade;
     }
 
 }

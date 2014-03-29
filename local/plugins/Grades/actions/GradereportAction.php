@@ -170,7 +170,9 @@ class GradereportAction extends Action {
                         $avatar = Avatar::defaultImage(AVATAR_MINI_SIZE);
                     }
                     $this->element('img', array('src' => $avatar));
-                    $this->raw('&nbsp;&nbsp;&nbsp;' . $profile->getBestName());
+                    $this->elementStart('a', array('class' => 'user-link-report', 'href' => common_local_url('gradeshowuser', array('nickgroup' => $group->nickname, 'nickname' => $profile->nickname))));
+                    $this->raw($profile->getBestName());
+                    $this->elementEnd('a');
                     $this->elementEnd('li');
                 }
                 $this->elementEnd('ol');
@@ -195,7 +197,7 @@ class GradereportAction extends Action {
 
             $this->element('a', array('class' => 'grade-show-report', 'href' =>
                 'javascript:mostrarReport(' . $group->id . ');'), 'Expandir');
-                        $this->element('a', array('class' => 'grade-export-report', 'href' => common_local_url('gradeoptionscsv').'?group='.$group->id), 'Exportar CSV');
+            $this->element('a', array('class' => 'grade-export-report', 'href' => common_local_url('gradeoptionscsv') . '?group=' . $group->id), 'Exportar CSV');
 
             $this->element('p', array('class' => 'grade-reports-group-underline'), '');
 
@@ -218,7 +220,9 @@ class GradereportAction extends Action {
                         $avatar = Avatar::defaultImage(AVATAR_MINI_SIZE);
                     }
                     $this->element('img', array('src' => $avatar));
-                    $this->raw('&nbsp;&nbsp;&nbsp;' . $alumno . ', ' . number_format($puntuacion, 2));
+                    $this->elementStart('a', array('class' => 'user-link-report', 'href' => common_local_url('gradeshowuser', array('nickgroup' => $group->nickname, 'nickname' => $profile->nickname))));
+                    $this->raw($profile->getBestName() . ', ' . number_format($puntuacion, 2));
+                    $this->elementEnd('a');
                     $this->elementEnd('li');
                 }
                 $this->elementEnd('ol');

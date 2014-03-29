@@ -40,7 +40,8 @@ class GradesPlugin extends Plugin {
         $m->connect('main/gradereport', array('action' => 'gradereport'));
         $m->connect('main/exportCSV/generate', array('action' => 'gradeexportcsv'));
         $m->connect('main/exportCSV/options', array('action' => 'gradeoptionscsv'));
-
+        $m->connect('main/gradereport/:nickgroup/:nickname', array('action' => 'gradeshowuser'), array('nickgroup' => Nickname::DISPLAY_FMT, 'nickname' => Nickname::DISPLAY_FMT)
+        );
         return true;
     }
 
@@ -64,6 +65,7 @@ class GradesPlugin extends Plugin {
             case 'GradereportAction':
             case 'GradeexportcsvAction':
             case 'GradeoptionscsvAction':
+            case 'GradeshowuserAction':
                 include_once $dir . '/actions/' . $cls . '.php';
                 return false;
             case 'GradeForm':

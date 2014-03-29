@@ -311,25 +311,25 @@
 }
 
 .options-text-csv{
-    
+
     display: inline-block;
-    
+
 }
 
 #grade-export-separator{
-    
+
     max-width: 50px;
     margin-left: 10px;
 }
 
 #grade-export-delimiter{
-    
+
     max-width: 50px;
     margin-left: 20px;
 }
 
 #grade-export-button{
-    
+
     height: 1.8em;
     color:#fff;
     font-weight: bold;
@@ -352,13 +352,30 @@
 }
 
 .hint-csv-text{
-    
-   font-size: 10px;
-   width: 38%;
-   background-color: #F5D5D5;
-   padding:1px;
-   border-radius: 3px;
-   margin-top: -15px;
-   padding-left: 8px;
-   padding-right: 8px;
+
+    font-size: 10px;
+    width: 38%;
+    background-color: #F5D5D5;
+    padding:1px;
+    border-radius: 3px;
+    margin-top: -15px;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.grade-report-groupmembers-item img{
+
+    margin-right: 8px;
+}
+
+.user-link-report:hover{
+
+    text-decoration: none;
+    color: gray;
+}
+
+#entity_statistics .statistics-span{
+
+    font-weight: bold;
+    margin-left: 5px;
 }
