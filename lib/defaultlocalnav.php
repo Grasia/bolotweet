@@ -57,8 +57,8 @@ class DefaultLocalNav extends Menu {
                 $this->action->elementStart('li');
                 $this->action->element('h3', null, 'Herramientas');
                 $this->action->elementStart('ul', array('class' => 'nav'));
-                Event::handle('StartToolsLocalNav', array($this, $user));
-                Event::handle('EndToolsLocalNav', array($this, $user));
+                Event::handle('StartToolsLocalNav', array($this));
+                Event::handle('EndToolsLocalNav', array($this));
                 $this->action->elementEnd('ul');
                 $this->action->elementEnd('li');
             }
