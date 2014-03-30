@@ -1,4 +1,5 @@
 <?php
+
 /**
  * StatusNet - the distributed open-source microblogging tool
  * Copyright (C) 2011, StatusNet, Inc.
@@ -27,7 +28,6 @@
  * @license   http://www.fsf.org/licensing/licenses/agpl-3.0.html AGPL 3.0
  * @link      http://status.net/
  */
-
 if (!defined('STATUSNET')) {
     // This check helps protect against security problems;
     // your code file can't be executed directly from the web.
@@ -44,10 +44,9 @@ if (!defined('STATUSNET')) {
  * @license   http://www.fsf.org/licensing/licenses/agpl-3.0.html AGPL 3.0
  * @link      http://status.net/
  */
-class DefaultLocalNav extends Menu
-{
-    function show()
-    {
+class DefaultLocalNav extends Menu {
+
+    function show() {
         $user = common_current_user();
 
         $this->action->elementStart('ul', array('id' => 'nav_local_default'));
@@ -55,14 +54,24 @@ class DefaultLocalNav extends Menu
         if (Event::handle('StartDefaultLocalNav', array($this, $user))) {
 
             if (!empty($user)) {
+                $this->action->elementStart('li');
+                $this->action->element('h3', null, 'Herramientas');
+                $this->action->elementStart('ul', array('class' => 'nav'));
+                Event::handle('StartToolsLocalNav', array($this, $user));
+                Event::handle('EndToolsLocalNav', array($this, $user));
+                $this->action->elementEnd('ul');
+                $this->action->elementEnd('li');
+            }
+
+            if (!empty($user)) {
                 $pn = new PersonalGroupNav($this->action);
                 // TRANS: Menu item in default local navigation panel.
-                $this->submenu(_m('MENU','Home'), $pn);
+                $this->submenu(_m('MENU', 'Home'), $pn);
             }
 
             $bn = new PublicGroupNav($this->action);
             // TRANS: Menu item in default local navigation panel.
-            $this->submenu(_m('MENU','Public'), $bn);
+            $this->submenu(_m('MENU', 'Public'), $bn);
 
             if (!empty($user)) {
                 $sn = new GroupsNav($this->action, $user);
@@ -85,4 +94,5 @@ class DefaultLocalNav extends Menu
 
         $this->action->elementEnd('ul');
     }
+
 }
