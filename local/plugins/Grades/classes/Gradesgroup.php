@@ -94,5 +94,27 @@ class Gradesgroup extends Managed_DataObject {
 
         return $graders;
     }
+    
+    static function getGroups($graderid){
+        
+        $qry = 'SELECT gg.groupid'
+                . ' FROM grades_group gg'
+                . ' where gg.userid=' . $graderid;
+
+     $grGroup = new Gradesgroup();
+
+        $grGroup->query($qry);
+        
+        $groups = array();
+
+        while ($grGroup->fetch()) {
+            $groups[] = $grGroup->groupid;
+        }
+
+        $grGroup->free();
+
+        return $groups;
+        
+    }
 
 }
