@@ -79,11 +79,11 @@ class GradeshowuserAction extends Action {
 
         if ($this->page == 1) {
             // TRANS: Page title for first group page. %s is a group name.
-            return sprintf(_('Tweets de %s en %s'), $this->alumno->nickname, strtoupper($this->group->nickname));
+            return sprintf(_('Tweets puntuados de %s en %s'), $this->alumno->nickname, strtoupper($this->group->nickname));
         } else {
             // TRANS: Page title for any but first group page.
             // TRANS: %1$s is a group name, $2$s is a page number.
-            return sprintf(_('Tweets de %1$s en %2$s (%3$d)'), $this->alumno->nickname, strtoupper($this->group->nickname), $this->page);
+            return sprintf(_('Tweets puntuados de %1$s en %2$s (%3$d)'), $this->alumno->nickname, strtoupper($this->group->nickname), $this->page);
         }
     }
 
