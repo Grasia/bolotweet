@@ -365,6 +365,35 @@ class Grades extends Managed_DataObject {
         $gradeBD->free();
     }
 
+    
+    static function getMembersExcludeGradersAndAdmin($groupid){
+        
+         $grade = new Grades();
+         
+         $qry = 'select gm.profile_id as id '
+                 . 'from group_member gm '
+                 . 'where gm.is_admin <> 1 '
+                 . 'and gm.group_id = ' . $groupid
+                 . ' and gm.profile_id not in '
+                 .      '(select gg.userid '
+                 .          'from grades_group gg '
+                 .          'where gg.groupid = ' . $groupid .')';
+         
+        $grade->query($qry);
+        
+        $ids = array();
+
+        while ($grade->fetch()) {
+            $ids[] = $grade->id;
+        }
+
+        $grade->free();
+
+        return $ids;
+             
+
+
+}
     /** Métodos para estadísticas */
     static function getNumberTweetsOfUserInGroup($userid, $groupid) {
 
