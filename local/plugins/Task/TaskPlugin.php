@@ -8,13 +8,6 @@ require_once INSTALLDIR . '/lib/util.php';
 
 class TaskPlugin extends Plugin {
 
-    /**
-     * constructor
-     */
-    function __construct($show = TRUE) {
-        parent::__construct();
-    }
-
     function onCheckSchema() {
         $schema = Schema::get();
 
@@ -33,7 +26,8 @@ class TaskPlugin extends Plugin {
     }
 
     function onRouterInitialized($m) {
-        $m->connect('main/grade', array('action' => 'task'));
+        $m->connect('main/tareas', array('action' => 'taskcreate'));
+        $m->connect('main/tareas/', array('action' => 'newnoticetask'));
         return true;
     }
 
@@ -44,19 +38,22 @@ class TaskPlugin extends Plugin {
         $user = common_current_user();
         if (!empty($user)) {
 
-            if ($actionName === 'task')
+            if ($actionName === 'taskcreate')
                 $action->elementStart('li', array('id' => 'nav_task', 'class' => 'current'));
             else
                 $action->elementStart('li', array('id' => 'nav_task'));
 
-            $action->elementStart('a', array('href' => common_local_url('task'), 'title' => _m('Tareas de Clase')));
+            $action->elementStart('a', array('href' => common_local_url('taskcreate'), 'title' => _m('Tareas de Clase')));
             $action->text('Tareas');
 
             // Si es alumno, mostramos las tareas pendientes.
             if (!$user->hasRole('grader')) {
 
                 // Llamamos a la función que obtenga el numero de tareas
-                $action->element('span', 'pending-tasks-number', 2);
+                $number = Task::getNumberPendingTasks($user->id);
+                
+                if($number != 0)
+                    $action->element('span', 'pending-tasks-number', $number);
             }
 
             $action->elementEnd('a');
@@ -81,17 +78,14 @@ class TaskPlugin extends Plugin {
 
         switch ($cls) {
 
-            /*case 'GradeAction':
-            case 'GradereportAction':
-            case 'GradeexportcsvAction':
-            case 'GradeoptionscsvAction':
-            case 'GradeshowuserAction':
+            case 'TaskcreateAction':
+            case 'NewnoticetaskAction':
                 include_once $dir . '/actions/' . $cls . '.php';
-                return false;*/
-            /*case 'GradeForm':
-            case 'GradecsvForm':
+                return false;
+            case 'InitForm':
+            case 'NoticeTaskForm':
                 include_once $dir . '/lib/' . $cls . '.php';
-                return false;*/
+                return false;
             case 'Task':
             case 'Task_Grader':
                 include_once $dir . '/classes/' . $cls . '.php';
@@ -107,8 +101,8 @@ class TaskPlugin extends Plugin {
         return true;
     }
 
-    /* function onEndShowScripts($action) {
-      $action->script($this->path('js/grades.js'));
+     function onEndShowScripts($action) {
+      $action->script($this->path('js/task.js'));
       return true;
-      } */
+      } 
 }

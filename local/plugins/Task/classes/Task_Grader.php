@@ -19,6 +19,11 @@ class Task_Grader extends Managed_DataObject {
     function pkeyGet($kv) {
         return Memcached_DataObject::pkeyGet('Task_Grader', $kv);
     }
+    
+        function multiGet($keyCol, $keyVals, $skipNulls=true)
+    {
+        return parent::multiGet('Task_Grader', $keyCol, $keyVals, $skipNulls);
+    }
 
     /**
      * Data definition for email reminders
@@ -32,7 +37,7 @@ class Task_Grader extends Managed_DataObject {
                     'not null' => true,
                     'description' => 'Task ID'
                 ),
-                 'graderid' => array(
+                'graderid' => array(
                     'type' => 'int',
                     'not null' => true,
                     'description' => 'ID del grader'
@@ -50,6 +55,53 @@ class Task_Grader extends Managed_DataObject {
             ),
             'primary key' => array('id'),
         );
+    }
+
+    static function register($fields) {
+
+        extract($fields);
+
+        $taskG = new Task_Grader();
+
+        $qry = 'INSERT INTO task_grader (graderid,groupid,cdate) '
+                . 'VALUES (' . $graderid . ',' . $groupid . ',CURDATE())';
+
+        $qry2 = 'SELECT LAST_INSERT_ID() as id FROM task_grader';
+
+        $taskG->query('BEGIN');
+        $taskG->query($qry);
+        $taskG->query($qry2);
+        $taskG->query('COMMIT');
+
+        if ($taskG->fetch()) {
+            $id = $taskG->id;
+        }
+
+        return $id;
+    }
+    
+    static function checkTask($graderid, $groupid){
+        
+        
+        $task = new Task_Grader();
+
+        $new = true;
+        
+        $qry = 'select tg.id as taskid '
+                . 'from task_grader tg '
+                . 'where tg.graderid =  "' . $graderid .'"'
+                . ' and tg.groupid = ' . $groupid
+                . ' and tg.cdate = CURDATE()';
+
+
+        $result = $task->query($qry);
+
+          if ($task->fetch()) {
+            $new = false;
+        }
+
+      return $new;
+        
     }
 
 }
