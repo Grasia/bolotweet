@@ -13,18 +13,32 @@ class InitForm extends Form {
      * Notice to favor
      */
     var $groupid = null;
-    var $enabled = null;
+    var $user = null;
+    var $status = null;
+    var $taskid = null;
+    
     /**
      * Constructor
      *
      * @param HTMLOutputter $out    output channel
      * @param Notice        $notice notice to favor
      */
-    function __construct($out = null, $groupid = null, $enabled = true) {
+    function __construct($out = null, $groupid = null, $result = null) {
         parent::__construct($out);
 
+        $this->user = common_current_user();
         $this->groupid = $groupid;
-        $this->enabled = $enabled;
+        
+        if($result == -1){
+        $this->status = $result;
+        $this->taskid = $result;
+        }
+        
+        else{
+            
+              $this->status = $result[0];
+              $this->taskid = $result[1];
+        }
    }
 
     /**
@@ -53,13 +67,26 @@ class InitForm extends Form {
      */
     function formData() {
         $this->out->hidden('group-task-h'.$this->groupid, $this->groupid, 'groupid');
-      
-        if($this->enabled){
+        $this->out->hidden('new-task-h'.$this->groupid, $this->status, 'status');
+        $this->out->hidden('taskid-h'.$this->groupid, $this->taskid, 'taskid');
+
+        if($this->status != 1){
         $this->out->element('input', array('type' => 'submit',
                                       'id' => 'task-submit-' . $this->groupid,
                                       'class' => 'submit task-button-enabled',
                                       'value' => 'Iniciar',
-                                      'title' => 'Crea una tarea para este grupo'));
+                                      'title' => 'Crea una tarea para este grupo',
+                                      'onclick' => 'updateHistorical('.$this->user->id . ',' . $this->groupid . ')'));
+        
+
+        
+        $this->out->element('input', array('type' => 'text',
+            'name' => 'task-tag-' . $this->groupid,
+            'class' => 'task-tag',
+            'maxlength' => "13",
+            'title' => 'Añade un tag relacionado con la tarea'));
+        
+                $this->out->element('p', 'label-for-tag', 'Tag: (Opcional)');
     }
     else{
             $this->out->element('input', array('type' => 'button',

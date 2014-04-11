@@ -173,5 +173,41 @@ class Task extends Managed_DataObject {
         $task->free();
         
     }
+    
+    static function cancelTask($taskid){
+        
+         $task = new Task();
+
+        $qry = 'UPDATE task ' .
+                'SET status=2 ' .
+                'WHERE id=' . $taskid;
+
+        $result = $task->query($qry);
+
+        if (!$result) {
+            common_log_db_error($user, 'UPDATE TASK', __FILE__);
+        }
+
+        $task->free();
+        
+    }
+    
+        static function reopenTask($taskid){
+        
+         $task = new Task();
+
+        $qry = 'UPDATE task ' .
+                'SET status=0 ' .
+                'WHERE id=' . $taskid;
+
+        $result = $task->query($qry);
+
+        if (!$result) {
+            common_log_db_error($user, 'UPDATE TASK', __FILE__);
+        }
+
+        $task->free();
+        
+    }
 
 }

@@ -23,6 +23,9 @@
  *
  * @author Brion Vibber <brion@status.net>
  */
+
+require_once INSTALLDIR . '/classes/Memcached_DataObject.php';
+
 abstract class Managed_DataObject extends Memcached_DataObject
 {
     /**

@@ -26,6 +26,9 @@ if (!defined('STATUSNET') && !defined('LACONICA')) { exit(1); }
  * - don't leak memory when loading already-used .ini files
  *   (eg when using the same schema on thousands of databases)
  */
+
+require_once INSTALLDIR . '/extlib/DB/DataObject.php';
+
 class Safe_DataObject extends DB_DataObject
 {
     /**

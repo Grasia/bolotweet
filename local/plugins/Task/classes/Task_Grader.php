@@ -4,6 +4,8 @@ if (!defined('STATUSNET') && !defined('LACONICA')) {
     exit(1);
 }
 
+require_once INSTALLDIR . '/classes/Managed_DataObject.php';
+
 class Task_Grader extends Managed_DataObject {
 
     public $__table = 'task_grader';
@@ -19,10 +21,14 @@ class Task_Grader extends Managed_DataObject {
     function pkeyGet($kv) {
         return Memcached_DataObject::pkeyGet('Task_Grader', $kv);
     }
-    
-        function multiGet($keyCol, $keyVals, $skipNulls=true)
-    {
+
+    function multiGet($keyCol, $keyVals, $skipNulls = true) {
         return parent::multiGet('Task_Grader', $keyCol, $keyVals, $skipNulls);
+    }
+
+    public static function prueba() {
+
+        return true;
     }
 
     /**
@@ -47,6 +53,17 @@ class Task_Grader extends Managed_DataObject {
                     'not null' => true,
                     'description' => 'Group ID'
                 ),
+                'tag' => array(
+                    'type' => 'varchar',
+                    'length' => 50,
+                    'not null' => true,
+                    'description' => 'Task tag'
+                ),
+                'status' => array(
+                    'type' => 'tinyint',
+                    'not null' => true,
+                    'description' => 'Status of Task'
+                ),
                 'cdate' => array(
                     'type' => 'date',
                     'not null' => true,
@@ -63,8 +80,14 @@ class Task_Grader extends Managed_DataObject {
 
         $taskG = new Task_Grader();
 
-        $qry = 'INSERT INTO task_grader (graderid,groupid,cdate) '
-                . 'VALUES (' . $graderid . ',' . $groupid . ',CURDATE())';
+        if ($tag == "") {
+            $qry = 'INSERT INTO task_grader (graderid,groupid,cdate,status) '
+                    . 'VALUES (' . $graderid . ',' . $groupid . ',CURDATE(), 1)';
+        } else {
+
+            $qry = 'INSERT INTO task_grader (graderid,groupid,tag,cdate,status) '
+                    . 'VALUES (' . $graderid . ',' . $groupid . ',"' . $tag . '",CURDATE(), 1)';
+        }
 
         $qry2 = 'SELECT LAST_INSERT_ID() as id FROM task_grader';
 
@@ -79,29 +102,106 @@ class Task_Grader extends Managed_DataObject {
 
         return $id;
     }
-    
-    static function checkTask($graderid, $groupid){
-        
-        
+
+    static function cancel($taskid) {
+
+
         $task = new Task_Grader();
 
-        $new = true;
-        
-        $qry = 'select tg.id as taskid '
+        $qry = 'UPDATE task_grader ' .
+                'SET status=0 ' .
+                'WHERE id=' . $taskid;
+
+        $task->query($qry);
+
+        $task->free();
+    }
+
+    static function reopenTask($taskid) {
+
+
+        $task = new Task_Grader();
+
+        $qry = 'UPDATE task_grader ' .
+                'SET status=1 ' .
+                'WHERE id=' . $taskid;
+
+        $task->query($qry);
+
+        $task->free();
+    }
+
+    static function updateTask($taskid, $tag) {
+
+        $task = new Task_Grader();
+
+        if ($tag == "") {
+            $qry = 'UPDATE task_grader ' .
+                    'SET status=1 ' .
+                    'WHERE id=' . $taskid;
+        } else {
+            $qry = 'UPDATE task_grader ' .
+                    'SET status=1, tag="' . $tag . '" '.
+                    'WHERE id=' . $taskid;
+        }
+
+
+        $task->query($qry);
+
+        $task->free();
+    }
+
+    static function checkTask($graderid, $groupid) {
+
+
+        $task = new Task_Grader();
+
+        $qry = 'select tg.status as status, tg.id as id '
                 . 'from task_grader tg '
-                . 'where tg.graderid =  "' . $graderid .'"'
+                . 'where tg.graderid =  "' . $graderid . '"'
                 . ' and tg.groupid = ' . $groupid
                 . ' and tg.cdate = CURDATE()';
 
 
-        $result = $task->query($qry);
+        $task->query($qry);
 
-          if ($task->fetch()) {
-            $new = false;
+        if($task->fetch()){
+            
+            $result = array($task->status, $task->id);
+        }
+        
+        else 
+            $result = -1;
+        
+        return $result;
+    }
+
+    static function getHistorical($graderid, $groupid) {
+
+        $task = new Task_Grader();
+
+        $qry = 'select ' .
+                '(select count(id) from task where id = tg.id and status = 1) as completed, ' .
+                '(select count(id) as total from task where id = tg.id) as total, ' .
+                'tg.cdate as cdate, ' .
+                'tg.status as status, ' .
+                'tg.id as id, ' .
+                'tg.tag as tag ' .
+                'from task_grader tg ' .
+                'where tg.graderid = ' . $graderid .
+                ' and tg.groupid = ' . $groupid .
+                ' order by tg.cdate desc';
+
+        $task->query($qry);
+
+        $historical = array();
+
+        while ($task->fetch()) {
+            $historical[] = array('completed' => $task->completed, 'total' => $task->total,
+                'cdate' => $task->cdate, 'status' => $task->status, 'id' => $task->id, 'tag' => $task->tag);
         }
 
-      return $new;
-        
+        return $historical;
     }
 
 }

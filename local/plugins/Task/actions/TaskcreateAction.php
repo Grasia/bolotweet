@@ -52,14 +52,75 @@ class TaskcreateAction extends Action {
 
             if ($this->trimmed('groupid')) {
                 $groupid = $this->trimmed('groupid');
-                $this->initTask($groupid);
+                $tag = $this->trimmed('task-tag-' . $groupid);
+                $status = $this->trimmed('status');
+                $taskid = $this->trimmed('taskid');
+                if (substr_compare($tag, "#", 0, 1) == 0) {
+                    $tag = substr($tag, 1);
+                }
+
+                $this->initTask($groupid, $tag, $status, $taskid);
             } else if ($this->trimmed('delete')) {
                 $taskid = $this->trimmed('delete');
                 $this->deleteTask($taskid);
+            } else if ($this->trimmed('cancel-task')) {
+                $taskid = $this->trimmed('cancel-task');
+                $this->cancelTaskGrader($taskid);
+            } else if ($this->trimmed('reopen-task')) {
+                $taskid = $this->trimmed('reopen-task');
+                $this->reopenTask($taskid);
             }
         } else {
 
             $this->showPage();
+        }
+    }
+
+    /**
+     * Cancela una tarea iniciada por un profesor, siempre y cuando
+     * la tarea no tenga aún ningún alumno que la haya completado.
+     */
+    function cancelTaskGrader($taskid) {
+
+        // Cancelamos la tarea del grader.
+        Task_Grader::cancel($taskid);
+
+        // Cancelamos cada tarea asociada a los alumnos de esa tarea.
+        Task::cancelTask($taskid);
+
+        if ($this->boolean('ajax')) {
+
+            $this->startHTML('application/xml,text/xml;charset=utf-8');
+            $this->elementStart('head');
+            $this->element('title', null, _('Disfavor favorite'));
+            $this->elementEnd('head');
+            $this->elementStart('body');
+            $form = new ReopenForm($this, $taskid);
+            $form->show();
+            $this->elementEnd('body');
+            $this->elementEnd('html');
+        }
+    }
+
+    function reopenTask($taskid) {
+
+        // Reabrimos la tarea del grader.
+        Task_Grader::reopenTask($taskid);
+
+        // Reabrimos cada tarea asociada a los alumnos de esa tarea.
+        Task::reopenTask($taskid);
+
+        if ($this->boolean('ajax')) {
+
+            $this->startHTML('application/xml,text/xml;charset=utf-8');
+            $this->elementStart('head');
+            $this->element('title', null, _('Disfavor favorite'));
+            $this->elementEnd('head');
+            $this->elementStart('body');
+            $form = new CancelForm($this, $taskid);
+            $form->show();
+            $this->elementEnd('body');
+            $this->elementEnd('html');
         }
     }
 
@@ -106,15 +167,78 @@ class TaskcreateAction extends Action {
 
             foreach ($groups as $group) {
 
-
-                $this->elementStart('div', array('class' => 'div-group-task'));
+                $this->elementStart('div', array('id' => 'div-group-task-' . $group->id, 'class' => 'group-task-grader'));
                 $this->element('h2', null, strtoupper($group->getBestName()));
-                
-                $new = Task_Grader::checkTask($this->user->id, $group->id);
-                
-                $form = new InitForm($this, $group->id, $new);
+
+                // Comprobamos si la tarea de ese día para ese grupo ya está creada.
+                $result = Task_Grader::checkTask($this->user->id, $group->id);
+
+                // Creamos el form para ese grupo.
+                $form = new InitForm($this, $group->id, $result);
                 $form->show();
+
                 $this->element('p', null, 'Fecha: ' . strftime('%d-%m-%Y'));
+
+                // Cogemos el histórico de tareas de ese grupo y ese profesor.
+                $historical = Task_Grader::getHistorical($this->user->id, $group->id);
+
+                $this->elementStart('div', array('class' => 'wrapper-group-historical'));
+                // Creamos el título del histórico y un enlace para expandirlo.
+                $this->elementStart('a', array('class' => 'task-show-historical',
+                    'onclick' => 'showHistorical(' . $group->id . ');'));
+                $this->raw('Histórico de tareas <span class="show-historical">▸</span>');
+                $this->elementEnd('a');
+
+                $this->elementStart('div', array('id' => 'historical-' . $group->id, 'class' => 'div-group-historical'));
+
+
+                if (count($historical) > 0) {
+
+                    foreach ($historical as $taskHistory) {
+
+                        $this->elementStart('div', array('id' => 'task-' . $taskHistory['id'], 'class' => 'div-historical-task'));
+
+                        if ($taskHistory['status'] == 1) {
+                            $status = 'Iniciada';
+                        } else {
+                            $status = 'Cancelada';
+                        }
+
+                        if ($taskHistory['tag'] == "") {
+
+                            $taskHistory['tag'] = '&lt;Ninguno&gt;';
+                        }
+
+                        $this->elementStart('p');
+                        $this->raw('<span class="historical-bold">' . $status . '</span> '
+                                . '| <span class="historical-bold">Fecha:</span> ' . $taskHistory['cdate'] . ' '
+                                . '| <span class="historical-bold">Tag:</span>  ' . $taskHistory['tag'] . ' '
+                                . '| <span class="historical-bold">Completada:</span>  ' . $taskHistory['completed'] . '/' . $taskHistory['total']);
+
+                        $this->elementEnd('p');
+                        if ($taskHistory['completed'] == 0) {
+
+                            if ($taskHistory['status'] == 1) {
+                                $form = new CancelForm($this, $taskHistory['id']);
+                                $form->show();
+                            } else {
+
+                                $form = new ReopenForm($this, $taskHistory['id']);
+                                $form->show();
+                            }
+                        }
+                        $this->elementEnd('div');
+                    }
+                } else {
+
+                    $this->element('p', null, 'Todavía no ha iniciado ninguna tarea.');
+                }
+
+                $this->elementEnd('div');
+
+                $this->elementEnd('div');
+
+                $this->element('p', 'task-underline');
 
                 $this->elementEnd('div');
             }
@@ -157,7 +281,11 @@ class TaskcreateAction extends Action {
 
                 $this->elementStart('div', array('class' => 'input_form'));
 
-                $notice_form = new NoticeTaskForm($this, $task->id, array('content' => '#' . $task->cdate, 'to_group' => $group));
+                if ($task->tag == "") {
+                    $notice_form = new NoticeTaskForm($this, $task->id, array('content' => '#' . $task->cdate, 'to_group' => $group));
+                } else {
+                    $notice_form = new NoticeTaskForm($this, $task->id, array('content' => '#' . $task->cdate . ' #' . $task->tag, 'to_group' => $group));
+                }
                 $notice_form->show();
 
                 $this->elementEnd('div');
@@ -169,16 +297,32 @@ class TaskcreateAction extends Action {
         }
     }
 
-    function initTask($groupid) {
+    function initTask($groupid, $tag, $status, $taskid) {
 
-        // Registramos la tarea en la tabla task_grader
-        $id = Task_Grader::register(array('graderid' => $this->user->id, 'groupid' => $groupid));
+        $result = array();
 
-        $idsUsers = Grades::getMembersExcludeGradersAndAdmin($groupid);
+        if ($status == -1) {
+            // Registramos la tarea en la tabla task_grader
+            $id = Task_Grader::register(array('graderid' => $this->user->id, 'groupid' => $groupid, 'tag' => $tag));
 
-        // Creamos una tarea asociada para cada alumno del grupo.
-        if (count($idsUsers) > 0)
-            Task::register(array('id' => $id, 'idsUsers' => $idsUsers));
+            $idsUsers = Grades::getMembersExcludeGradersAndAdmin($groupid);
+
+            // Creamos una tarea asociada para cada alumno del grupo.
+            if (count($idsUsers) > 0) {
+                Task::register(array('id' => $id, 'idsUsers' => $idsUsers));
+            }
+
+            $result[0] = 1;
+            $result[1] = $id;
+        } else {
+
+            Task_Grader::updateTask($taskid, $tag);
+
+            Task::reopenTask($taskid);
+
+            $result[0] = 1;
+            $result[1] = $taskid;
+        }
 
         if ($this->boolean('ajax')) {
             $this->startHTML('text/xml;charset=utf-8');
@@ -187,7 +331,7 @@ class TaskcreateAction extends Action {
             $this->element('title', null, _m('Add to favorites'));
             $this->elementEnd('head');
             $this->elementStart('body');
-            $form = new InitForm($this, $groupid, false);
+            $form = new InitForm($this, $groupid, $result);
             $form->show();
             $this->elementEnd('body');
             $this->elementEnd('html');

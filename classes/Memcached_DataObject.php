@@ -19,6 +19,9 @@
 
 if (!defined('STATUSNET') && !defined('LACONICA')) { exit(1); }
 
+require_once INSTALLDIR . '/classes/Safe_DataObject.php';
+
+
 class Memcached_DataObject extends Safe_DataObject
 {
     /**

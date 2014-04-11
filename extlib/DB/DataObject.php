@@ -88,7 +88,7 @@
  * - we use getStaticProperty from PEAR pretty extensively (cant remove it ATM)
  */
 
-require_once 'PEAR.php';
+require_once INSTALLDIR . '/extlib/PEAR.php';
 
 /**
  * We are duping fetchmode constants to be compatible with

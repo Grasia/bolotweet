@@ -84,6 +84,8 @@ class TaskPlugin extends Plugin {
                 return false;
             case 'InitForm':
             case 'NoticeTaskForm':
+            case 'CancelForm':
+            case 'ReopenForm':
                 include_once $dir . '/lib/' . $cls . '.php';
                 return false;
             case 'Task':
