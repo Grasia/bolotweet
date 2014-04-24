@@ -4,7 +4,7 @@ function changeComboTag(groupid) {
     var userid = $('#notes-combo-user').find(":selected").text();
     var grade = $('#notes-combo-grade').find(":selected").text();
 
-    $('#notes-combo-user').load('/bolotweet/local/plugins/NotesPDF/scripts/updateBoxUser.php', {groupid: groupid, grade: grade, tag: tag}, function() {
+    $('#notes-combo-user').load("../../local/plugins/NotesPDF/scripts/updateBoxUser.php", {groupid: groupid, grade: grade, tag: tag}, function() {
 
         if (userid !== 'Todos') {
             $("#notes-combo-user option[value=" + userid + "]").attr("selected", "selected");
@@ -12,7 +12,7 @@ function changeComboTag(groupid) {
 
     });
 
-    $('#notes-combo-grade').load('/bolotweet/local/plugins/NotesPDF/scripts/updateBoxGrade.php', {groupid: groupid, userid: userid, tag: tag}, function() {
+    $('#notes-combo-grade').load("../../local/plugins/NotesPDF/scripts/updateBoxGrade.php", {groupid: groupid, userid: userid, tag: tag}, function() {
 
         if (grade !== 'Todos') {
             $("#notes-combo-grade option[value=" + grade + "]").attr("selected", "selected");
@@ -28,7 +28,7 @@ function changeComboUser(groupid) {
     var userid = $('#notes-combo-user').find(":selected").text();
     var grade = $('#notes-combo-grade').find(":selected").text();
 
-    $('#notes-combo-hashtag').load('/bolotweet/local/plugins/NotesPDF/scripts/updateBoxTags.php', {groupid: groupid, userid: userid, grade: grade}, function() {
+    $('#notes-combo-hashtag').load("../../local/plugins/NotesPDF/scripts/updateBoxTags.php", {groupid: groupid, userid: userid, grade: grade}, function() {
 
         if (tag !== 'Todos') {
             $("#notes-combo-hashtag option[value=" + tag + "]").attr("selected", "selected");
@@ -37,7 +37,7 @@ function changeComboUser(groupid) {
 
 
 
-    $('#notes-combo-grade').load('/bolotweet/local/plugins/NotesPDF/scripts/updateBoxGrade.php', {groupid: groupid, userid: userid, tag: tag}, function() {
+    $('#notes-combo-grade').load("../../local/plugins/NotesPDF/scripts/updateBoxGrade.php", {groupid: groupid, userid: userid, tag: tag}, function() {
 
         if (grade !== 'Todos') {
             $("#notes-combo-grade option[value=" + grade + "]").attr("selected", "selected");
@@ -54,7 +54,7 @@ function changeComboGrade(groupid) {
     var userid = $('#notes-combo-user').find(":selected").text();
     var grade = $('#notes-combo-grade').find(":selected").text();
 
-    $('#notes-combo-user').load('/bolotweet/local/plugins/NotesPDF/scripts/updateBoxUser.php', {groupid: groupid, grade: grade, tag: tag}, function() {
+    $('#notes-combo-user').load("../../local/plugins/NotesPDF/scripts/updateBoxUser.php", {groupid: groupid, grade: grade, tag: tag}, function() {
        
         if (userid !== 'Todos') {
             $("#notes-combo-user option[value=" + userid + "]").attr("selected", "selected");
@@ -62,7 +62,7 @@ function changeComboGrade(groupid) {
     });
 
 
-    $('#notes-combo-hashtag').load('/bolotweet/local/plugins/NotesPDF/scripts/updateBoxTags.php', {groupid: groupid, userid: userid, grade: grade}, function() {
+    $('#notes-combo-hashtag').load("../../local/plugins/NotesPDF/scripts/updateBoxTags.php", {groupid: groupid, userid: userid, grade: grade}, function() {
 
         if (tag !== 'Todos') {
             $("#notes-combo-hashtag option[value=" + tag + "]").attr("selected", "selected");

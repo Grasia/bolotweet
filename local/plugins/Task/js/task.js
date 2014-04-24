@@ -86,12 +86,12 @@ function updateHistorical(graderid, groupid) {
 
             if ($('#div-group-task-' + groupid + ' #historical-' + groupid).css('display') == 'none') {
                 
-                $('#div-group-task-' + groupid + ' #historical-' + groupid).load('/bolotweet/local/plugins/Task/scripts/updateHistorical.php', {graderid: graderid, groupid: groupid});
+                $('#div-group-task-' + groupid + ' #historical-' + groupid).load("../../local/plugins/Task/scripts/updateHistorical.php", {graderid: graderid, groupid: groupid});
 
             }
 
             else {
-                $('#div-group-task-' + groupid + ' #historical-' + groupid).fadeOut("fast").load('/bolotweet/local/plugins/Task/scripts/updateHistorical.php', {graderid: graderid, groupid: groupid}).fadeIn('slow');
+                $('#div-group-task-' + groupid + ' #historical-' + groupid).fadeOut("fast").load("../../local/plugins/Task/scripts/updateHistorical.php", {graderid: graderid, groupid: groupid}).fadeIn('slow');
             }
 
         }, 100);
