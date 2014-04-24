@@ -26,38 +26,53 @@ class GenerarPDF extends FPDF {
         $pdf->SetFont('Times', '', 12);
 
         $i = 1;
+        
+        $authorAndNotice = array();
+        $authors = array();
+        
         foreach ($notices as $notice) {
             $pdf->Ln(10);
             $filterContent = $pdf->filtrarContenido($notice->content);
             $filterContent = $filterContent . " [" . $i . "]";
             $pdf->Write(5, $filterContent);
             
+            $authorAndNotice[$i] = $notice->getProfile()->getBestName();
+            $authors[] = $notice->getProfile()->getBestName();
             $i = $i + 1;
         }
-
-        $pdf->Fuentes($idGroup, $notices);
+      
+        
+        $pdf->Fuentes($authorAndNotice, array_unique($authors));
         
         $pdf->Output('apuntes.pdf', 'D');
     }
 
     static function contentCustom($idGroup, $notices, $modo) {
 
-        global $tipoApuntes;
-        $tipoApuntes = $modo;
-        
-        
-        $pdf = new GenerarPDF();
-
+        $pdf = new GenerarPDF($modo);
+        $pdf->Portada($idGroup);
         $pdf->SetFont('Times', '', 12);
 
+        $i = 1;
+        
+        $authorAndNotice = array();
+        $authors = array();
+        
         foreach ($notices as $notice) {
             $pdf->Ln(10);
             $filterContent = $pdf->filtrarContenido($notice->content);
-
+            $filterContent = $filterContent . " [" . $i . "]";
             $pdf->Write(5, $filterContent);
+            
+            $authorAndNotice[$i] = $notice->getProfile()->getBestName();
+            $authors[] = $notice->getProfile()->getBestName();
+            $i = $i + 1;
         }
-
-        $pdf->Output('apuntes', 'D');
+      
+        
+        $pdf->Fuentes($authorAndNotice, array_unique($authors));
+        
+        $pdf->Output('apuntes.pdf', 'D');
     }
 
     //Cabecera de página
@@ -75,6 +90,7 @@ class GenerarPDF extends FPDF {
         $this->SetFont('Arial', 'I', 12);
         $this->SetTextColor(199, 199, 199);
         $this->MultiCell(0,6, 'Este documento es únicamente una recopilación de ideas. En ningún caso sustituye al material proporcionado por el profesor.',0);
+        $this->Ln(5);
     }
 
     //Pie de página
@@ -92,10 +108,10 @@ class GenerarPDF extends FPDF {
         $groupName = NotesPDF::getGroupByID($idGroup)->getBestName();
         
         $this->AddPage();
-        $this->Ln(20);
+        $this->Ln(7);
         $this->SetFont('Arial', 'I', 12);
         setlocale(LC_ALL,"es_ES");
-        $this->Cell(0, 0, $groupName . ' - ' . strftime("%d de %B del %Y"), 0, 0, 'R');
+        $this->Cell(0, 0, strtoupper($groupName) . ' - ' . strftime("%d de %B del %Y"), 0, 0, 'R');
         $this->Ln(10);
         $this->SetFont('Arial', 'B', 14);
         $this->Cell(0,7, 'Ideas Seleccionadas',1,0,'C');
@@ -109,7 +125,7 @@ class GenerarPDF extends FPDF {
         return ltrim(preg_replace('/(?:^|\s)!\w{1,64}/', '', $content));
     }
 
-     function Fuentes($idGroup, $notices) {
+     function Fuentes($authorAndNotice, $authors) {
          
          
          $this->addPage();
@@ -120,14 +136,21 @@ class GenerarPDF extends FPDF {
          $this->Cell(0, 7, 'Autores', 1, 0,'C');
          $this->Ln(5);
          $this->SetFont('Times', '', 12);
-         
-         $i = 1;
           
-        foreach ($notices as $notice) {
+        foreach ($authors as $author) {
+            
+            $noticeIds = array_keys($authorAndNotice, $author);
+            
+            $linea = $author . " ->";
+            
+            foreach($noticeIds as $id){
+                
+                $linea .= " " . "[".$id."] ";
+            }
+            
             $this->Ln(10);
-            $content = "[".$i."]  " . $notice->getProfile()->getBestName();
-            $this->Write(5, $content);
-            $i = $i + 1;
+            $this->Write(5, $linea);
+
         }
         
      }    
