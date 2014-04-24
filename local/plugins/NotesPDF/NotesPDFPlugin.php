@@ -80,9 +80,9 @@ class NotesPDFPlugin extends Plugin {
         return true;
     }
 
-    /* function onEndShowScripts($action)
+     function onEndShowScripts($action)
       {
       $action->script($this->path('js/notespdf.js'));
       return true;
-      } */
+      } 
 }

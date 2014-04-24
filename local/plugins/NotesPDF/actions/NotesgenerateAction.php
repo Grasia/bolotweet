@@ -121,7 +121,14 @@ class NotesgenerateAction extends Action {
         else if (($this->trimmed('submit-custom') != null)){
             
             
+            $tag = $this->trimmed('combo-tag') == 'Todos' ? '%' : $this->trimmed('combo-tag');
+            $nick = $this->trimmed('combo-user') == 'Todos' ? '%' : $this->trimmed('combo-user');
+            $grade = $this->trimmed('combo-grade') == 'Todos' ? '%' : $this->trimmed('combo-grade');
+
+            $noticeIds = NotesPDF::getNoticesInModeCustom(array('idGroup' => $idGroup, 'tag' => $tag, 'nick' => $nick, 'grade' => $grade));
             
+            $notices = Notice::multiGet('id', $noticeIds)->fetchAll();
+
             GenerarPDF::contentCustom($idGroup,$notices,'Personalizados');
         }
         
