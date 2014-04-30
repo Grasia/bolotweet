@@ -136,6 +136,12 @@ class GradereportAction extends Action {
 
         $groupsUser = $this->user->getGroups()->fetchAll();
 
+        if(empty($groupsUser)){
+            
+           $this->element('p', null, 'Todavía no perteneces a ningún grupo.');
+
+        }
+        
         foreach ($groupsUser as $group) {
             $gradespergroup = Grades::getGradedNoticesAndUsersWithinGroup($group->id);
 
@@ -186,6 +192,13 @@ class GradereportAction extends Action {
 
         $groupsUser = $this->user->getGroups()->fetchAll();
 
+        
+        if(empty($groupsUser)){
+            
+           $this->element('p', null, 'Todavía no perteneces a ningún grupo.');
+
+        }
+        
         foreach ($groupsUser as $group) {
             $gradespergroup = Grades::getGradedNoticesAndUsersWithinGroup($group->id);
 
