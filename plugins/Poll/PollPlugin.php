@@ -435,7 +435,7 @@ class PollPlugin extends MicroAppPlugin
             if ($user) {
                 $profile = $user->getProfile();
                 $response = $poll->getResponse($profile);
-                if ($response) {
+                if ($response || ($user->id === $poll->profile_id)) {
                     // User has already responded; show the results.
                     $form = new PollResultForm($poll, $out);
                 } else {

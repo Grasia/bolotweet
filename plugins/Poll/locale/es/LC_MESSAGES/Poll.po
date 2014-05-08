@@ -89,7 +89,7 @@ msgstr "Selección de encuesta no válida."
 #. TRANS: %s a link to the poll with the chosen option as link description.
 #, php-format
 msgid "voted for \"%s\""
-msgstr "ha votado a favor de \"%s\""
+msgstr "ha votado a la opción \"%s\""
 
 #. TRANS: Button text for submitting a poll response.
 msgctxt "BUTTON"
