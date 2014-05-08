@@ -202,7 +202,7 @@ class GroupdirectoryAction extends Action
      */
     function showContent()
     {
-        if (common_logged_in()) {
+        if (common_logged_in() && common_current_user()->hasrole('grader')) {
             $this->elementStart(
                 'p',
                 array(
