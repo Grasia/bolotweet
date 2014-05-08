@@ -355,7 +355,7 @@ class Notice extends Managed_DataObject
             $final = common_shorten_links($content);
         }
 
-        if($source!='activity'){
+        if($source!='activity' && $source!='event'){
             if (Notice::contentTooLong($final)) {
                 // TRANS: Client exception thrown if a notice contains too many characters.
                 throw new ClientException(_('Problem saving notice. Too long.'));

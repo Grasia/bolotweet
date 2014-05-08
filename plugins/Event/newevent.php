@@ -217,6 +217,8 @@ class NeweventAction extends Action
 
             ToSelector::fillOptions($this, $options);
 
+            $options['source'] = 'event';
+            
             $profile = $this->user->getProfile();
 
             $saved = Happening::saveNew($profile,
