@@ -153,7 +153,7 @@ class EventListItem extends NoticeListItemAdapter
         $out->elementStart('div', 'event-rsvps');
         // TRANS: Field label for event description.
 
-        $out->text(_('Attending:'));
+        $out->text(_m('Attending:'));
         $out->elementStart('ul', 'attending-list');
 
         foreach ($rsvps as $verb => $responses) {
@@ -161,13 +161,13 @@ class EventListItem extends NoticeListItemAdapter
             switch ($verb)
             {
             case RSVP::POSITIVE:
-                $out->text(_('Yes:'));
+                $out->text(_m('Yes:'));
                 break;
             case RSVP::NEGATIVE:
                 $out->text(_('No:'));
                 break;
             case RSVP::POSSIBLE:
-                $out->text(_('Maybe:'));
+                $out->text(_m('Maybe:'));
                 break;
             }
             $ids = array();

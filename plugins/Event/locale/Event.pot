@@ -483,3 +483,18 @@ msgstr ""
 #: eventlistitem.php:146
 msgid "Description:"
 msgstr ""
+
+#. TRANS: Field label for event attending.
+#: eventlistitem.php:156
+msgid "Attending:"
+msgstr ""
+
+#. TRANS: Field label for Yes option.
+#: eventlistitem.php:164
+msgid "Yes:"
+msgstr ""
+
+#. TRANS: Field label for Maybe option.
+#: eventlistitem.php:170
+msgid "Maybe:"
+msgstr ""
