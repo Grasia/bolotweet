@@ -4125,7 +4125,7 @@ msgstr "Nombre completo"
 #. TRANS: Form input field label.
 #. TRANS: Field label on group edit form; points to "more info" for a group.
 msgid "Homepage"
-msgstr "Página de inicio"
+msgstr "Página Web"
 
 #. TRANS: Tooltip for field label in form for profile settings.
 #. TRANS: Field title on account registration page.
@@ -7853,25 +7853,25 @@ msgstr "Bloquear a este usuario de modo que ya no pueden enviar mensajes."
 
 #. TRANS: Field title on group edit form.
 msgid "URL of the homepage or blog of the group or topic."
-msgstr "URL de la página o el blog del grupo o tema."
+msgstr "URL de la asignatura (Opcional)."
 
 #. TRANS: Text area title for group description when there is no text limit.
 msgid "Describe the group or topic."
-msgstr "Describir el grupo o tema."
+msgstr "Describir el grupo o la asignatura."
 
 #. TRANS: Text area title for group description.
 #. TRANS: %d is the number of characters available for the description.
 #, php-format
 msgid "Describe the group or topic in %d character or less."
 msgid_plural "Describe the group or topic in %d characters or less."
-msgstr[0] "Describir el grupo o el tema en %d caracteres o menos."
-msgstr[1] "Describir el grupo o el tema en %d caracteres o menos."
+msgstr[0] "Describir el grupo o la asignatura en %d caracteres o menos."
+msgstr[1] "Describir el grupo o la asignatura en %d caracteres o menos."
 
 #. TRANS: Field title on group edit form.
 msgid ""
 "Location for the group, if any, like \"City, State (or Region), Country\"."
 msgstr ""
-"Ubicación del grupo, si alguno, como \"ciudad, Estado o región, país\"."
+"Ubicación del grupo, \"nombre de facultad, escuela...\"."
 
 #. TRANS: Field label on group edit form.
 msgid "Aliases"
@@ -7887,11 +7887,11 @@ msgid_plural ""
 "Extra nicknames for the group, separated with commas or spaces. Maximum %d "
 "aliases allowed."
 msgstr[0] ""
-"Extra nicknames for the group, separated with commas or spaces. Maximum %d "
-"alias allowed."
+"Nombres extra para el grupo, separados con comas o espacios. Máximo %d "
+"alias permitidos."
 msgstr[1] ""
-"Extra nicknames for the group, separated with commas or spaces. Maximum %d "
-"aliases allowed."
+"Nombres extra para el grupo, separados con comas o espacios. Máximo %d "
+"alias permitidos."
 
 #. TRANS: Checkbox field title on group edit form to mark a group private.
 msgid ""
