@@ -60,10 +60,11 @@ function reducir(taskid) {
         e.preventDefault(); // don't submit multiple times
         setTimeout(function() {
 
-            $(".pending-tasks-number").text($(".pending-tasks-number").text() - 1);
-            $(".pending-tasks-number").css('display', 'none');
-            $(".pending-tasks-number").toggle('fade', 800);
-            
+            if ($('#form_notice_task_' + taskid).length == 0) {
+                $(".pending-tasks-number").text($(".pending-tasks-number").text() - 1);
+                $(".pending-tasks-number").css('display', 'none');
+                $(".pending-tasks-number").toggle('fade', 800);
+            }
 
         }, 1000);
     });
