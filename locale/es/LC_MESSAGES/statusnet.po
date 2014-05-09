@@ -2148,7 +2148,7 @@ msgstr "Alias inválido: \"%s\""
 #. TRANS: Group edit form success message.
 #. TRANS: Edit list form success message.
 msgid "Options saved."
-msgstr "Se guardó Opciones."
+msgstr "Opciones actualizadas."
 
 #. TRANS: Title for edit list page after deleting a tag.
 #. TRANS: %s is a list.
