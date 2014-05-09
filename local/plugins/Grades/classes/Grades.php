@@ -365,7 +365,34 @@ class Grades extends Managed_DataObject {
         $gradeBD->free();
     }
 
-    
+    static function getMembersNicksExcludeGradersAndAdmin($groupid){
+        
+         $grade = new Grades();
+         
+         $qry = 'select p.nickname as nick '
+                 . 'from group_member gm, profile p '
+                 . 'where gm.is_admin <> 1 '
+                 . 'and gm.group_id = ' . $groupid
+                 . ' and gm.profile_id = p.id '
+                 . 'and gm.profile_id not in '
+                 .      '(select gg.userid '
+                 .          'from grades_group gg '
+                 .          'where gg.groupid = ' . $groupid .')';
+         
+        $grade->query($qry);
+        
+        $nicks = array();
+
+        while ($grade->fetch()) {
+            $nicks[] = $grade->nick;
+        }
+
+        $grade->free();
+
+        return $nicks;
+             
+}
+
     static function getMembersExcludeGradersAndAdmin($groupid){
         
          $grade = new Grades();

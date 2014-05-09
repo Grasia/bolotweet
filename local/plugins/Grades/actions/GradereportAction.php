@@ -144,8 +144,15 @@ class GradereportAction extends Action {
         
         foreach ($groupsUser as $group) {
             $gradespergroup = Grades::getGradedNoticesAndUsersWithinGroup($group->id);
+            $nicksMembers = Grades::getMembersNicksExcludeGradersAndAdmin($group->id);
 
-
+            foreach($nicksMembers as $nick){
+                
+                if(!array_key_exists($nick, $gradespergroup)){
+                    $gradespergroup[$nick] = '0';
+                }
+            }
+            
             $this->elementStart('div', array('id' => 'grade-report-group-' . $group->id));
             $this->elementStart('h3', array('class' => 'grade-report-group', 'title' => $group->getBestName()));
             $this->element('a', array('class' => 'grade-report-group-link', 'href' =>
@@ -201,7 +208,15 @@ class GradereportAction extends Action {
         
         foreach ($groupsUser as $group) {
             $gradespergroup = Grades::getGradedNoticesAndUsersWithinGroup($group->id);
+            $nicksMembers = Grades::getMembersNicksExcludeGradersAndAdmin($group->id);
 
+            foreach($nicksMembers as $nick){
+                
+                if(!array_key_exists($nick, $gradespergroup)){
+                    $gradespergroup[$nick] = '0';
+                }
+            }
+            
             $this->elementStart('div', array('id' => 'grade-report-group-' . $group->id));
             $this->elementStart('h3', array('class' => 'grade-report-group', 'title' => $group->getBestName()));
             $this->element('a', array('class' => 'grade-report-group-link', 'href' =>
