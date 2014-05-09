@@ -103,7 +103,15 @@ class GradeexportcsvAction extends Action {
         $separator = $this->trimmed('grade-export-separator');
 
         $arrayReport = Grades::getGradedNoticesAndUsersWithinGroup($groupid);
+        $nicksMembers = Grades::getMembersNicksExcludeGradersAndAdmin($groupid);
 
+            foreach($nicksMembers as $nick){
+                
+                if(!array_key_exists($nick, $arrayReport)){
+                    $arrayReport[$nick] = 0;
+                }
+            }
+            
         $arrayFinal = array();
 
         foreach ($arrayReport as $alumno => $puntuacion) {
