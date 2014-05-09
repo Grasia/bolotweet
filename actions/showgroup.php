@@ -147,10 +147,10 @@ class ShowgroupAction extends GroupAction {
             $this->elementEnd('p');
         } else {
 
-            if (empty($this->notice->_items)) {
+            if (empty($this->notice->_items) ) {
 
                 $this->elementStart('p');
-                $this->raw('Este grupo aún no tiene mensajes, ¡sé el primero en comentar! ');
+                $this->raw('¡Una lástima! Este grupo aún no tiene mensajes. ');
                 $this->elementEnd('p');
             } else {
                 
