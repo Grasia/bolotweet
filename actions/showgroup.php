@@ -1,4 +1,5 @@
 <?php
+
 /**
  * StatusNet, the distributed open-source microblogging tool
  *
@@ -27,13 +28,12 @@
  * @license   http://www.fsf.org/licensing/licenses/agpl-3.0.html GNU Affero General Public License version 3.0
  * @link      http://status.net/
  */
-
 if (!defined('STATUSNET') && !defined('LACONICA')) {
     exit(1);
 }
 
-require_once INSTALLDIR.'/lib/noticelist.php';
-require_once INSTALLDIR.'/lib/feedlist.php';
+require_once INSTALLDIR . '/lib/noticelist.php';
+require_once INSTALLDIR . '/lib/feedlist.php';
 
 /**
  * Group main page
@@ -44,8 +44,8 @@ require_once INSTALLDIR.'/lib/feedlist.php';
  * @license  http://www.fsf.org/licensing/licenses/agpl-3.0.html GNU Affero General Public License version 3.0
  * @link     http://status.net/
  */
-class ShowgroupAction extends GroupAction
-{
+class ShowgroupAction extends GroupAction {
+
     /** page we're viewing. */
     var $page = null;
     var $userProfile = null;
@@ -56,8 +56,7 @@ class ShowgroupAction extends GroupAction
      *
      * @return boolean true
      */
-    function isReadOnly($args)
-    {
+    function isReadOnly($args) {
         return true;
     }
 
@@ -66,8 +65,7 @@ class ShowgroupAction extends GroupAction
      *
      * @return string page title, with page number
      */
-    function title()
-    {
+    function title() {
         $base = $this->group->getFancyName();
 
         if ($this->page == 1) {
@@ -76,9 +74,7 @@ class ShowgroupAction extends GroupAction
         } else {
             // TRANS: Page title for any but first group page.
             // TRANS: %1$s is a group name, $2$s is a page number.
-            return sprintf(_('%1$s group, page %2$d'),
-                           $base,
-                           $this->page);
+            return sprintf(_('%1$s group, page %2$d'), $base, $this->page);
         }
     }
 
@@ -91,11 +87,10 @@ class ShowgroupAction extends GroupAction
      *
      * @return boolean success flag
      */
-    function prepare($args)
-    {
+    function prepare($args) {
         parent::prepare($args);
 
-        $this->page = ($this->arg('page')) ? ($this->arg('page')+0) : 1;
+        $this->page = ($this->arg('page')) ? ($this->arg('page') + 0) : 1;
 
         $this->userProfile = Profile::current();
 
@@ -107,8 +102,7 @@ class ShowgroupAction extends GroupAction
             $stream = new ThreadingGroupNoticeStream($this->group, $this->userProfile);
         }
 
-        $this->notice = $stream->getNotices(($this->page-1)*NOTICES_PER_PAGE,
-                                            NOTICES_PER_PAGE + 1);
+        $this->notice = $stream->getNotices(($this->page - 1) * NOTICES_PER_PAGE, NOTICES_PER_PAGE + 1);
 
         common_set_returnto($this->selfUrl());
 
@@ -123,8 +117,7 @@ class ShowgroupAction extends GroupAction
      *
      * @return void
      */
-    function handle($args)
-    {
+    function handle($args) {
         $this->showPage();
     }
 
@@ -133,8 +126,7 @@ class ShowgroupAction extends GroupAction
      *
      * Shows a group profile and a list of group notices
      */
-    function showContent()
-    {
+    function showContent() {
         $this->showGroupNotices();
     }
 
@@ -143,23 +135,29 @@ class ShowgroupAction extends GroupAction
      *
      * @return void
      */
-    function showGroupNotices()
-    {
+    function showGroupNotices() {
         $user = common_current_user();
 
-        if (!empty($user) && $user->streamModeOnly()) {
-            $nl = new NoticeList($this->notice, $this);
+        if ($this->group->force_scope &&
+                (empty($this->userProfile) || !$this->userProfile->isMember($this->group))) {
+
+            $this->elementStart('p');
+            $this->raw('Este grupo es privado, por lo que no es posible ver su contenido.<br/><br/>'
+                    . 'Si lo desea, puede comunicarse con el administrador del grupo, o solicitar unirse al grupo. ');
+            $this->elementEnd('p');
         } else {
-            $nl = new ThreadedNoticeList($this->notice, $this, $this->userProfile);
-        } 
+       
+                if (!empty($user) && $user->streamModeOnly()) {
+                    $nl = new NoticeList($this->notice, $this);
+                } else {
+                    $nl = new ThreadedNoticeList($this->notice, $this, $this->userProfile);
+                }
 
-        $cnt = $nl->show();
+                $cnt = $nl->show();
 
-        $this->pagination($this->page > 1,
-                          $cnt > NOTICES_PER_PAGE,
-                          $this->page,
-                          'showgroup',
-                          array('nickname' => $this->group->nickname));
+
+                $this->pagination($this->page > 1, $cnt > NOTICES_PER_PAGE, $this->page, 'showgroup', array('nickname' => $this->group->nickname));
+        }
     }
 
     /**
@@ -167,78 +165,57 @@ class ShowgroupAction extends GroupAction
      *
      * @return void
      */
-    function getFeeds()
-    {
-        $url =
-          common_local_url('grouprss',
-                           array('nickname' => $this->group->nickname));
+    function getFeeds() {
+        $url = common_local_url('grouprss', array('nickname' => $this->group->nickname));
 
-        return array(new Feed(Feed::JSON,
-                              common_local_url('ApiTimelineGroup',
-                                               array('format' => 'as',
-                                                     'id' => $this->group->id)),
-                              // TRANS: Tooltip for feed link. %s is a group nickname.
-                              sprintf(_('Notice feed for %s group (Activity Streams JSON)'),
-                                      $this->group->nickname)),
-                    new Feed(Feed::RSS1,
-                              common_local_url('grouprss',
-                                               array('nickname' => $this->group->nickname)),
-                              // TRANS: Tooltip for feed link. %s is a group nickname.
-                              sprintf(_('Notice feed for %s group (RSS 1.0)'),
-                                      $this->group->nickname)),
-                     new Feed(Feed::RSS2,
-                              common_local_url('ApiTimelineGroup',
-                                               array('format' => 'rss',
-                                                     'id' => $this->group->id)),
-                              // TRANS: Tooltip for feed link. %s is a group nickname.
-                              sprintf(_('Notice feed for %s group (RSS 2.0)'),
-                                      $this->group->nickname)),
-                     new Feed(Feed::ATOM,
-                              common_local_url('ApiTimelineGroup',
-                                               array('format' => 'atom',
-                                                     'id' => $this->group->id)),
-                              // TRANS: Tooltip for feed link. %s is a group nickname.
-                              sprintf(_('Notice feed for %s group (Atom)'),
-                                      $this->group->nickname)),
-                     new Feed(Feed::FOAF,
-                              common_local_url('foafgroup',
-                                               array('nickname' => $this->group->nickname)),
-                              // TRANS: Tooltip for feed link. %s is a group nickname.
-                              sprintf(_('FOAF for %s group'),
-                                       $this->group->nickname)));
+        return array(new Feed(Feed::JSON, common_local_url('ApiTimelineGroup', array('format' => 'as',
+                        'id' => $this->group->id)),
+                    // TRANS: Tooltip for feed link. %s is a group nickname.
+                    sprintf(_('Notice feed for %s group (Activity Streams JSON)'), $this->group->nickname)),
+            new Feed(Feed::RSS1, common_local_url('grouprss', array('nickname' => $this->group->nickname)),
+                    // TRANS: Tooltip for feed link. %s is a group nickname.
+                    sprintf(_('Notice feed for %s group (RSS 1.0)'), $this->group->nickname)),
+            new Feed(Feed::RSS2, common_local_url('ApiTimelineGroup', array('format' => 'rss',
+                        'id' => $this->group->id)),
+                    // TRANS: Tooltip for feed link. %s is a group nickname.
+                    sprintf(_('Notice feed for %s group (RSS 2.0)'), $this->group->nickname)),
+            new Feed(Feed::ATOM, common_local_url('ApiTimelineGroup', array('format' => 'atom',
+                        'id' => $this->group->id)),
+                    // TRANS: Tooltip for feed link. %s is a group nickname.
+                    sprintf(_('Notice feed for %s group (Atom)'), $this->group->nickname)),
+            new Feed(Feed::FOAF, common_local_url('foafgroup', array('nickname' => $this->group->nickname)),
+                    // TRANS: Tooltip for feed link. %s is a group nickname.
+                    sprintf(_('FOAF for %s group'), $this->group->nickname)));
     }
 
-    function showAnonymousMessage()
-    {
-        if (!(common_config('site','closed') || common_config('site','inviteonly'))) {
+    function showAnonymousMessage() {
+        if (!(common_config('site', 'closed') || common_config('site', 'inviteonly'))) {
             // TRANS: Notice on group pages for anonymous users for StatusNet sites that accept new registrations.
             // TRANS: %s is the group name, %%%%site.name%%%% is the site name,
             // TRANS: %%%%action.register%%%% is the URL for registration, %%%%doc.help%%%% is a URL to help.
             // TRANS: This message contains Markdown links. Ensure they are formatted correctly: [Description](link).
             $m = sprintf(_('**%s** is a user group on %%%%site.name%%%%, a [micro-blogging](http://en.wikipedia.org/wiki/Micro-blogging) service ' .
-                'based on the Free Software [StatusNet](http://status.net/) tool. Its members share ' .
-                'short messages about their life and interests. '.
-                '[Join now](%%%%action.register%%%%) to become part of this group and many more! ([Read more](%%%%doc.help%%%%))'),
-                     $this->group->getBestName());
+                            'based on the Free Software [StatusNet](http://status.net/) tool. Its members share ' .
+                            'short messages about their life and interests. ' .
+                            '[Join now](%%%%action.register%%%%) to become part of this group and many more! ([Read more](%%%%doc.help%%%%))'), $this->group->getBestName());
         } else {
             // TRANS: Notice on group pages for anonymous users for StatusNet sites that accept no new registrations.
             // TRANS: %s is the group name, %%%%site.name%%%% is the site name,
             // TRANS: This message contains Markdown links. Ensure they are formatted correctly: [Description](link).
             $m = sprintf(_('**%s** is a user group on %%%%site.name%%%%, a [micro-blogging](http://en.wikipedia.org/wiki/Micro-blogging) service ' .
-                'based on the Free Software [StatusNet](http://status.net/) tool. Its members share ' .
-                'short messages about their life and interests.'),
-                     $this->group->getBestName());
+                            'based on the Free Software [StatusNet](http://status.net/) tool. Its members share ' .
+                            'short messages about their life and interests.'), $this->group->getBestName());
         }
         $this->elementStart('div', array('id' => 'anon_notice'));
         $this->raw(common_markup_to_html($m));
         $this->elementEnd('div');
     }
 
-    function extraHead()
-    {
+    function extraHead() {
         if ($this->page != 1) {
             $this->element('link', array('rel' => 'canonical',
-                                         'href' => $this->group->homeUrl()));
+                'href' => $this->group->homeUrl()));
         }
     }
+
 }
