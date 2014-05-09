@@ -146,7 +146,14 @@ class ShowgroupAction extends GroupAction {
                     . 'Si lo desea, puede comunicarse con el administrador del grupo, o solicitar unirse al grupo. ');
             $this->elementEnd('p');
         } else {
-       
+
+            if (empty($this->notice->_items)) {
+
+                $this->elementStart('p');
+                $this->raw('Este grupo aún no tiene mensajes, ¡sé el primero en comentar! ');
+                $this->elementEnd('p');
+            } else {
+                
                 if (!empty($user) && $user->streamModeOnly()) {
                     $nl = new NoticeList($this->notice, $this);
                 } else {
@@ -157,6 +164,7 @@ class ShowgroupAction extends GroupAction {
 
 
                 $this->pagination($this->page > 1, $cnt > NOTICES_PER_PAGE, $this->page, 'showgroup', array('nickname' => $this->group->nickname));
+            }
         }
     }
 
