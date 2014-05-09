@@ -144,7 +144,7 @@ class NewnoticetaskAction extends Action {
  
 
         $notice = Notice::saveNew($user->id, $content_shortened, 'web', $options);
-
+                     
         if (isset($upload)) {
             $upload->attachToNotice($notice);
         }
@@ -185,9 +185,7 @@ class NewnoticetaskAction extends Action {
         $this->elementStart('div', array('class' => 'input_form'));
         $notice_form = new NoticeTaskForm($this, $taskid, array('content' => $this->content, 'to_group' => $group), $msg);
         $notice_form->show();
-        $this->inlineScript('alert();');
         $this->elementEnd('div');
-        
         $this->elementEnd('body');
         $this->elementEnd('html');
     }

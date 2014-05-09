@@ -250,10 +250,11 @@ class NoticeTaskForm extends Form {
      * @return void
      */
     function formActions() {
-        $this->out->element('input', array('id' => 'notice_action-submit',
-            'class' => 'submit',
+        $this->out->element('input', array('id' => 'submit-task-' . $this->taskid,
+            'class' => 'submit task-submit-form',
             'name' => 'status_submit',
             'type' => 'submit',
+            'onclick' => 'reducir('.$this->taskid.');',
             // TRANS: Button text for sending notice.
             'value' => _m('BUTTON', 'Enviar')));
     }

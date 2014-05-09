@@ -54,12 +54,19 @@ function counter(id) {
 
 }
 
-function reducir() {
+function reducir(taskid) {
 
-    $(".pending-tasks-number").text($(".pending-tasks-number").text() - 1);
-    $(".pending-tasks-number").css('display', 'none');
-    $(".pending-tasks-number").toggle('fade', 800);
+    $('#form_notice_task_' + taskid).submit(function(e) {
+        e.preventDefault(); // don't submit multiple times
+        setTimeout(function() {
 
+            $(".pending-tasks-number").text($(".pending-tasks-number").text() - 1);
+            $(".pending-tasks-number").css('display', 'none');
+            $(".pending-tasks-number").toggle('fade', 800);
+            
+
+        }, 1000);
+    });
 }
 
 
@@ -85,7 +92,7 @@ function updateHistorical(graderid, groupid) {
         setTimeout(function() {
 
             if ($('#div-group-task-' + groupid + ' #historical-' + groupid).css('display') === 'none') {
-                
+
                 $('#div-group-task-' + groupid + ' #historical-' + groupid).load("../local/plugins/Task/scripts/updateHistorical.php", {graderid: graderid, groupid: groupid});
 
             }
@@ -99,10 +106,10 @@ function updateHistorical(graderid, groupid) {
 
 }
 
-function updateTaskStatus(taskid){
-    
-    
-$('#task-' + taskid + ' span:first').fadeOut().text($('#task-'+ taskid+ ' span:first').text() == 'Iniciada' ? 'Cancelada' : 'Iniciada').fadeIn();
+function updateTaskStatus(taskid) {
 
-    
+
+    $('#task-' + taskid + ' span:first').fadeOut().text($('#task-' + taskid + ' span:first').text() == 'Iniciada' ? 'Cancelada' : 'Iniciada').fadeIn();
+
+
 }

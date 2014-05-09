@@ -68,7 +68,7 @@
 
     float: none;
 }
-.div-group-task .input_form #notice_action-submit{
+.div-group-task .input_form .task-submit-form{
 
     float: right;
     height: auto;
