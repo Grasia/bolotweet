@@ -71,7 +71,7 @@ class GroupsNav extends MoreMenu
         $items = array();
 
         while ($this->groups->fetch()) {
-            $items[] = array('placeholder',
+            $items[] = array('showgroup',
                              array('nickname' => $this->groups->nickname,
                                    'mainpage' => $this->groups->homeUrl()),
                              $this->groups->nickname,
