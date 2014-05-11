@@ -8,3 +8,9 @@
 .poll-winner {
     background: #4af;
 }
+
+#content .poll-results .option-poll-tr{
+    
+        border: none;
+
+}

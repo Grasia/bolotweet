@@ -3478,7 +3478,7 @@ msgstr "Si te gusta \"el sistema viejo\", se puede establecer aquí."
 #. TRANS: Confirmation shown when user profile settings are saved.
 #. TRANS: Message after successful saving of administrative settings.
 msgid "Settings saved."
-msgstr "Se guardó configuración."
+msgstr "Ajustes actualizados."
 
 msgid "Only stream mode (no conversations) in timelines"
 msgstr "Flujo sólo de modo (no conversaciones) en líneas de tiempo"

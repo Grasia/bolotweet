@@ -109,12 +109,12 @@ class PollResultForm extends Form
             $max = 1; // quick hack :D
         }
 
-        $out->element('p', 'poll-question', $poll->question);
+        //$out->element('p', 'poll-question', $poll->question);
         $out->elementStart('table', 'poll-results');
         foreach ($poll->getOptions() as $i => $opt) {
             $w = intval($counts[$i] * $width / $max) + 1;
 
-            $out->elementStart('tr');
+            $out->elementStart('tr', array('class' => 'option-poll-tr'));
 
             $out->elementStart('td');
             $out->text($opt);

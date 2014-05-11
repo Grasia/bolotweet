@@ -235,7 +235,7 @@ class NoticeTaskForm extends Form {
                 
         $this->out->dropdown('notice_to',
                              // TRANS: Label for drop-down of potential addressees.
-                             _m('LABEL','To:'),
+                            'Para:',
                              $dropdown,
                              null,
                              false,

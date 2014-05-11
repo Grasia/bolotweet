@@ -103,7 +103,7 @@ class PollResponseForm extends Form
         $out = $this->out;
         $id = "poll-" . $poll->id;
 
-        $out->element('p', 'poll-question', $poll->question);
+        //$out->element('p', 'poll-question', $poll->question);
         $out->elementStart('ul', 'poll-options');
         foreach ($poll->getOptions() as $i => $opt) {
             $out->elementStart('li');
