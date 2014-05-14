@@ -42,6 +42,7 @@ class GradesPlugin extends Plugin {
         $m->connect('main/exportCSV/options', array('action' => 'gradeoptionscsv'));
         $m->connect('main/gradereport/:nickgroup/:nickname', array('action' => 'gradeshowuser'), array('nickgroup' => Nickname::DISPLAY_FMT, 'nickname' => Nickname::DISPLAY_FMT)
         );
+        $m->connect('group/:nickname/makegrader', array('action' => 'makegrader'), array('nickname' => Nickname::DISPLAY_FMT));
         return true;
     }
 
@@ -66,10 +67,12 @@ class GradesPlugin extends Plugin {
             case 'GradeexportcsvAction':
             case 'GradeoptionscsvAction':
             case 'GradeshowuserAction':
+            case 'MakegraderAction':
                 include_once $dir . '/actions/' . $cls . '.php';
                 return false;
             case 'GradeForm':
             case 'GradecsvForm':
+            case 'MakeGraderForm':
                 include_once $dir . '/lib/' . $cls . '.php';
                 return false;
             case 'Grades':
@@ -280,6 +283,36 @@ class GradesPlugin extends Plugin {
                 Gradesgroup::vincularGrupo($user->id, $group->id);
             }
         }
+    }
+
+    function onEndProfileListItemActionElements($item) {
+
+        if ($item->action->args['action'] === 'groupmembers') {
+
+            $user = common_current_user();
+
+            if ($user->hasRole('grader') && $user->isAdmin($item->group)) {
+
+                if ($user->id != $item->profile->id && !Gradesgroup::isGrader($item->profile->id, $item->group->id)) {
+
+                    $args = array('action' => 'groupmembers',
+                        'nickname' => $item->group->nickname);
+                    $page = $item->out->arg('page');
+                    if ($page) {
+                        $args['param-page'] = $page;
+                    }
+
+                    $item->out->elementStart('li', 'entity_make_grader');
+                    $mgf = new MakeGraderForm($item->out, $item->profile, $item->group, $args);
+                    $mgf->show();
+                    $item->out->elementEnd('li');
+                }
+            }
+        }
+
+
+
+        return true;
     }
 
     function onEndShowStyles($action) {

@@ -55,7 +55,7 @@ class Gradesgroup extends Managed_DataObject {
         $result = $grGroup->insert();
 
         if (!$result) {
-            common_log_db_error($user, 'INSERT', __FILE__);
+            common_log_db_error($userid, 'INSERT', __FILE__);
             return false;
         }
 
@@ -115,6 +115,30 @@ class Gradesgroup extends Managed_DataObject {
 
         return $groups;
         
+    }
+    
+    static function isGrader($userid, $groupid){
+        
+         $qry = 'SELECT gg.userid'
+                . ' FROM grades_group gg'
+                . ' where gg.userid=' . $userid
+                . ' and gg.groupid =' . $groupid;
+
+     $grGroup = new Gradesgroup();
+
+        $grGroup->query($qry);
+        
+
+         if ($grGroup->fetch()) {
+            $result = true;
+        } else {
+            $result = false;
+        }
+
+        $grGroup->free();
+        return $result;
+        
+    
     }
 
 }
