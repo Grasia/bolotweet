@@ -1,4 +1,5 @@
 <?php
+
 /**
  * StatusNet, the distributed open-source microblogging tool
  *
@@ -26,13 +27,12 @@
  * @license   http://www.fsf.org/licensing/licenses/agpl-3.0.html GNU Affero General Public License version 3.0
  * @link      http://status.net/
  */
-
 if (!defined('STATUSNET') && !defined('LACONICA')) {
     exit(1);
 }
 
-require_once(INSTALLDIR.'/lib/profilelist.php');
-require_once INSTALLDIR.'/lib/publicgroupnav.php';
+require_once(INSTALLDIR . '/lib/profilelist.php');
+require_once INSTALLDIR . '/lib/publicgroupnav.php';
 
 /**
  * List of group members
@@ -43,71 +43,72 @@ require_once INSTALLDIR.'/lib/publicgroupnav.php';
  * @license  http://www.fsf.org/licensing/licenses/agpl-3.0.html GNU Affero General Public License version 3.0
  * @link     http://status.net/
  */
-class GroupmembersAction extends GroupAction
-{
+class GroupmembersAction extends GroupAction {
+
     var $page = null;
 
-    function isReadOnly($args)
-    {
+    function isReadOnly($args) {
         return true;
     }
 
-    function prepare($args)
-    {
+    function prepare($args) {
         parent::prepare($args);
 
-        $this->page = ($this->arg('page')) ? ($this->arg('page')+0) : 1;
+        $this->page = ($this->arg('page')) ? ($this->arg('page') + 0) : 1;
 
         return true;
     }
 
-    function title()
-    {
+    function title() {
         if ($this->page == 1) {
             // TRANS: Title of the page showing group members.
             // TRANS: %s is the name of the group.
-            return sprintf(_('%s group members'),
-                           $this->group->nickname);
+            return sprintf(_('%s group members'), $this->group->nickname);
         } else {
             // TRANS: Title of the page showing group members.
             // TRANS: %1$s is the name of the group, %2$d is the page number of the members list.
-            return sprintf(_('%1$s group members, page %2$d'),
-                           $this->group->nickname,
-                           $this->page);
+            return sprintf(_('%1$s group members, page %2$d'), $this->group->nickname, $this->page);
         }
     }
 
-    function handle($args)
-    {
+    function handle($args) {
         parent::handle($args);
         $this->showPage();
     }
 
-    function showPageNotice()
-    {
+    function showPageNotice() {
         $this->element('p', 'instructions',
-                       // TRANS: Page notice for group members page.
-                       _('A list of the users in this group.'));
+                // TRANS: Page notice for group members page.
+                _('A list of the users in this group.'));
     }
 
-    function showContent()
-    {
-        $offset = ($this->page-1) * PROFILES_PER_PAGE;
-        $limit =  PROFILES_PER_PAGE + 1;
+    function showContent() {
+
+        $offset = ($this->page - 1) * PROFILES_PER_PAGE;
+        $limit = PROFILES_PER_PAGE + 1;
 
         $cnt = 0;
 
         $members = $this->group->getMembers($offset, $limit);
 
         if ($members) {
+
+            $user = common_current_user();
+
+            if ($user->isAdmin($this->group)) {
+                $this->elementStart('div', array('class' => 'member-list-admin'));
+            }
             $member_list = new GroupMemberList($members, $this->group, $this);
             $cnt = $member_list->show();
+
+            if ($user->isAdmin($this->group)) {
+                $this->elementEnd('div');
+            }
         }
 
         $members->free();
 
-        $this->pagination($this->page > 1, $cnt > PROFILES_PER_PAGE,
-                          $this->page, 'groupmembers',
-                          array('nickname' => $this->group->nickname));
+        $this->pagination($this->page > 1, $cnt > PROFILES_PER_PAGE, $this->page, 'groupmembers', array('nickname' => $this->group->nickname));
     }
+
 }
