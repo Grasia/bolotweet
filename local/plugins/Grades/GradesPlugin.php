@@ -272,6 +272,16 @@ class GradesPlugin extends Plugin {
         return true;
     }
 
+    function onEndGroupSave($group) {
+        $user = common_current_user();
+        if (!empty($user)) {
+            if ($user->hasRole('grader')) {
+
+                Gradesgroup::vincularGrupo($user->id, $group->id);
+            }
+        }
+    }
+
     function onEndShowStyles($action) {
         $action->cssLink($this->path('css/grades.css'));
         return true;
