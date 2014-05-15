@@ -108,10 +108,10 @@ class Group_join_queue extends Managed_DataObject
         $join = null;
         $profile = $this->getMember();
         $group = $this->getGroup();
-        if (Event::handle('StartJoinGroup', array($profile, $group))) {
+        if (Event::handle('StartJoinGroup', array($group, $profile))) {
             $join = Group_member::join($group->id, $profile->id);
             $this->delete();
-            Event::handle('EndJoinGroup', array($profile, $group));
+            Event::handle('EndJoinGroup', array($group, $profile));
         }
         if (!$join) {
             throw new Exception('Internal error: group join failed.');
