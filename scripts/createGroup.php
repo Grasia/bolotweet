@@ -86,3 +86,4 @@ User_group::register(array('nickname' => $nickname,
 
 
 print "Registrado grupo '$nickname'.\n";
+print "Vinculado usuario '$profile->nickname' con grupo '$nickname'.\n";

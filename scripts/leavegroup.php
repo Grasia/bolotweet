@@ -51,7 +51,7 @@ try {
     }
     $group = User_group::staticGet('id', $lgroup->group_id);
     $user->leaveGroup($group);
-    print "OK\n";
+    print "'$user->nickname' ya no forma parte del grupo '$group->nickname'\n";
 } catch (Exception $e) {
     print $e->getMessage()."\n";
     exit(1);

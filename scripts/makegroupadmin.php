@@ -82,6 +82,12 @@ try {
     if (!$member->update($orig)) {
         throw new Exception("Can't make '$nickname' admin of '$groupname'.");
     }
+    
+    else{
+        
+            print "'$nickname' ahora es admin del grupo '$groupname'\n";
+
+    }
 
 } catch (Exception $e) {
     print $e->getMessage() . "\n";
