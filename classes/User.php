@@ -688,10 +688,10 @@ class User extends Managed_DataObject
      * @param User_group $group
      * @return Group_member
      */
-    function joinGroup(User_group $group)
+    function joinGroup(User_group $group, $script = false)
     {
         $profile = $this->getProfile();
-        return $profile->joinGroup($group);
+        return $profile->joinGroup($group, $script);
     }
 
     /**

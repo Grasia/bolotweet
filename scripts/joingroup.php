@@ -57,7 +57,7 @@ try {
     }
     
     else{
-    $user->joinGroup($group);
+    $user->joinGroup($group, true);
     print "'$user->nickname' unido al grupo '$group->nickname'\n";
     }
 

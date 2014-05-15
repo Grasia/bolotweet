@@ -586,10 +586,10 @@ class Profile extends Managed_DataObject
      * @param User_group $group
      * @return mixed: Group_member on success, Group_join_queue if pending approval, null on some cancels?
      */
-    function joinGroup(User_group $group)
+    function joinGroup(User_group $group, $script = false)
     {
         $join = null;
-        if ($group->join_policy == User_group::JOIN_POLICY_MODERATE) {
+        if (($group->join_policy == User_group::JOIN_POLICY_MODERATE) && !$script) {
             $join = Group_join_queue::saveNew($this, $group);
         } else {
             if (Event::handle('StartJoinGroup', array($group, $this))) {
