@@ -84,8 +84,8 @@ fi
 
 
 # Borramos la database por si existe.
-printf "Borrando database antigua..."
-mysqladmin -uadminbtdb -pbtv2db! -f drop bolotweetdb 2>/dev/null
+printf "Borrando database antigua...\n"
+mysqladmin -uadminbtdb -p -f drop bolotweetdb 2>/dev/null
 
 if [ $? -eq 0 ]; then
 printf "Listo!\n"
@@ -106,8 +106,8 @@ fi;
 
 
 # Restauramos el BackUp de la BBDD
-printf "Restaurando Backup de la Base de Datos..."
-mysql -u uadminbtdb -pbtv2db! bolotweetdb < $nameSql
+printf "Restaurando Backup de la Base de Datos...\n"
+mysql -u uadminbtdb -p bolotweetdb < $nameSql
 
 if [ $? -eq 0 ]; then
 printf "Listo!\n"

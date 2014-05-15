@@ -41,8 +41,8 @@ printf "Fallo. Abortando...\n"
 exit 1
 fi
 
-printf "Creando Backup de la Base de Datos..."
-mysqldump -u adminbtdb -pbtv2db! bolotweetdb > ~/$nameSql
+printf "Creando Backup de la Base de Datos...\n"
+mysqldump -u adminbtdb -p bolotweetdb > ~/$nameSql
 if [ $? -eq 0 ]; then
 printf "Listo!\n"
 else
