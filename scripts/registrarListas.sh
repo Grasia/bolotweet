@@ -29,14 +29,16 @@ fullname=( $(echo $nameTemp | tr '[:lower:]' '[:upper:]') )
 
 php registeruser.php -n$nick -w$pass -f$fullname -e$email
 
-# Si se ha registrado mandamos correo.
-if [ $? -eq 0 ]; then
-php emailBienvenida.php -n$nick
-fi;
+# Si se ha registrado mandamos correo. (Ahora se envía desde registeruser.php)
+# if [ $? -eq 0 ]; then
+# php emailBienvenida.php -n$nick
+# fi;
 
 # Comprobamos si nos han pasado grupo.
 if [ -n "$2" ];  then
 php joingroup.php -n$nick -g$2
 fi
+
+echo "----------------------------"
 
 done < $1
