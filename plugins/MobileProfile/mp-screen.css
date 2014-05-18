@@ -128,7 +128,9 @@ address img + .fn {
 
 #footer {
     width: auto;
-    padding: 10px 4px 4px 4px;
+    padding-left: 29px;
+    padding-top: 7px;
+    padding-bottom: 0;
 }
 
 .input_forms { 
@@ -386,3 +388,9 @@ margin-bottom: 3px;
  
     margin-right:40px;
 }
+
+.nav #nav_guia {
+    
+    display: none;
+}
+

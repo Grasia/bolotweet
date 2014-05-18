@@ -329,7 +329,7 @@ class MobileProfilePlugin extends WAP20Plugin
     {
         if ($this->serveMobile) {
             // @todo FIXME: "Show Navigation" / "Hide Navigation" needs i18n
-            $action->element('a', array('href' => '#', 'id' => 'navtoggle'), 'Show Navigation');
+            $action->element('a', array('href' => '#', 'id' => 'navtoggle'), 'Mostrar menú');
         return true;
         }
     }
@@ -353,7 +353,7 @@ class MobileProfilePlugin extends WAP20Plugin
                           $("#site_nav_local_views").fadeToggle();
                           var text = $("#navtoggle").text();
                           $("#navtoggle").text(
-                          text == "Show Navigation" ? "Hide Navigation" : "Show Navigation");
+                          text == "Show Navigation" ? "Ocultar menú" : "Mostrar menú");
                 });
             });'
         );
@@ -370,7 +370,7 @@ class MobileProfilePlugin extends WAP20Plugin
     }
 
 
-    function onEndShowInsideFooter($action)
+    function onStartShowInsideFooter($action)
     {
         if ($this->serveMobile) {
             // TRANS: Link to switch site layout from mobile to desktop mode. Appears at very bottom of page.
@@ -384,7 +384,7 @@ class MobileProfilePlugin extends WAP20Plugin
         $action->elementStart('p');
         $action->element('a', array('href' => '#', 'id' => $key), $linkText);
         $action->elementEnd('p');
-        return true;
+        return false;
     }
 
     function _common_path($relative, $ssl=false)
