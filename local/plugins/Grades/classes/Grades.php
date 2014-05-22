@@ -1,32 +1,11 @@
 <?php
 
 /**
- * StatusNet, the distributed open-source microblogging tool
+ * 
+ * BoloTweet 2.0
  *
- * Form for favoring a notice
+ * @author   Alvaro Ortego <alvorteg@ucm.es>
  *
- * PHP version 5
- *
- * LICENCE: This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- * @category  Form
- * @package   StatusNet
- * @author    Evan Prodromou <evan@status.net>
- * @author    Sarven Capadisli <csarven@status.net>
- * @copyright 2009 StatusNet, Inc.
- * @license   http://www.fsf.org/licensing/licenses/agpl-3.0.html GNU Affero General Public License version 3.0
- * @link      http://status.net/
  */
 if (!defined('STATUSNET') && !defined('LACONICA')) {
     exit(1);
@@ -365,22 +344,22 @@ class Grades extends Managed_DataObject {
         $gradeBD->free();
     }
 
-    static function getMembersNicksExcludeGradersAndAdmin($groupid){
-        
-         $grade = new Grades();
-         
-         $qry = 'select p.nickname as nick '
-                 . 'from group_member gm, profile p '
-                 . 'where gm.is_admin <> 1 '
-                 . 'and gm.group_id = ' . $groupid
-                 . ' and gm.profile_id = p.id '
-                 . 'and gm.profile_id not in '
-                 .      '(select gg.userid '
-                 .          'from grades_group gg '
-                 .          'where gg.groupid = ' . $groupid .')';
-         
+    static function getMembersNicksExcludeGradersAndAdmin($groupid) {
+
+        $grade = new Grades();
+
+        $qry = 'select p.nickname as nick '
+                . 'from group_member gm, profile p '
+                . 'where gm.is_admin <> 1 '
+                . 'and gm.group_id = ' . $groupid
+                . ' and gm.profile_id = p.id '
+                . 'and gm.profile_id not in '
+                . '(select gg.userid '
+                . 'from grades_group gg '
+                . 'where gg.groupid = ' . $groupid . ')';
+
         $grade->query($qry);
-        
+
         $nicks = array();
 
         while ($grade->fetch()) {
@@ -390,24 +369,23 @@ class Grades extends Managed_DataObject {
         $grade->free();
 
         return $nicks;
-             
-}
+    }
 
-    static function getMembersExcludeGradersAndAdmin($groupid){
-        
-         $grade = new Grades();
-         
-         $qry = 'select gm.profile_id as id '
-                 . 'from group_member gm '
-                 . 'where gm.is_admin <> 1 '
-                 . 'and gm.group_id = ' . $groupid
-                 . ' and gm.profile_id not in '
-                 .      '(select gg.userid '
-                 .          'from grades_group gg '
-                 .          'where gg.groupid = ' . $groupid .')';
-         
+    static function getMembersExcludeGradersAndAdmin($groupid) {
+
+        $grade = new Grades();
+
+        $qry = 'select gm.profile_id as id '
+                . 'from group_member gm '
+                . 'where gm.is_admin <> 1 '
+                . 'and gm.group_id = ' . $groupid
+                . ' and gm.profile_id not in '
+                . '(select gg.userid '
+                . 'from grades_group gg '
+                . 'where gg.groupid = ' . $groupid . ')';
+
         $grade->query($qry);
-        
+
         $ids = array();
 
         while ($grade->fetch()) {
@@ -417,10 +395,8 @@ class Grades extends Managed_DataObject {
         $grade->free();
 
         return $ids;
-             
+    }
 
-
-}
     /** Métodos para estadísticas */
     static function getNumberTweetsOfUserInGroup($userid, $groupid) {
 

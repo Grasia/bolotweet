@@ -1,4 +1,8 @@
 #!/bin/bash
+#
+#   @author Alvaro Ortego <alvorteg@ucm.es>
+#
+
 
 # Almacenamos la ruta actual
 path=`pwd`

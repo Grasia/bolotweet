@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * 
+ * BoloTweet 2.0
+ *
+ * @author   Alvaro Ortego <alvorteg@ucm.es>
+ *
+ */
 if (!defined('STATUSNET') && !defined('LACONICA')) {
     exit(1);
 }
@@ -191,21 +198,17 @@ class NoticeTaskForm extends Form {
         $contentLimit = Notice::maxContent();
 
         if ($contentLimit > 0) {
-            
-            $count = $contentLimit;
-            if($this->content){
-                
-                $count = $contentLimit - mb_strlen($this->content);
-                
-            }
-            
-            if($count < 0){
-               $this->out->element('span', array('class' => 'count count-negative'), $count);
-            }
-            
-            else
-               $this->out->element('span', array('class' => 'count'), $count);
 
+            $count = $contentLimit;
+            if ($this->content) {
+
+                $count = $contentLimit - mb_strlen($this->content);
+            }
+
+            if ($count < 0) {
+                $this->out->element('span', array('class' => 'count count-negative'), $count);
+            } else
+                $this->out->element('span', array('class' => 'count'), $count);
         }
 
         if (common_config('attachments', 'uploads')) {
@@ -230,16 +233,12 @@ class NoticeTaskForm extends Form {
 
 
         $this->out->elementStart('div', 'to-selector');
-        
+
         $dropdown[$this->to_group->id] = $this->to_group->getBestName();
-                
+
         $this->out->dropdown('notice_to',
-                             // TRANS: Label for drop-down of potential addressees.
-                            'Para:',
-                             $dropdown,
-                             null,
-                             false,
-                             $this->to_group->getBestName());
+                // TRANS: Label for drop-down of potential addressees.
+                'Para:', $dropdown, null, false, $this->to_group->getBestName());
 
         $this->out->elementEnd('div');
     }
@@ -254,7 +253,7 @@ class NoticeTaskForm extends Form {
             'class' => 'submit task-submit-form',
             'name' => 'status_submit',
             'type' => 'submit',
-            'onclick' => 'reducir('.$this->taskid.');',
+            'onclick' => 'reducir(' . $this->taskid . ');',
             // TRANS: Button text for sending notice.
             'value' => _m('BUTTON', 'Enviar')));
     }

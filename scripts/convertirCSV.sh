@@ -1,5 +1,7 @@
 #!/bin/bash
-
+#
+#   @author Alvaro Ortego <alvorteg@ucm.es>
+#
 # Este script está hecho para convertir los ficheros xlsx o xls con los usuarios
 # a formato csv, para poder posteriormente registrarlos.
 # 

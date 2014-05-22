@@ -1,16 +1,16 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Columnas múltiples</title>
-<link type="text/css" rel="stylesheet" href="../fpdf.css">
-</head>
-<body>
-<h1>Columnas múltiples</h1>
-Este ejemplo es una variante del anterior en el que se mostrará como disponer texto
-en varias columnas.
-<div class="source">
-<pre><code>&lt;?php
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+        <title>Columnas múltiples</title>
+        <link type="text/css" rel="stylesheet" href="../fpdf.css">
+    </head>
+    <body>
+        <h1>Columnas múltiples</h1>
+        Este ejemplo es una variante del anterior en el que se mostrará como disponer texto
+        en varias columnas.
+        <div class="source">
+            <pre><code>&lt;?php
 <span class="kw">require(</span><span class="str">'fpdf.php'</span><span class="kw">);
 
 class </span>PDF <span class="kw">extends </span>FPDF
@@ -121,14 +121,14 @@ function </span>PrintChapter<span class="kw">(</span>$num<span class="kw">, </sp
 </span>$pdf<span class="kw">-&gt;</span>PrintChapter<span class="kw">(</span>2<span class="kw">,</span><span class="str">'LOS PROS Y LOS CONTRAS'</span><span class="kw">,</span><span class="str">'20k_c2.txt'</span><span class="kw">);
 </span>$pdf<span class="kw">-&gt;</span>Output<span class="kw">();
 </span>?&gt;</code></pre>
-</div>
-<p class='demo'><a href='tuto4.php' target='_blank' class='demo'>[Demo]</a></p>
-El método clave usado es <a href='../doc/acceptpagebreak.htm'>AcceptPageBreak()</a>. Permite aceptar o no el salto
-automático de línea. Evitándolo y alterando la posición actual y el margen,
-se consigue la disposición deseada en columnas.
-<br>
-Por lo demás, poco cambia; se han añadido dos propiedades (atributos) a la clase
-para almacenar el número de columna y la posición donde empiezan las columnas, y
-la llamada a MultiCell() incluye un ancho de 6 centímetros.
-</body>
+        </div>
+        <p class='demo'><a href='tuto4.php' target='_blank' class='demo'>[Demo]</a></p>
+        El método clave usado es <a href='../doc/acceptpagebreak.htm'>AcceptPageBreak()</a>. Permite aceptar o no el salto
+        automático de línea. Evitándolo y alterando la posición actual y el margen,
+        se consigue la disposición deseada en columnas.
+        <br>
+        Por lo demás, poco cambia; se han añadido dos propiedades (atributos) a la clase
+        para almacenar el número de columna y la posición donde empiezan las columnas, y
+        la llamada a MultiCell() incluye un ancho de 6 centímetros.
+    </body>
 </html>

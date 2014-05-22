@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * 
+ * BoloTweet 2.0
+ *
+ * @author   Alvaro Ortego <alvorteg@ucm.es>
+ *
+ */
 if (!defined('STATUSNET')) {
     exit(1);
 }
@@ -51,8 +58,8 @@ class TaskPlugin extends Plugin {
 
                 // Llamamos a la función que obtenga el numero de tareas
                 $number = Task::getNumberPendingTasks($user->id);
-                
-                if($number != 0)
+
+                if ($number != 0)
                     $action->element('span', 'pending-tasks-number', $number);
             }
 
@@ -66,7 +73,7 @@ class TaskPlugin extends Plugin {
     function onPluginVersion(&$versions) {
         $versions[] = array('name' => 'Task',
             'version' => STATUSNET_VERSION,
-            'author' => 'Alvaro Ortego Marcos',
+            'author' => 'Alvaro Ortego',
             'rawdescription' =>
             _m('A plugin to generate homeworks.'));
         return true;
@@ -103,8 +110,9 @@ class TaskPlugin extends Plugin {
         return true;
     }
 
-     function onEndShowScripts($action) {
-      $action->script($this->path('js/task.js'));
-      return true;
-      } 
+    function onEndShowScripts($action) {
+        $action->script($this->path('js/task.js'));
+        return true;
+    }
+
 }

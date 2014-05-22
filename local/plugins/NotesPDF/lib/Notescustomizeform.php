@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * 
+ * BoloTweet 2.0
+ *
+ * @author   Alvaro Ortego <alvorteg@ucm.es>
+ *
+ */
 if (!defined('STATUSNET') && !defined('LACONICA')) {
     exit(1);
 }
@@ -71,10 +78,10 @@ class Notescustomizeform extends Form {
 
         $nicks = NotesPDF::getUsersinGroupWithHashtagAndGrade($this->idGroup, '%', '%');
 
-        $this->out->element('option',  array('value' => 'Todos'), 'Todos');
+        $this->out->element('option', array('value' => 'Todos'), 'Todos');
 
         for ($i = 0; $i < count($nicks); $i++) {
-            $this->out->element('option',  array('value' => $nicks[$i]), $nicks[$i]);
+            $this->out->element('option', array('value' => $nicks[$i]), $nicks[$i]);
         }
 
         $this->out->elementEnd('select');
@@ -84,7 +91,7 @@ class Notescustomizeform extends Form {
         $this->out->elementStart('select', array('name' => 'combo-grade', 'id' => 'notes-combo-grade', 'class' => 'notes-combo-manual', 'onchange' => 'changeComboGrade(' . $this->idGroup . ');'));
 
         $grades = NotesPDF::getGradesinGroupWithTagAndUser($this->idGroup, '%', '%');
-        $this->out->element('option',  array('value' => 'Todos'), 'Todos');
+        $this->out->element('option', array('value' => 'Todos'), 'Todos');
 
         for ($i = 0; $i < count($grades); $i++) {
             $this->out->element('option', array('value' => $grades[$i]), $grades[$i]);

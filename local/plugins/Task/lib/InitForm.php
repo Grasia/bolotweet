@@ -1,11 +1,17 @@
 <?php
 
+/**
+ * 
+ * BoloTweet 2.0
+ *
+ * @author   Alvaro Ortego <alvorteg@ucm.es>
+ *
+ */
 if (!defined('STATUSNET') && !defined('LACONICA')) {
     exit(1);
 }
 
 require_once INSTALLDIR . '/lib/form.php';
-
 
 class InitForm extends Form {
 
@@ -16,7 +22,7 @@ class InitForm extends Form {
     var $user = null;
     var $status = null;
     var $taskid = null;
-    
+
     /**
      * Constructor
      *
@@ -28,18 +34,16 @@ class InitForm extends Form {
 
         $this->user = common_current_user();
         $this->groupid = $groupid;
-        
-        if($result == -1){
-        $this->status = $result;
-        $this->taskid = $result;
+
+        if ($result == -1) {
+            $this->status = $result;
+            $this->taskid = $result;
+        } else {
+
+            $this->status = $result[0];
+            $this->taskid = $result[1];
         }
-        
-        else{
-            
-              $this->status = $result[0];
-              $this->taskid = $result[1];
-        }
-   }
+    }
 
     /**
      * ID of the form
@@ -59,44 +63,41 @@ class InitForm extends Form {
         return common_local_url('taskcreate');
     }
 
-
     /**
      * Data elements
      *
      * @return void
      */
     function formData() {
-        $this->out->hidden('group-task-h'.$this->groupid, $this->groupid, 'groupid');
-        $this->out->hidden('new-task-h'.$this->groupid, $this->status, 'status');
-        $this->out->hidden('taskid-h'.$this->groupid, $this->taskid, 'taskid');
+        $this->out->hidden('group-task-h' . $this->groupid, $this->groupid, 'groupid');
+        $this->out->hidden('new-task-h' . $this->groupid, $this->status, 'status');
+        $this->out->hidden('taskid-h' . $this->groupid, $this->taskid, 'taskid');
 
-        if($this->status != 1){
-        $this->out->element('input', array('type' => 'submit',
-                                      'id' => 'task-submit-' . $this->groupid,
-                                      'class' => 'submit task-button-enabled',
-                                      'value' => 'Iniciar',
-                                      'title' => 'Crea una tarea para este grupo',
-                                      'onclick' => 'updateHistorical('.$this->user->id . ',' . $this->groupid . ')'));
-        
+        if ($this->status != 1) {
+            $this->out->element('input', array('type' => 'submit',
+                'id' => 'task-submit-' . $this->groupid,
+                'class' => 'submit task-button-enabled',
+                'value' => 'Iniciar',
+                'title' => 'Crea una tarea para este grupo',
+                'onclick' => 'updateHistorical(' . $this->user->id . ',' . $this->groupid . ')'));
 
-        
-        $this->out->element('input', array('type' => 'text',
-            'name' => 'task-tag-' . $this->groupid,
-            'class' => 'task-tag',
-            'maxlength' => "13",
-            'title' => 'Añade un tag relacionado con la tarea'));
-        
-                $this->out->element('p', 'label-for-tag', 'Tag: (Opcional)');
-    }
-    else{
+
+
+            $this->out->element('input', array('type' => 'text',
+                'name' => 'task-tag-' . $this->groupid,
+                'class' => 'task-tag',
+                'maxlength' => "13",
+                'title' => 'Añade un tag relacionado con la tarea'));
+
+            $this->out->element('p', 'label-for-tag', 'Tag: (Opcional)');
+        } else {
             $this->out->element('input', array('type' => 'button',
-                                      'class' => 'task-disabled',
-                                      'value' => 'Iniciada',
-                                      'title' => 'La tarea ya está iniciada.',
-                                      'disabled' => 'disabled'));
+                'class' => 'task-disabled',
+                'value' => 'Iniciada',
+                'title' => 'La tarea ya está iniciada.',
+                'disabled' => 'disabled'));
+        }
     }
-    }
-
 
     /**
      * Class of the form.

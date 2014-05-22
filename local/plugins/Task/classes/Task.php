@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * 
+ * BoloTweet 2.0
+ *
+ * @author   Alvaro Ortego <alvorteg@ucm.es>
+ *
+ */
 if (!defined('STATUSNET') && !defined('LACONICA')) {
     exit(1);
 }
@@ -152,10 +159,9 @@ class Task extends Managed_DataObject {
         }
 
         $task->free();
-        
     }
-    
-        static function completeTask($userid, $taskid) {
+
+    static function completeTask($userid, $taskid) {
 
         $task = new Task();
 
@@ -171,12 +177,11 @@ class Task extends Managed_DataObject {
         }
 
         $task->free();
-        
     }
-    
-    static function cancelTask($taskid){
-        
-         $task = new Task();
+
+    static function cancelTask($taskid) {
+
+        $task = new Task();
 
         $qry = 'UPDATE task ' .
                 'SET status=2 ' .
@@ -189,12 +194,11 @@ class Task extends Managed_DataObject {
         }
 
         $task->free();
-        
     }
-    
-        static function reopenTask($taskid){
-        
-         $task = new Task();
+
+    static function reopenTask($taskid) {
+
+        $task = new Task();
 
         $qry = 'UPDATE task ' .
                 'SET status=0 ' .
@@ -207,7 +211,6 @@ class Task extends Managed_DataObject {
         }
 
         $task->free();
-        
     }
 
 }

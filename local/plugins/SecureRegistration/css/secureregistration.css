@@ -1,10 +1,18 @@
+/**
+ * 
+ * BoloTweet 2.0
+ *
+ * @author   Alvaro Ortego <alvorteg@ucm.es>
+ *
+ */
+
 #recaptcha_area {
 
     margin-left: 98px;
 }
 
 #phone {
-    
-display: none;
+
+    display: none;
 
 }

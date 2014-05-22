@@ -1,11 +1,12 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * 
+ * BoloTweet 2.0
+ *
+ * @author   Alvaro Ortego <alvorteg@ucm.es>
+ *
  */
-
 if (!defined('STATUSNET')) {
     exit(1);
 }
@@ -69,7 +70,7 @@ class LogoPlugin extends Plugin {
     function onPluginVersion(&$versions) {
         $versions[] = array('name' => 'LogoPlugin',
             'version' => STATUSNET_VERSION,
-            'author' => 'Alvaro Ortego Marcos',
+            'author' => 'Alvaro Ortego',
             'rawdescription' =>
             _m('A plugin to put a Logo in Default Nav'));
         return true;

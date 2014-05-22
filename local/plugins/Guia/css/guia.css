@@ -1,5 +1,14 @@
+/**
+ * 
+ * BoloTweet 2.0
+ *
+ * @author   Alvaro Ortego <alvorteg@ucm.es>
+ *
+ */
+
+
 .form_download_guide #guide-download-submit{
-   
+
     height: 1.7em;
     padding: 0px 10px;
     color:#fff;
@@ -19,12 +28,12 @@
     background: -ms-linear-gradient(top, #ff9d63 0%,#fb6104 100%);
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff9d63', endColorstr='#fb6104',GradientType=0 );
     background: linear-gradient(top, #ff9d63 0%,#fb6104 100%);
-    
-    
+
+
 }
 
 .text-download-guide{
-    
+
     border-bottom:1px dotted #9999CC;
     font-weight: bold;
 }

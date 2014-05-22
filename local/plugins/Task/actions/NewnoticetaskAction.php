@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * 
+ * BoloTweet 2.0
+ *
+ * @author   Alvaro Ortego <alvorteg@ucm.es>
+ *
+ */
 if (!defined('STATUSNET') && !defined('LACONICA')) {
     exit(1);
 }
@@ -56,7 +63,7 @@ class NewnoticetaskAction extends Action {
             parent::handle($args);
 
             $user = common_current_user();
-                    
+
             $group = User_group::staticGet('id', $this->trimmed('groupid'));
             $taskid = $this->trimmed('taskid');
 
@@ -141,10 +148,10 @@ class NewnoticetaskAction extends Action {
 
         $notice_to = $this->trimmed('notice_to');
         $options['groups'] = array($notice_to);
- 
+
 
         $notice = Notice::saveNew($user->id, $content_shortened, 'web', $options);
-                     
+
         if (isset($upload)) {
             $upload->attachToNotice($notice);
         }
@@ -174,14 +181,14 @@ class NewnoticetaskAction extends Action {
      * @return void
      */
     function ajaxErrorMsg($msg, $taskid, $group) {
-        
+
         $this->startHTML('text/xml;charset=utf-8', true);
         $this->elementStart('head');
         // TRANS: Page title after an AJAX error occurs on the send notice page.
         $this->element('title', null, _('Ajax Error'));
         $this->elementEnd('head');
         $this->elementStart('body');
-        
+
         $this->elementStart('div', array('class' => 'input_form'));
         $notice_form = new NoticeTaskForm($this, $taskid, array('content' => $this->content, 'to_group' => $group), $msg);
         $notice_form->show();

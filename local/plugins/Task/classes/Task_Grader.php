@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * 
+ * BoloTweet 2.0
+ *
+ * @author   Alvaro Ortego <alvorteg@ucm.es>
+ *
+ */
 if (!defined('STATUSNET') && !defined('LACONICA')) {
     exit(1);
 }
@@ -141,7 +148,7 @@ class Task_Grader extends Managed_DataObject {
                     'WHERE id=' . $taskid;
         } else {
             $qry = 'UPDATE task_grader ' .
-                    'SET status=1, tag="' . $tag . '" '.
+                    'SET status=1, tag="' . $tag . '" ' .
                     'WHERE id=' . $taskid;
         }
 
@@ -165,14 +172,12 @@ class Task_Grader extends Managed_DataObject {
 
         $task->query($qry);
 
-        if($task->fetch()){
-            
+        if ($task->fetch()) {
+
             $result = array($task->status, $task->id);
-        }
-        
-        else 
+        } else
             $result = -1;
-        
+
         return $result;
     }
 

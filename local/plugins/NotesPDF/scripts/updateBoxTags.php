@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * 
+ * BoloTweet 2.0
+ *
+ * @author   Alvaro Ortego <alvorteg@ucm.es>
+ *
+ */
 define('STATUSNET', true);
 define('LACONICA', true); // compatibility
 define('INSTALLDIR', realpath(dirname(__FILE__) . '/../../../..'));

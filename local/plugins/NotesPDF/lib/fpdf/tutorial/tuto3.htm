@@ -1,16 +1,16 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Saltos de línea y colores</title>
-<link type="text/css" rel="stylesheet" href="../fpdf.css">
-</head>
-<body>
-<h1>Saltos de línea y colores</h1>
-Continuemos con un ejemplo que imprime párrafos justificados. También ilustra el
-uso de colores.
-<div class="source">
-<pre><code>&lt;?php
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+        <title>Saltos de línea y colores</title>
+        <link type="text/css" rel="stylesheet" href="../fpdf.css">
+    </head>
+    <body>
+        <h1>Saltos de línea y colores</h1>
+        Continuemos con un ejemplo que imprime párrafos justificados. También ilustra el
+        uso de colores.
+        <div class="source">
+            <pre><code>&lt;?php
 <span class="kw">require(</span><span class="str">'fpdf.php'</span><span class="kw">);
 
 class </span>PDF <span class="kw">extends </span>FPDF
@@ -91,26 +91,26 @@ function </span>PrintChapter<span class="kw">(</span>$num<span class="kw">, </sp
 </span>$pdf<span class="kw">-&gt;</span>PrintChapter<span class="kw">(</span>2<span class="kw">,</span><span class="str">'LOS PROS Y LOS CONTRAS'</span><span class="kw">,</span><span class="str">'20k_c2.txt'</span><span class="kw">);
 </span>$pdf<span class="kw">-&gt;</span>Output<span class="kw">();
 </span>?&gt;</code></pre>
-</div>
-<p class='demo'><a href='tuto3.php' target='_blank' class='demo'>[Demo]</a></p>
-El método <a href='../doc/getstringwidth.htm'>GetStringWidth()</a> le permite determinar la longitud de una cadena
-en el tipo de letra actual, y se usa aquí para calcular la posición y ancho del
-borde que rodea al título. Después se establecen los colores
-(mediante <a href='../doc/setdrawcolor.htm'>SetDrawColor()</a>, <a href='../doc/setfillcolor.htm'>SetFillColor()</a> y <a href='../doc/settextcolor.htm'>SetTextColor()</a>)
-y el borde de la línea se establece en 1 mm (en contra de los 0,2 por defecto) con <a href='../doc/setlinewidth.htm'>SetLineWidth()</a>.
-Finalmente, imprimimos la celda (el último parámetro a 1 indica que debe colorearse el fondo).
-<br>
-<br>
-El método usado para imprimir los párrafos es <a href='../doc/multicell.htm'>MultiCell()</a>.
-Cada vez que la línea llega al extremo derecho de la celda o aparece un carácter de
-fin de línea, se ejecuta un salto de línea y se crea automáticamente otra celda debajo
-de la actual. El texto se encuentra justificado por defecto.
-<br>
-<br>
-Se definen dos propiedades del documento: título (<a href='../doc/settitle.htm'>SetTitle()</a>) y autor (<a href='../doc/setauthor.htm'>SetAuthor()</a>).
-Las propiedades pueden verse de dos maneras. La primera es abrir el documento directamente
-con Adobe Reader, vaya al menú Archivo y seleccione la opción Propiedades del documento.
-La segunda, también disponible desde el plug-in, es hacer clic con el botón derecho y
-seleccione Propiedades del documento.
-</body>
+        </div>
+        <p class='demo'><a href='tuto3.php' target='_blank' class='demo'>[Demo]</a></p>
+        El método <a href='../doc/getstringwidth.htm'>GetStringWidth()</a> le permite determinar la longitud de una cadena
+        en el tipo de letra actual, y se usa aquí para calcular la posición y ancho del
+        borde que rodea al título. Después se establecen los colores
+        (mediante <a href='../doc/setdrawcolor.htm'>SetDrawColor()</a>, <a href='../doc/setfillcolor.htm'>SetFillColor()</a> y <a href='../doc/settextcolor.htm'>SetTextColor()</a>)
+        y el borde de la línea se establece en 1 mm (en contra de los 0,2 por defecto) con <a href='../doc/setlinewidth.htm'>SetLineWidth()</a>.
+        Finalmente, imprimimos la celda (el último parámetro a 1 indica que debe colorearse el fondo).
+        <br>
+        <br>
+        El método usado para imprimir los párrafos es <a href='../doc/multicell.htm'>MultiCell()</a>.
+        Cada vez que la línea llega al extremo derecho de la celda o aparece un carácter de
+        fin de línea, se ejecuta un salto de línea y se crea automáticamente otra celda debajo
+        de la actual. El texto se encuentra justificado por defecto.
+        <br>
+        <br>
+        Se definen dos propiedades del documento: título (<a href='../doc/settitle.htm'>SetTitle()</a>) y autor (<a href='../doc/setauthor.htm'>SetAuthor()</a>).
+        Las propiedades pueden verse de dos maneras. La primera es abrir el documento directamente
+        con Adobe Reader, vaya al menú Archivo y seleccione la opción Propiedades del documento.
+        La segunda, también disponible desde el plug-in, es hacer clic con el botón derecho y
+        seleccione Propiedades del documento.
+    </body>
 </html>

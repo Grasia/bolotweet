@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * 
+ * BoloTweet 2.0
+ *
+ * @author   Alvaro Ortego <alvorteg@ucm.es>
+ *
+ */
 if (!defined('STATUSNET')) {
     exit(1);
 }
@@ -50,9 +57,8 @@ class GuiamostrarAction extends Action {
             $this->clientError(_('Not logged in.'));
             return;
         }
-        
-    $this->showPage();
-    
+
+        $this->showPage();
     }
 
     /**
@@ -79,26 +85,22 @@ class GuiamostrarAction extends Action {
      * @return void
      */
     function showContent() {
-        
-        
-            $this->elementStart('p');
-            $this->raw("En este manual podrás conocer las principales funcionalidades y mejoras de BoloTweet. "
-                    . "Aprenderás cómo manejar algunas de sus opciones, así como otros aspectos importantes de"
-                    . "su uso.<br/><br/>Esta guía estará constantemente actualizada a medida que se vayan añadiendo novedades "
-                    . "al sistema.");
-            $this->elementEnd('p');
-            $this->element('br');
-            $this->element('br');
-            $this->elementStart('p', array('class' => 'text-download-guide'));
-            $this->raw('Descarga la Guía en Formato PDF &nbsp;&nbsp; [Versión v1.0]');
-            $this->elementEnd('p');
-            $downloadBut = new GuiaForm($this, "Manualv1.pdf");
-            $downloadBut->show();
 
-            
-            
-        }
-    
+
+        $this->elementStart('p');
+        $this->raw("En este manual podrás conocer las principales funcionalidades y mejoras de BoloTweet. "
+                . "Aprenderás cómo manejar algunas de sus opciones, así como otros aspectos importantes de"
+                . "su uso.<br/><br/>Esta guía estará constantemente actualizada a medida que se vayan añadiendo novedades "
+                . "al sistema.");
+        $this->elementEnd('p');
+        $this->element('br');
+        $this->element('br');
+        $this->elementStart('p', array('class' => 'text-download-guide'));
+        $this->raw('Descarga la Guía en Formato PDF &nbsp;&nbsp; [Versión v1.0]');
+        $this->elementEnd('p');
+        $downloadBut = new GuiaForm($this, "Manualv1.pdf");
+        $downloadBut->show();
+    }
 
     /**
      * Return true if read only.

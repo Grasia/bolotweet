@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * 
+ * BoloTweet 2.0
+ *
+ * @author   Alvaro Ortego <alvorteg@ucm.es>
+ *
+ */
 if (!defined('STATUSNET')) {
     exit(1);
 }
@@ -49,8 +56,7 @@ class GradesPlugin extends Plugin {
     function onPluginVersion(&$versions) {
         $versions[] = array('name' => 'Grade',
             'version' => STATUSNET_VERSION,
-            'author' => 'Jorge J. Gomez-Sanz',
-            'homepage' => 'http://grasia.fdi.ucm.es/jorge',
+            'author' => 'Alvaro Ortego',
             'rawdescription' =>
             _m('A plugin to grade notices'));
         return true;

@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * 
+ * BoloTweet 2.0
+ *
+ * @author   Alvaro Ortego <alvorteg@ucm.es>
+ *
+ */
 if (!defined('STATUSNET')) {
     exit(1);
 }
@@ -8,7 +15,6 @@ require_once INSTALLDIR . '/lib/util.php';
 
 class GuiaPlugin extends Plugin {
 
-    
     function onInitializePlugin() {
         // A chance to initialize a plugin in a complete environment
     }
@@ -26,7 +32,7 @@ class GuiaPlugin extends Plugin {
     function onPluginVersion(&$versions) {
         $versions[] = array('name' => 'Grade',
             'version' => STATUSNET_VERSION,
-            'author' => 'Alvaro Ortego Marcos',
+            'author' => 'Alvaro Ortego',
             'rawdescription' =>
             _m('A plugin to show a manual.'));
         return true;
@@ -61,7 +67,7 @@ class GuiaPlugin extends Plugin {
 
         return true;
     }
- 
+
     function onEndShowStyles($action) {
         $action->cssLink($this->path('css/guia.css'));
         return true;

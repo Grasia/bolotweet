@@ -1,9 +1,12 @@
 #!/usr/bin/env php
 <?php
-/*
- * @name createGroup.php
+
+/**
  * 
- * @author Alvaro Ortego <alvorteg@ucm.es>
+ * BoloTweet 2.0
+ *
+ * @author   Alvaro Ortego <alvorteg@ucm.es>
+ *
  */
 
 define('INSTALLDIR', realpath(dirname(__FILE__) . '/..'));

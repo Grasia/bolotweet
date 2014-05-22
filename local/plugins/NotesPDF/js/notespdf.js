@@ -1,3 +1,13 @@
+/**
+ * 
+ * BoloTweet 2.0
+ *
+ * @author   Alvaro Ortego <alvorteg@ucm.es>
+ *
+ */
+
+
+
 function changeComboTag(groupid) {
 
     var tag = $('#notes-combo-hashtag').find(":selected").text();
@@ -55,7 +65,7 @@ function changeComboGrade(groupid) {
     var grade = $('#notes-combo-grade').find(":selected").text();
 
     $('#notes-combo-user').load("../../local/plugins/NotesPDF/scripts/updateBoxUser.php", {groupid: groupid, grade: grade, tag: tag}, function() {
-       
+
         if (userid !== 'Todos') {
             $("#notes-combo-user option[value=" + userid + "]").attr("selected", "selected");
         }

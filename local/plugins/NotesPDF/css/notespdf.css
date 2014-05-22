@@ -1,5 +1,13 @@
+/**
+ * 
+ * BoloTweet 2.0
+ *
+ * @author   Alvaro Ortego <alvorteg@ucm.es>
+ *
+ */
+
 .notespdf-group-item {
-    
+
     list-style: none;
     border-style: solid;
     padding: 5px 5px 0px 5px;
@@ -10,27 +18,27 @@
 }
 
 .notespdf-group-item>p{
-    
+
     position: relative;
     bottom: 19px;
     display:inline;
-    
+
 }
 
 .notespdf-group-item>img{
-    
+
     margin-right: 11px;
 }
 
 .form_notes_groups {
-    
+
     float: right;
     top: 10px;
     position:relative;
 }
 
 .notes-error-group{
-    
+
     float:left;
     position:relative;
     top:3px;
@@ -38,13 +46,13 @@
 }
 
 .notes-error-group-text {
-    
+
     display:inline-block;
 }
 
 
 .notes-div-auto {
-    
+
     float:left;
     border-style: solid;
     border-radius: 5px;
@@ -53,11 +61,11 @@
     width: 230px;
     word-wrap: break-word;
     padding: 10px;
-    
+
 }
 
 .notes-div-manual{
-    
+
     float:right;
     border-style: solid;
     border-radius: 5px;
@@ -69,18 +77,18 @@
 }
 
 .notes-combo-manual{
-    
+
     float:right;
     width:90px;
 }
 
 .notes-manual-option {
-    
+
     display:inline-block;
 }
 
 .notes-text-auto, .notes-text-manual{
-    
+
     font-weight:bold;
     background: url("brdr_black_dot.png") repeat-x scroll left bottom transparent;
 }

@@ -1,3 +1,11 @@
+/**
+ * 
+ * BoloTweet 2.0
+ *
+ * @author   Alvaro Ortego <alvorteg@ucm.es>
+ *
+ */
+
 .pending-tasks-number{
 
     margin-left: 30px;
@@ -203,7 +211,7 @@
 }
 
 .group-task-grader{
-    
+
     float: left;
     width: 100%;
 }
@@ -248,18 +256,18 @@
 }
 
 .task-show-historical{
-    
-width: 100%;
-float: right;
-font-weight: 700;
-cursor: pointer;
+
+    width: 100%;
+    float: right;
+    font-weight: 700;
+    cursor: pointer;
 
 }
 
 .task-show-historical:hover{
-    
-text-decoration: none;
-color: black;
+
+    text-decoration: none;
+    color: black;
 
 }
 
@@ -267,15 +275,15 @@ color: black;
 
     display:inline-block;
     width: 100%;
-border-radius: 4px;
-padding-left: 7px;
-background-color: #F5F7DC;
+    border-radius: 4px;
+    padding-left: 7px;
+    background-color: #F5F7DC;
 }
 
 .show-historical{
-    
-float: right;
-padding-right: 10px;
+
+    float: right;
+    padding-right: 10px;
 }
 .historical-bold{
 
@@ -315,7 +323,7 @@ padding-right: 10px;
 }
 
 .reopen-task-button{
-    
+
     margin-right: 5px;
     cursor: pointer;
     float:right;
@@ -327,7 +335,7 @@ padding-right: 10px;
     text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.2);
     border: 1px solid #47A31C;
     border-radius: 4px;
-        -moz-border-radius: 4px;
+    -moz-border-radius: 4px;
     -webkit-border-radius: 4px;
     background: #b4e391; /* Old browsers */
     background: -moz-linear-gradient(top, #b4e391 0%, #61c419 50%, #b4e391 100%); /* FF3.6+ */
@@ -345,7 +353,7 @@ padding-right: 10px;
 }
 
 .div-historical-task{
-    
+
     float: left;
     width: 100%;
 }

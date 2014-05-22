@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * 
+ * BoloTweet 2.0
+ *
+ * @author   Alvaro Ortego <alvorteg@ucm.es>
+ *
+ */
 if (!defined('STATUSNET') && !defined('LACONICA')) {
     exit(1);
 }
@@ -94,17 +101,17 @@ class Gradesgroup extends Managed_DataObject {
 
         return $graders;
     }
-    
-    static function getGroups($graderid){
-        
+
+    static function getGroups($graderid) {
+
         $qry = 'SELECT gg.groupid'
                 . ' FROM grades_group gg'
                 . ' where gg.userid=' . $graderid;
 
-     $grGroup = new Gradesgroup();
+        $grGroup = new Gradesgroup();
 
         $grGroup->query($qry);
-        
+
         $groups = array();
 
         while ($grGroup->fetch()) {
@@ -114,22 +121,21 @@ class Gradesgroup extends Managed_DataObject {
         $grGroup->free();
 
         return $groups;
-        
     }
-    
-    static function isGrader($userid, $groupid){
-        
-         $qry = 'SELECT gg.userid'
+
+    static function isGrader($userid, $groupid) {
+
+        $qry = 'SELECT gg.userid'
                 . ' FROM grades_group gg'
                 . ' where gg.userid=' . $userid
                 . ' and gg.groupid =' . $groupid;
 
-     $grGroup = new Gradesgroup();
+        $grGroup = new Gradesgroup();
 
         $grGroup->query($qry);
-        
 
-         if ($grGroup->fetch()) {
+
+        if ($grGroup->fetch()) {
             $result = true;
         } else {
             $result = false;
@@ -137,8 +143,6 @@ class Gradesgroup extends Managed_DataObject {
 
         $grGroup->free();
         return $result;
-        
-    
     }
 
 }

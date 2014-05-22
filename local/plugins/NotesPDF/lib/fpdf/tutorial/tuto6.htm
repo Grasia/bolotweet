@@ -1,16 +1,16 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Enlaces y texto flotante</title>
-<link type="text/css" rel="stylesheet" href="../fpdf.css">
-</head>
-<body>
-<h1>Enlaces y texto flotante</h1>
-Este tutorial explica cómo incluir enlaces (internos y externos) y muestra una nueva
-manera de imprimir texto. También incluye un intérprete rudimentario de HTML.
-<div class="source">
-<pre><code>&lt;?php
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+        <title>Enlaces y texto flotante</title>
+        <link type="text/css" rel="stylesheet" href="../fpdf.css">
+    </head>
+    <body>
+        <h1>Enlaces y texto flotante</h1>
+        Este tutorial explica cómo incluir enlaces (internos y externos) y muestra una nueva
+        manera de imprimir texto. También incluye un intérprete rudimentario de HTML.
+        <div class="source">
+            <pre><code>&lt;?php
 <span class="kw">require(</span><span class="str">'fpdf.php'</span><span class="kw">);
 
 class </span>PDF <span class="kw">extends </span>FPDF
@@ -134,37 +134,37 @@ texto, como &lt;a href="http://www.fpdf.org"&gt;www.fpdf.org&lt;/a&gt;, o en una
 </span>$pdf<span class="kw">-&gt;</span>WriteHTML<span class="kw">(</span>$html<span class="kw">);
 </span>$pdf<span class="kw">-&gt;</span>Output<span class="kw">();
 </span>?&gt;</code></pre>
-</div>
-<p class='demo'><a href='tuto6.php' target='_blank' class='demo'>[Demo]</a></p>
-El nuevo método para imprimir texto es  <a href='../doc/write.htm'>Write()</a>.
-Se parece mucho a <a href='../doc/multicell.htm'>MultiCell()</a>; las diferencias son:
-<ul>
-<li>El límite de la línea está en el margen derecho y la siguiente línea
-empieza en el izquierdo</li>
-<li>La posición actual se establece al final del texto</li>
-</ul>
-Así que le permite escribir un texto, alterar el estilo de la fuente, y continuar
-en el punto exacto donde lo dejó. Sin embargo, no puede justificar el texto simultáneamente
-a derecha y a izquierda.
-<br>
-<br>
-Este método se usa en la primera página para añadir un enlace que apunta a la segunda página.
-El principio de la frase se escribe en un estilo normal, después cambiamos a subrayado y la
-terminamos. El enlace se crea con <a href='../doc/addlink.htm'>AddLink()</a>, que devuelve el identificador del enlace.
-El identificador se pasa como tercer parámetro a Write(). Una vez que la segunda página se
-ha creado, usamos <a href='../doc/setlink.htm'>SetLink()</a> para hacer que el enlace apunte al principio de la
-página actual.
-<br>
-<br>
-Deespués ponemos una imagen con un enlace en ella. Un enlace externo apunta a una URL.
-La URL se pasa como el último parámetro de <a href='../doc/image.htm'>Image()</a>.
-<br>
-<br>
-Finalmente, el margen izquierdo se modifica después de la imagen con <a href='../doc/setleftmargin.htm'>SetLeftMargin()</a> y se
-escribe texto en formato HTML. Se utiliza un intérprete HTML para esto, basado en les expresiones
-regulares. Las etiquetas reconocidas son &lt;b&gt;, &lt;i&gt;, &lt;u&gt;, &lt;a&gt; y &lt;br&gt;;
-las demás se ignoran. El intérprete también usa el método Write(). Se pone un enlace externo de la
-misma manera que uno interno (como tercer parámetro de Write()). Observe que <a href='../doc/cell.htm'>Cell()</a> también
-permite incluir enlaces.
-</body>
+        </div>
+        <p class='demo'><a href='tuto6.php' target='_blank' class='demo'>[Demo]</a></p>
+        El nuevo método para imprimir texto es  <a href='../doc/write.htm'>Write()</a>.
+        Se parece mucho a <a href='../doc/multicell.htm'>MultiCell()</a>; las diferencias son:
+        <ul>
+            <li>El límite de la línea está en el margen derecho y la siguiente línea
+                empieza en el izquierdo</li>
+            <li>La posición actual se establece al final del texto</li>
+        </ul>
+        Así que le permite escribir un texto, alterar el estilo de la fuente, y continuar
+        en el punto exacto donde lo dejó. Sin embargo, no puede justificar el texto simultáneamente
+        a derecha y a izquierda.
+        <br>
+        <br>
+        Este método se usa en la primera página para añadir un enlace que apunta a la segunda página.
+        El principio de la frase se escribe en un estilo normal, después cambiamos a subrayado y la
+        terminamos. El enlace se crea con <a href='../doc/addlink.htm'>AddLink()</a>, que devuelve el identificador del enlace.
+        El identificador se pasa como tercer parámetro a Write(). Una vez que la segunda página se
+        ha creado, usamos <a href='../doc/setlink.htm'>SetLink()</a> para hacer que el enlace apunte al principio de la
+        página actual.
+        <br>
+        <br>
+        Deespués ponemos una imagen con un enlace en ella. Un enlace externo apunta a una URL.
+        La URL se pasa como el último parámetro de <a href='../doc/image.htm'>Image()</a>.
+        <br>
+        <br>
+        Finalmente, el margen izquierdo se modifica después de la imagen con <a href='../doc/setleftmargin.htm'>SetLeftMargin()</a> y se
+        escribe texto en formato HTML. Se utiliza un intérprete HTML para esto, basado en les expresiones
+        regulares. Las etiquetas reconocidas son &lt;b&gt;, &lt;i&gt;, &lt;u&gt;, &lt;a&gt; y &lt;br&gt;;
+        las demás se ignoran. El intérprete también usa el método Write(). Se pone un enlace externo de la
+        misma manera que uno interno (como tercer parámetro de Write()). Observe que <a href='../doc/cell.htm'>Cell()</a> también
+        permite incluir enlaces.
+    </body>
 </html>

@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * 
+ * BoloTweet 2.0
+ *
+ * @author   Alvaro Ortego <alvorteg@ucm.es>
+ *
+ */
 define('STATUSNET', true);
 define('LACONICA', true); // compatibility
 define('INSTALLDIR', realpath(dirname(__FILE__) . '/../../../..'));
@@ -8,8 +15,8 @@ require_once INSTALLDIR . '/lib/common.php';
 require_once INSTALLDIR . '/local/plugins/Task/classes/Task_Grader.php';
 
 
-    $graderid = $_POST['graderid'];
-    $groupid = $_POST['groupid'];
+$graderid = $_POST['graderid'];
+$groupid = $_POST['groupid'];
 
 
 $historical = Task_Grader::getHistorical($graderid, $groupid);
@@ -41,13 +48,13 @@ foreach ($historical as $taskHistory) {
         if ($taskHistory['status'] == 1) {
             echo '<form action="' . common_local_url('taskcreate') . '" method="POST" class="ajax">';
             echo '<input type="hidden" value="' . $taskHistory[id] . '" name="cancel-task"></input>';
-            echo '<input type="submit" value="Cancelar" class="cancel-task-button title="Cancela esta tarea" onclick="updateTaskStatus('.$taskHistory[id].');"></input>';
+            echo '<input type="submit" value="Cancelar" class="cancel-task-button title="Cancela esta tarea" onclick="updateTaskStatus(' . $taskHistory[id] . ');"></input>';
             echo '</form>';
         } else {
 
             echo '<form action="' . common_local_url('taskcreate') . '" method="POST" class="ajax">';
             echo '<input type="hidden" value="' . $taskHistory[id] . '" name="reopen-task"></input>';
-            echo '<input type="submit" value="Iniciar" class="reopen-task-button" title="Reabre esta tarea" onclick="updateTaskStatus('.$taskHistory[id].');"></input>';
+            echo '<input type="submit" value="Iniciar" class="reopen-task-button" title="Reabre esta tarea" onclick="updateTaskStatus(' . $taskHistory[id] . ');"></input>';
             echo '</form>';
         }
     }

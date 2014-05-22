@@ -1,3 +1,11 @@
+/**
+ * 
+ * BoloTweet 2.0
+ *
+ * @author   Alvaro Ortego <alvorteg@ucm.es>
+ *
+ */
+
 function mostrarBox(id) {
 
     $("#div-task-" + id + ">.input_form").toggle('fade', 300);

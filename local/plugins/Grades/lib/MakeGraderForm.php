@@ -1,13 +1,14 @@
 <?php
 
-/* 
- * @name MakeGraderForm.php
+/**
  * 
- * @author Alvaro Ortego <alvorteg@ucm.es>
+ * BoloTweet 2.0
+ *
+ * @author   Alvaro Ortego <alvorteg@ucm.es>
+ *
  */
+class MakeGraderForm extends Form {
 
-class MakeGraderForm extends Form
-{
     /**
      * Profile of user to make Grader
      */
@@ -31,13 +32,12 @@ class MakeGraderForm extends Form
      * @param User_group    $group   group to block user from
      * @param array         $args    return-to args
      */
-    function __construct($out=null, $profile=null, $group=null, $args=null)
-    {
+    function __construct($out = null, $profile = null, $group = null, $args = null) {
         parent::__construct($out);
 
         $this->profile = $profile;
-        $this->group   = $group;
-        $this->args    = $args;
+        $this->group = $group;
+        $this->args = $args;
     }
 
     /**
@@ -45,8 +45,7 @@ class MakeGraderForm extends Form
      *
      * @return int ID of the form
      */
-    function id()
-    {
+    function id() {
         // This should be unique for the page.
         return 'makegrader-' . $this->profile->id;
     }
@@ -56,8 +55,7 @@ class MakeGraderForm extends Form
      *
      * @return string class of the form
      */
-    function formClass()
-    {
+    function formClass() {
         return 'form_make_grader';
     }
 
@@ -66,8 +64,7 @@ class MakeGraderForm extends Form
      *
      * @return string URL of the action
      */
-    function action()
-    {
+    function action() {
         return common_local_url('makegrader', array('nickname' => $this->group->nickname));
     }
 
@@ -76,8 +73,7 @@ class MakeGraderForm extends Form
      *
      * @return void
      */
-    function formLegend()
-    {
+    function formLegend() {
         // TRANS: Form legend for form to make a user a group grader.
         $this->out->element('legend', null, _('Hacer Grader a ese usuario.'));
     }
@@ -87,14 +83,9 @@ class MakeGraderForm extends Form
      *
      * @return void
      */
-    function formData()
-    {
-        $this->out->hidden('profileid-' . $this->profile->id,
-                           $this->profile->id,
-                           'profileid');
-        $this->out->hidden('groupid-' . $this->group->id,
-                           $this->group->id,
-                           'groupid');
+    function formData() {
+        $this->out->hidden('profileid-' . $this->profile->id, $this->profile->id, 'profileid');
+        $this->out->hidden('groupid-' . $this->group->id, $this->group->id, 'groupid');
         if ($this->args) {
             foreach ($this->args as $k => $v) {
                 $this->out->hidden('returnto-' . $k, $v);
@@ -107,15 +98,13 @@ class MakeGraderForm extends Form
      *
      * @return void
      */
-    function formActions()
-    {
+    function formActions() {
         $this->out->submit(
-          'submit',
-          // TRANS: Button text for the form that will make a user administrator.
-          _m('BUTTON','Hacer Grader'),
-          'submit',
-          null,
-          // TRANS: Submit button title.
-          _m('TOOLTIP','Hace Grader a este usuario.'));
+                'submit',
+                // TRANS: Button text for the form that will make a user administrator.
+                _m('BUTTON', 'Hacer Grader'), 'submit', null,
+                // TRANS: Submit button title.
+                _m('TOOLTIP', 'Hace Grader a este usuario.'));
     }
+
 }

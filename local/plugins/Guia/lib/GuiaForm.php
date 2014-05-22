@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * 
+ * BoloTweet 2.0
+ *
+ * @author   Alvaro Ortego <alvorteg@ucm.es>
+ *
+ */
 if (!defined('STATUSNET') && !defined('LACONICA')) {
     exit(1);
 }
@@ -21,11 +28,10 @@ require_once INSTALLDIR . '/lib/form.php';
 class GuiaForm extends Form {
 
     var $fileName = null;
-    
+
     function __construct($out = null, $fileName = null) {
         parent::__construct($out);
         $this->fileName = $fileName;
-
     }
 
     /**
@@ -45,10 +51,11 @@ class GuiaForm extends Form {
     function action() {
         return common_local_url('guiadescargar');
     }
-     
-function formData() {
+
+    function formData() {
         $this->out->hidden('filename-guide', $this->fileName, 'filename');
-}
+    }
+
     /**
      * Legend of the Form
      *

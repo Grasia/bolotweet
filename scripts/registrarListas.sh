@@ -1,4 +1,7 @@
 #!/bin/bash
+#
+#   @author Alvaro Ortego <alvorteg@ucm.es>
+#
 
 # Este script está hecho para registrar listas de usuarios
 # e insertarlos en sus respectivos grupos.

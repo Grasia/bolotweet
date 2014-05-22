@@ -1,3 +1,11 @@
+/**
+ * 
+ * BoloTweet 2.0
+ *
+ * @author   Alvaro Ortego <alvorteg@ucm.es>
+ *
+ */
+
 function editarNota(id) {
 
     $("#div-grades-hidden-" + id).attr('class', 'notice-grades');
@@ -13,34 +21,34 @@ function puntuarNota(noticeid, value) {
 
 }
 
-function mostrarPuntuacion(noticeid){
-    
-    
-    if($("#notice-" + noticeid + '>.div-with-grades-hidden').length){
-        
+function mostrarPuntuacion(noticeid) {
+
+
+    if ($("#notice-" + noticeid + '>.div-with-grades-hidden').length) {
+
         $("#notice-" + noticeid + '>.div-with-grades-hidden').attr('class', 'div-with-grades');
     }
-    
+
     else {
-             
+
         $("#notice-" + noticeid + '>.div-with-grades').attr('class', 'div-with-grades-hidden');
-        
+
     }
 }
 
-function mostrarReport(groupid){
-    
-    
-    if($("#grade-report-group-" + groupid + '>.grade-show-report').text() == 'Expandir'){
-        
-        $("#grade-report-group-" + groupid + '>.report-group-hidden').toggle('fade',300);
+function mostrarReport(groupid) {
+
+
+    if ($("#grade-report-group-" + groupid + '>.grade-show-report').text() == 'Expandir') {
+
+        $("#grade-report-group-" + groupid + '>.report-group-hidden').toggle('fade', 300);
         $("#grade-report-group-" + groupid + '>.grade-show-report').text('Ocultar');
     }
-    
+
     else {
-        
-        
-        $("#grade-report-group-" + groupid + '>.report-group-hidden').toggle('fade',300);
+
+
+        $("#grade-report-group-" + groupid + '>.report-group-hidden').toggle('fade', 300);
         $("#grade-report-group-" + groupid + '>.grade-show-report').text('Expandir');
 
     }

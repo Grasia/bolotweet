@@ -1,11 +1,12 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * 
+ * BoloTweet 2.0
+ *
+ * @author   Alvaro Ortego <alvorteg@ucm.es>
+ *
  */
-
 if (!defined('STATUSNET')) {
     exit(1);
 }
@@ -55,9 +56,9 @@ class NotesPDFPlugin extends Plugin {
 
     function onStartToolsLocalNav($action) {
         // '''common_local_url()''' gets the correct URL for the action name we provide
-        
+
         $actionName = $action->trimmed('action');
-        
+
         $user = common_current_user();
         if (!empty($user)) {
             $action->menuItem(common_local_url('notesgroups'), _m('Apuntes'), _m('Apuntes en PDF'), ($actionName === 'notesgroups' || $actionName === 'notescustomize'), 'nav_notespdf');
@@ -74,15 +75,15 @@ class NotesPDFPlugin extends Plugin {
     function onPluginVersion(&$versions) {
         $versions[] = array('name' => 'NotesPDF',
             'version' => STATUSNET_VERSION,
-            'author' => 'Alvaro Ortego Marcos',
+            'author' => 'Alvaro Ortego',
             'rawdescription' =>
             _m('A plugin to export notes in PDF'));
         return true;
     }
 
-     function onEndShowScripts($action)
-      {
-      $action->script($this->path('js/notespdf.js'));
-      return true;
-      } 
+    function onEndShowScripts($action) {
+        $action->script($this->path('js/notespdf.js'));
+        return true;
+    }
+
 }

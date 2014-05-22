@@ -1,14 +1,11 @@
 <?php
 
 /**
- * StatusNet - the distributed open-source microblogging tool
- * Copyright (C) 2011, StatusNet, Inc.
+ * 
+ * BoloTweet 2.0
  *
- * @category  Secure Registration
- * @package   StatusNet
- * @author    Alvaro Ortego
- * @copyright 2011 StatusNet, Inc.
- * @link      http://status.net/
+ * @author   Alvaro Ortego <alvorteg@ucm.es>
+ *
  */
 if (!defined('STATUSNET')) {
     // This check helps protect against security problems;
@@ -147,8 +144,8 @@ class SecureregisterAction extends Action {
                 $this->showForm(_("The reCAPTCHA wasn't entered correctly."));
             } else {
 
-                if($this->trimmed('phoneLbl')!=""){
-                return;
+                if ($this->trimmed('phoneLbl') != "") {
+                    return;
                 }
                 $nickname = $this->trimmed('nickname');
                 $email = $this->trimmed('email');

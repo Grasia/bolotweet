@@ -1,3 +1,11 @@
+/**
+ * 
+ * BoloTweet 2.0
+ *
+ * @author   Alvaro Ortego <alvorteg@ucm.es>
+ *
+ */
+
 #showstream .notice-current-grade .notice-current-grade-value {
     float: left;
     position: relative;
@@ -381,18 +389,18 @@
 }
 
 .form_make_grader input.submit{
-    
+
     background-image: url("but_birrete.png");
     background-position: 5px;
     background-repeat: no-repeat;
 }
 
 .member-list-admin ul.profiles div.entity_actions {
-    
+
     float: left;
     width: 100%;
     margin-left: 0px;
-    
+
 }
 
 .member-list-admin ul.profiles div.entity_actions li{
@@ -410,17 +418,17 @@
 
 
 .member-list-admin ul.profiles div.entity_profile{
-    
-   width: 100%;
+
+    width: 100%;
 }
 
 .member-list-admin ul.profiles > li {
-    
+
     margin-bottom: 0px;
     padding-top: 10px;
 }
 
 .member-list-admin ul.profiles > li+li {
-    
-        border-top: solid 1px #DBDBDB;
+
+    border-top: solid 1px #DBDBDB;
 }

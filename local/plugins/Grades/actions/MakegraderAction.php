@@ -1,11 +1,12 @@
 <?php
 
-/* 
- * @name GradeMakeGrader.php
+/**
  * 
- * @author Alvaro Ortego <alvorteg@ucm.es>
+ * BoloTweet 2.0
+ *
+ * @author   Alvaro Ortego <alvorteg@ucm.es>
+ *
  */
-
 if (!defined('STATUSNET') && !defined('LACONICA')) {
     exit(1);
 }
@@ -14,16 +15,12 @@ if (!defined('STATUSNET') && !defined('LACONICA')) {
  * Make another user an grader of a group
  *
  */
+class MakegraderAction extends RedirectingAction {
 
-class MakegraderAction extends RedirectingAction
-{
     var $profile = null;
     var $group = null;
 
- 
-
-    function prepare($args)
-    {
+    function prepare($args) {
         parent::prepare($args);
         if (!common_logged_in()) {
             $this->clientError(_('Not logged in.'));
@@ -51,15 +48,12 @@ class MakegraderAction extends RedirectingAction
         }
         $user = common_current_user();
         if (!$user->isAdmin($this->group) &&
-            !$user->hasRole('grader')) {
+                !$user->hasRole('grader')) {
             $this->clientError(_('Only an admin and grader can make another user a grader.'), 401);
             return false;
         }
         if ($this->profile->hasRole('grader')) {
-            $this->clientError(sprintf(_('%1$s is already a grader for group "%2$s".'),
-                                       $this->profile->getBestName(),
-                                       $this->group->getBestName()),
-                               401);
+            $this->clientError(sprintf(_('%1$s is already a grader for group "%2$s".'), $this->profile->getBestName(), $this->group->getBestName()), 401);
             return false;
         }
         return true;
@@ -72,9 +66,7 @@ class MakegraderAction extends RedirectingAction
      *
      * @return void
      */
-
-    function handle($args)
-    {
+    function handle($args) {
         parent::handle($args);
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $this->makeGrader();
@@ -86,29 +78,23 @@ class MakegraderAction extends RedirectingAction
      *
      * @return void
      */
+    function makeGrader() {
 
-    function makeGrader()
-    {
-        
-        if (!$this->profile->hasRole('grader')){
-        $this->profile->grantRole('grader');
+        if (!$this->profile->hasRole('grader')) {
+            $this->profile->grantRole('grader');
         }
-        
-        if (!$this->profile->hasRole('deleter')){
-        $this->profile->grantRole('deleter');
+
+        if (!$this->profile->hasRole('deleter')) {
+            $this->profile->grantRole('deleter');
         }
-        
+
         $result = Gradesgroup::vincularGrupo($this->profile->id, $this->group->id);
 
-        if(!$result){
-            
-            $this->clientError(sprintf(_('Ha habido un error al vincular a %1$s con el grupo "%2$s".'),
-                                       $this->profile->getBestName(),
-                                       $this->group->getBestName()),
-                               401);
-            
+        if (!$result) {
+
+            $this->clientError(sprintf(_('Ha habido un error al vincular a %1$s con el grupo "%2$s".'), $this->profile->getBestName(), $this->group->getBestName()), 401);
         }
-        
+
         $this->returnToPrevious();
     }
 
@@ -118,10 +104,8 @@ class MakegraderAction extends RedirectingAction
      * 
      * @return string URL
      */
-    function defaultReturnTo()
-    {
-        return common_local_url('groupmembers',
-                                array('nickname' => $this->group->nickname));
+    function defaultReturnTo() {
+        return common_local_url('groupmembers', array('nickname' => $this->group->nickname));
     }
 
 }

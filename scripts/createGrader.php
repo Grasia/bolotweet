@@ -1,5 +1,14 @@
 #!/usr/bin/env php
 <?php
+
+/**
+ * 
+ * BoloTweet 2.0
+ *
+ * @author   Alvaro Ortego <alvorteg@ucm.es>
+ *
+ */
+
 define('INSTALLDIR', realpath(dirname(__FILE__) . '/..'));
 
 $shortoptions = 'i:n:g:G:d';

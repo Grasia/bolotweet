@@ -1,49 +1,49 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * 
+ * BoloTweet 2.0
+ *
+ * @author   Alvaro Ortego <alvorteg@ucm.es>
+ *
  */
-
 require_once INSTALLDIR . '/local/plugins/NotesPDF/lib/fpdf/fpdf.php';
 
 class GenerarPDF extends FPDF {
 
-   var $modo;
-   
+    var $modo;
+
     function __construct($modo = '') {
         parent::FPDF();
 
         $this->modo = $modo;
-
     }
-    
-     static function contentAuto($idGroup, $notices, $modo) {
+
+    static function contentAuto($idGroup, $notices, $modo) {
 
         $pdf = new GenerarPDF($modo);
         $pdf->Portada($idGroup);
         $pdf->SetFont('Times', '', 12);
 
         $i = 1;
-        
+
         $authorAndNotice = array();
         $authors = array();
-        
+
         foreach ($notices as $notice) {
             $pdf->Ln(10);
             $filterContent = $pdf->filtrarContenido($notice->content);
             $filterContent = $filterContent . " [" . $i . "]";
             $pdf->Write(5, $filterContent);
-            
+
             $authorAndNotice[$i] = $notice->getProfile()->getBestName();
             $authors[] = $notice->getProfile()->getBestName();
             $i = $i + 1;
         }
-      
-        
+
+
         $pdf->Fuentes($authorAndNotice, array_unique($authors));
-        
+
         $pdf->Output('apuntes.pdf', 'D');
     }
 
@@ -54,24 +54,24 @@ class GenerarPDF extends FPDF {
         $pdf->SetFont('Times', '', 12);
 
         $i = 1;
-        
+
         $authorAndNotice = array();
         $authors = array();
-        
+
         foreach ($notices as $notice) {
             $pdf->Ln(10);
             $filterContent = $pdf->filtrarContenido($notice->content);
             $filterContent = $filterContent . " [" . $i . "]";
             $pdf->Write(5, $filterContent);
-            
+
             $authorAndNotice[$i] = $notice->getProfile()->getBestName();
             $authors[] = $notice->getProfile()->getBestName();
             $i = $i + 1;
         }
-      
-        
+
+
         $pdf->Fuentes($authorAndNotice, array_unique($authors));
-        
+
         $pdf->Output('apuntes.pdf', 'D');
     }
 
@@ -84,12 +84,12 @@ class GenerarPDF extends FPDF {
         // Movernos a la derecha
         $this->Cell(80);
         // Título
-        $this->Cell(0, 0, 'Apuntes '. $this->modo, 0, 1, 'R');
+        $this->Cell(0, 0, 'Apuntes ' . $this->modo, 0, 1, 'R');
         $this->Ln(10);
 
         $this->SetFont('Arial', 'I', 12);
         $this->SetTextColor(199, 199, 199);
-        $this->MultiCell(0,6, 'Este documento es únicamente una recopilación de ideas. En ningún caso sustituye al material proporcionado por el profesor.',0);
+        $this->MultiCell(0, 6, 'Este documento es únicamente una recopilación de ideas. En ningún caso sustituye al material proporcionado por el profesor.', 0);
         $this->Ln(5);
     }
 
@@ -102,22 +102,20 @@ class GenerarPDF extends FPDF {
         // Número de página
         $this->Cell(0, 10, 'Page ' . $this->PageNo(), 0, 0, 'C');
     }
-    
+
     function Portada($idGroup) {
-        
+
         $groupName = NotesPDF::getGroupByID($idGroup)->getBestName();
-        
+
         $this->AddPage();
         $this->Ln(7);
         $this->SetFont('Arial', 'I', 12);
-        setlocale(LC_ALL,"es_ES");
+        setlocale(LC_ALL, "es_ES");
         $this->Cell(0, 0, strtoupper($groupName) . ' - ' . strftime("%d de %B del %Y"), 0, 0, 'R');
         $this->Ln(10);
         $this->SetFont('Arial', 'B', 14);
-        $this->Cell(0,7, 'Ideas Seleccionadas',1,0,'C');
+        $this->Cell(0, 7, 'Ideas Seleccionadas', 1, 0, 'C');
         $this->Ln(10);
-        
-        
     }
 
     function filtrarContenido($content) {
@@ -125,34 +123,32 @@ class GenerarPDF extends FPDF {
         return ltrim(preg_replace('/(?:^|\s)!\w{1,64}/', '', $content));
     }
 
-     function Fuentes($authorAndNotice, $authors) {
-         
-         
-         $this->addPage();
-         $this->SetFont('Arial', 'B', 15);
-         
-         $this->Ln(10);
-        
-         $this->Cell(0, 7, 'Autores', 1, 0,'C');
-         $this->Ln(5);
-         $this->SetFont('Times', '', 12);
-          
+    function Fuentes($authorAndNotice, $authors) {
+
+
+        $this->addPage();
+        $this->SetFont('Arial', 'B', 15);
+
+        $this->Ln(10);
+
+        $this->Cell(0, 7, 'Autores', 1, 0, 'C');
+        $this->Ln(5);
+        $this->SetFont('Times', '', 12);
+
         foreach ($authors as $author) {
-            
+
             $noticeIds = array_keys($authorAndNotice, $author);
-            
+
             $linea = $author . " ->";
-            
-            foreach($noticeIds as $id){
-                
-                $linea .= " " . "[".$id."] ";
+
+            foreach ($noticeIds as $id) {
+
+                $linea .= " " . "[" . $id . "] ";
             }
-            
+
             $this->Ln(10);
             $this->Write(5, $linea);
-
         }
-        
-     }    
-             
+    }
+
 }

@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * 
+ * BoloTweet 2.0
+ *
+ * @author   Alvaro Ortego <alvorteg@ucm.es>
+ *
+ */
 if (!defined('STATUSNET')) {
     exit(1);
 }
@@ -54,7 +61,7 @@ class GuiadescargarAction extends Action {
         $file = basename($this->trimmed('filename'));
 
         $url = common_path() . 'local/plugins/Guia/files/';
-        $dir = substr($_SERVER['SCRIPT_FILENAME'],0,-9) . 'local/plugins/Guia/files/';
+        $dir = substr($_SERVER['SCRIPT_FILENAME'], 0, -9) . 'local/plugins/Guia/files/';
 
         $pathURL = $url . $file;
         $pathDIR = $dir . $file;
