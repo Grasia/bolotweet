@@ -6798,8 +6798,7 @@ msgstr ""
 #, php-format
 msgid "All %1$s content and data are available under the %2$s license."
 msgstr ""
-"Todo el contenido%1$s y la información están disponibles bajo la licencia 2%"
-"$s."
+"Todo el contenido %1$s y la información están disponibles bajo la licencia %2$s."
 
 #. TRANS: Pagination message to go to a page displaying information more in the
 #. TRANS: present than the currently displayed information.

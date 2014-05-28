@@ -132,7 +132,7 @@ class GradereportAction extends Action {
                 }
             }
 
-            $this->elementStart('div', array('id' => 'grade-report-group-' . $group->id));
+            $this->elementStart('div', array('id' => 'grade-report-group-' . $group->id, 'class' => 'div-group-report'));
             $this->elementStart('h3', array('class' => 'grade-report-group', 'title' => $group->getBestName()));
             $this->element('a', array('class' => 'grade-report-group-link', 'href' =>
                 common_root_url() . 'group/' . $group->nickname), $group->getBestName());
@@ -195,7 +195,7 @@ class GradereportAction extends Action {
                 }
             }
 
-            $this->elementStart('div', array('id' => 'grade-report-group-' . $group->id));
+            $this->elementStart('div', array('id' => 'grade-report-group-' . $group->id, 'class' => 'div-group-report'));
             $this->elementStart('h3', array('class' => 'grade-report-group', 'title' => $group->getBestName()));
             $this->element('a', array('class' => 'grade-report-group-link', 'href' =>
                 common_root_url() . 'group/' . $group->nickname), $group->getBestName());

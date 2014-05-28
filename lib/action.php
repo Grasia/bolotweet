@@ -1066,8 +1066,7 @@ class Action extends HTMLOutputter // lawsuit
                 $this->element('img', array('id' => 'license_cc',
                                             'src' => $url,
                                             'alt' => common_config('license', 'title'),
-                                            'width' => '80',
-                                            'height' => '15'));
+                                            'width' => '90'));
                 $this->text(' ');
                 // TRANS: license message in footer.
                 // TRANS: %1$s is the site name, %2$s is a link to the license URL, with a licence name set in configuration.
@@ -1078,7 +1077,7 @@ class Action extends HTMLOutputter // lawsuit
                         htmlspecialchars(common_config('license', 'title')) .
                         "</a>";
                 $this->raw(sprintf(htmlspecialchars($notice),
-                                   htmlspecialchars(common_config('site', 'name')),
+                                   '',
                                    $link));
                 $this->elementEnd('p');
                 break;

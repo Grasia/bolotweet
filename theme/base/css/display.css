@@ -1333,6 +1333,10 @@ vertical-align:top;
 margin-right:4px;
 }
 
+#license_cc {
+    margin-right: 10px;
+}
+
 form ul li {
     list-style-type:none;
     margin:0 0 18px 0;
@@ -2593,3 +2597,4 @@ margin-bottom:18px;
 }
 
 }/*end of @media print*/
+
