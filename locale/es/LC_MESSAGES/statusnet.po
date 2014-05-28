@@ -8501,7 +8501,7 @@ msgstr "Convertir al usuario en administrador del grupo"
 #. TRANS: Button text for the form that will make a user administrator.
 msgctxt "BUTTON"
 msgid "Make Admin"
-msgstr "Convertir en administrador"
+msgstr "Hacer Admin"
 
 #. TRANS: Submit button title.
 msgctxt "TOOLTIP"
@@ -8957,12 +8957,12 @@ msgstr "Desconocido"
 #. TRANS: Plugin admin panel controls
 msgctxt "plugin"
 msgid "Disable"
-msgstr "Deshabilitado"
+msgstr "Deshabilitar"
 
 #. TRANS: Plugin admin panel controls
 msgctxt "plugin"
 msgid "Enable"
-msgstr "Habilitado"
+msgstr "Habilitar"
 
 #. TRANS: Plugin description for a disabled plugin.
 msgctxt "plugin-description"
