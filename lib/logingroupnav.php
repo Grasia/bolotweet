@@ -74,7 +74,7 @@ class LoginGroupNav extends Menu
                                         // TRANS: Title for menu item for registering with the StatusNet site.
                                         _('Sign up for a new account'),
                                         // If plugin SecureRegistration is not active, change secureregister -> register.
-                                        $action_name === 'secureregister'); 
+                                        ($action_name === 'register' || $action_name === 'secureregister')); 
             }
 
             Event::handle('EndLoginGroupNav', array($this->action));
