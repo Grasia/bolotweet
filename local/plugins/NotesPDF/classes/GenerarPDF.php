@@ -19,35 +19,7 @@ class GenerarPDF extends FPDF {
         $this->modo = $modo;
     }
 
-    static function contentAuto($idGroup, $notices, $modo) {
-
-        $pdf = new GenerarPDF($modo);
-        $pdf->Portada($idGroup);
-        $pdf->SetFont('Times', '', 12);
-
-        $i = 1;
-
-        $authorAndNotice = array();
-        $authors = array();
-
-        foreach ($notices as $notice) {
-            $pdf->Ln(10);
-            $filterContent = $pdf->filtrarContenido($notice->content);
-            $filterContent = $filterContent . " [" . $i . "]";
-            $pdf->Write(5, $filterContent);
-
-            $authorAndNotice[$i] = $notice->getProfile()->getBestName();
-            $authors[] = $notice->getProfile()->getBestName();
-            $i = $i + 1;
-        }
-
-
-        $pdf->Fuentes($authorAndNotice, array_unique($authors));
-
-        $pdf->Output('apuntes.pdf', 'D');
-    }
-
-    static function contentCustom($idGroup, $notices, $modo) {
+    static function content($idGroup, $notices, $modo) {
 
         $pdf = new GenerarPDF($modo);
         $pdf->Portada($idGroup);

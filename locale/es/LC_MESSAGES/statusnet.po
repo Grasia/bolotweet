@@ -1989,7 +1989,7 @@ msgstr "Inicio"
 
 msgctxt "MENU"
 msgid "Docs"
-msgstr "Documentación"
+msgstr "Docs"
 
 #. TRANS: Secondary navigation menu item leading to help on StatusNet.
 msgctxt "MENU"
@@ -4662,8 +4662,6 @@ msgstr ""
 "este momento, puede que quieras...\n"
 "\n"
 "* Ir a [tu perfil](%2$s) y publicar tu primer mensaje.\n"
-"* Añadir una [dirección Jabber/GTalk](%%%%action.imsettings%%%%) para poder "
-"enviar mensajes a través de mensajería instantanea.\n"
 "* [Buscar personas](%%%%action.peoplesearch%%%%) que conozcas o que "
 "compartan tus intereses.  \n"
 "* Actualizar tu [configuración de perfil](%%%%action.profilesettings%%%%) "

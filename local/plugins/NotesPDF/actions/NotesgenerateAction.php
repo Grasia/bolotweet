@@ -95,7 +95,7 @@ class NotesgenerateAction extends Action {
 
             $notices = Notice::multiGet('id', $groupids)->fetchAll();
 
-            GenerarPDF::contentAuto($idGroup, $notices, 'Automáticos');
+            GenerarPDF::content($idGroup, $notices, 'Automáticos');
         } else if (($this->trimmed('submit-custom') != null)) {
 
 
@@ -107,7 +107,7 @@ class NotesgenerateAction extends Action {
 
             $notices = Notice::multiGet('id', $noticeIds)->fetchAll();
 
-            GenerarPDF::contentCustom($idGroup, $notices, 'Personalizados');
+            GenerarPDF::content($idGroup, $notices, 'Personalizados');
         } else {
 
             $this->showForm('Error al generar los apuntes. Inténtelo de nuevo en unos minutos.');

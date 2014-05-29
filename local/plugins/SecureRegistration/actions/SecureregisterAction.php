@@ -82,7 +82,7 @@ class SecureregisterAction extends Action {
             return _('Registration successful');
         } else {
             // TRANS: Title for registration page.
-            return _m('TITLE', 'Register');
+            return _('Registrarse');
         }
     }
 
@@ -141,7 +141,7 @@ class SecureregisterAction extends Action {
 
             if (!$resp->is_valid) {
                 // What happens when the CAPTCHA was entered incorrectly
-                $this->showForm(_("The reCAPTCHA wasn't entered correctly."));
+                $this->showForm(_("El reCAPTCHA no se ha introducido correctamente."));
             } else {
 
                 if ($this->trimmed('phoneLbl') != "") {
@@ -386,32 +386,32 @@ class SecureregisterAction extends Action {
         if (Event::handle('StartRegistrationFormData', array($this))) {
             $this->elementStart('li');
             // TRANS: Field label on account registration page.
-            $this->input('nickname', _('Nickname *'), $this->trimmed('nickname'),
+            $this->input('nickname', _('Nickname') . ' *', $this->trimmed('nickname'),
                     // TRANS: Field title on account registration page.
                     _('1-64 lowercase letters or numbers, no punctuation or spaces.'));
             $this->elementEnd('li');
             $this->elementStart('li');
             // TRANS: Field label on account registration page.
-            $this->password('password', _('Password *'),
+            $this->password('password', _('Password') . ' *',
                     // TRANS: Field title on account registration page.
                     _('6 or more characters.'));
             $this->elementEnd('li');
             $this->elementStart('li');
             // TRANS: Field label on account registration page. In this field the password has to be entered a second time.
-            $this->password('confirm', _m('PASSWORD', 'Confirm *'),
+            $this->password('confirm', _('Confirm') . ' *',
                     // TRANS: Field title on account registration page.
                     _('Same as password above.'));
             $this->elementEnd('li');
             $this->elementStart('li');
             if ($this->invite && $this->invite->address_type == 'email') {
                 // TRANS: Field label on account registration page.
-                $this->input('email', _m('LABEL', 'Email *'), $this->invite->address,
+                $this->input('email', _('Email') . ' *', $this->invite->address,
                         // TRANS: Field title on account registration page.
                         _('Used only for updates, announcements, ' .
                                 'and password recovery.'));
             } else {
                 // TRANS: Field label on account registration page.
-                $this->input('email', _m('LABEL', 'Email *'), $this->trimmed('email'),
+                $this->input('email', _('Email') . ' *', $this->trimmed('email'),
                         // TRANS: Field title on account registration page.
                         _('Used only for updates, announcements, ' .
                                 'and password recovery.'));
@@ -455,7 +455,7 @@ class SecureregisterAction extends Action {
         $this->elementEnd('ul');
 
         // TRANS: Button text to register a user on account registration page.
-        $this->submit('submit', _m('BUTTON', 'Register'));
+        $this->submit('submit', _('Registrarse'));
         $this->elementEnd('fieldset');
         $this->elementEnd('form');
     }
