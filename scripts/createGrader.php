@@ -1,6 +1,5 @@
 #!/usr/bin/env php
 <?php
-
 /**
  * 
  * BoloTweet 2.0
@@ -8,7 +7,6 @@
  * @author   Alvaro Ortego <alvorteg@ucm.es>
  *
  */
-
 define('INSTALLDIR', realpath(dirname(__FILE__) . '/..'));
 
 $shortoptions = 'i:n:g:G:d';
@@ -121,8 +119,19 @@ if (have_option('d', 'delete')) {
         }
 
         print "Vinculando usuario '$profile->nickname' con Grupo '$lgroup->nickname' ($lgroup->group_id)...";
-        Gradesgroup::vincularGrupo($profile->id, $lgroup->group_id);
-        print "OK\n";
+
+        $group = User_group::staticGet('id', $lgroup->group_id);
+
+        if (!$profile->isMember($group)) {
+            $profile->joinGroup($group, true);
+        }
+
+        if (!Gradesgroup::isGrader($profile->id, $lgroup->group_id)) {
+            Gradesgroup::vincularGrupo($profile->id, $lgroup->group_id);
+            print "OK\n";
+        } else {
+            print "Fallo. Ya estaba vinculado como profesor al grupo.\n";
+        }
     } catch (Exception $e) {
         print "FAIL\n";
         print $e->getMessage();

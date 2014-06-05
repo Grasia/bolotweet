@@ -117,7 +117,6 @@ class GradeshowuserAction extends Action {
     }
 
     function showUserNotices() {
-        $user = common_current_user();
 
         if ($this->error) {
             $this->elementStart('p');
@@ -136,9 +135,13 @@ class GradeshowuserAction extends Action {
     }
 
     function showSections() {
+        $user = common_current_user();
+
         parent::showSections();
 
-        $this->showStatistics();
+        if ($user->hasRole('grader')) {
+            $this->showStatistics();
+        }
     }
 
     function showStatistics() {
