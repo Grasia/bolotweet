@@ -56,7 +56,7 @@ class GradesPlugin extends Plugin {
     function onPluginVersion(&$versions) {
         $versions[] = array('name' => 'Grade',
             'version' => STATUSNET_VERSION,
-            'author' => 'Alvaro Ortego',
+            'author' => 'Alvaro Ortego', 'Jorge Gomez',
             'rawdescription' =>
             _m('A plugin to grade notices'));
         return true;
