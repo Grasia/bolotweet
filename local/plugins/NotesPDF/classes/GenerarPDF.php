@@ -36,8 +36,8 @@ class GenerarPDF extends FPDF {
             $filterContent = $filterContent . " [" . $i . "]";
             $pdf->Write(5, $filterContent);
 
-            $authorAndNotice[$i] = $notice->getProfile()->getBestName();
-            $authors[] = $notice->getProfile()->getBestName();
+            $authorAndNotice[$i] = strtoupper($notice->getProfile()->getBestName());
+            $authors[] = strtoupper($notice->getProfile()->getBestName());
             $i = $i + 1;
         }
 

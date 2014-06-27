@@ -546,7 +546,7 @@ class FPDF {
     }
 
     function Cell($w, $h = 0, $txt = '', $border = 0, $ln = 0, $align = '', $fill = false, $link = '') {
-        $txt = iconv("UTF-8", "ISO-8859-1", $txt);
+        $txt = iconv("UTF-8", "ISO-8859-1//TRANSLIT", $txt);
 
         // Output a cell
         $k = $this->k;
