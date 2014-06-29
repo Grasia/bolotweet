@@ -29,8 +29,33 @@ class GenerarPDF extends FPDF {
 
         $authorAndNotice = array();
         $authors = array();
-
+        $days = array();
+        
+        $date = '';
+        
         foreach ($notices as $notice) {
+            
+            $dateTmp = substr($notice->created,0,10);
+            if($dateTmp != $date){
+                
+                $date = $dateTmp;
+                $pdf->Ln(10);
+                
+                $pdf->SetFont('Arial', 'BU', 12);
+                // Escribimos la fecha
+                $pdf->Write(5, $date);
+                $pdf->Ln(5);
+                
+                $tags = NotesPDF::getTopTagsInADay($idGroup, $dateTmp);
+                //Escribimos los tags
+                $pdf->SetFont('Arial', 'I', 12);
+                // Escribimos la fecha
+                $pdf->Write(5, 'Top tags:  ' . implode(', ',$tags));
+                $pdf->Ln(5);
+                
+                $pdf->SetFont('Times', '', 12);
+                
+            }
             $pdf->Ln(10);
             $filterContent = $pdf->filtrarContenido($notice->content);
             $filterContent = $filterContent . " [" . $i . "]";

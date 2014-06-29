@@ -211,6 +211,40 @@ class NotesPDF extends Memcached_DataObject {
         return $noticesids;
     }
 
+    static function getTopTagsInADay($idGroup, $day) {
+
+        $notes = new NotesPDF();
+
+        $dateTmp = date_create_from_format('Y-m-d', $day);
+        $reverseDate = date_format($dateTmp, 'd-m-Y');
+
+
+        $qry = 'select distinct(nt.tag) as tag ' .
+                'from notice_tag nt, group_inbox gi ' .
+                'where nt.notice_id = gi.notice_id ' .
+                'and gi.group_id = ' . $idGroup . ' ' .
+                'and date(nt.created) = \'' . $day . '\' ' .
+                'and nt.tag <> \'' . $day . '\' ' .
+                'and nt.tag <> \'' . $reverseDate . '\' ' .
+                'group by nt.tag ' .
+                'order by count(nt.tag) desc ' .
+                'limit 3';
+
+        $notes->query($qry); // all select fields will
+// be written to fields of the Grade object. It is required that
+// select fields are named after the Grade fields.
+
+        $topTags = array();
+
+        while ($notes->fetch()) {
+            $topTags[] = $notes->tag;
+        }
+
+        $notes->free();
+
+        return $topTags;
+    }
+
     static function getNoticesInModeCustom($fields) {
 
         extract($fields);
