@@ -99,7 +99,7 @@ fi;
 
 # Creamos la nueva database.
 printf "Creando database nueva..."
-mysqladmin -u "uadminbtdb" --password="btv2db!" create bolotweetdb
+mysqladmin -u "uadminbtdb" --password create bolotweetdb
 
 if [ $? -eq 0 ]; then
 printf "Listo!\n"
@@ -111,7 +111,7 @@ fi;
 
 # Restauramos el BackUp de la BBDD
 printf "Restaurando Backup de la Base de Datos...\n"
-mysql -u uadminbtdb -p bolotweetdb < $nameSql
+mysql -u uadminbtdb -p < $nameSql
 
 if [ $? -eq 0 ]; then
 printf "Listo!\n"
