@@ -1,11 +1,22 @@
-Bolotweet is a modified install of STATUS.NET with plugins to enable professors to score, report, and create scheduled micro-annotation exercises. The goal of Bolotweet is to achieve a low effort continuous evaluation system. Bolotweet is regularly 
+Bolotweet is a modified install of STATUS.NET with plugins to enable professors to score, report, and create scheduled micro-annotation exercises. The goal of Bolotweet is to achieve a low effort continuous evaluation system. Bolotweet is regularly used in some subjects in the Facultad de Informática of the Universidad Complutense de Madrid.
+
+The work started with support from the Universidad Complutense as a PIMCD (Proyecto de Innovación y Mejora de la Calidad Docente, or Innovation and Enhancement of the Teaching Quality) within three years. The last year, a student grant was used to advance the project and create new plugins and improve the user interface of the prototype system. The modification consists in several plugins incorporated in a 2013 version of status net. The description of the original plugins and the new versions are described in 
+
+http://eprints.ucm.es/30200/1/MemoriaFinal.pdf
+
+This repository has been built using the pre-deployment version of STATUS.NET. Its install procedure should be the same as with STATUS.NET.
+
+STATUS.NET exists no more and it is GNU Social. It is within the following repository. Future versions of this software will integrate with the bleeding edge version of this tool:
+
+https://git.gnu.io/gnu/gnu-social
 
 #Credits
 
-Head of the project: Jorge J. Gomez Sanz (jjgomez@ucm.es)
-Developers: Álvaro Ortego (ex-alumni,  alvorteg@ucm.es), J. Gomez Sanz (jjgomez@ucm.es)
-Involved professors in the evaluation of the system: Juan Pavón (jpavon@ucm.es), Carlos Cervigón (ccervigon@fdi.ucm.es), Jorge J. Gomez Sanz (jjgomez@ucm.es)
+The project is a joint effort of professors and students to bring Bolonia principles into daily teching activities. The participants of the project are:
 
+- Head of the project: Jorge J. Gomez Sanz (jjgomez@ucm.es)
+- Developers: Álvaro Ortego (ex-alumni,  alvorteg@ucm.es), Jorge J. Gomez Sanz (jjgomez@ucm.es)
+- Involved professors in the evaluation of the system: Juan Pavón (jpavon@ucm.es), Carlos Cervigón (ccervigon@fdi.ucm.es), Jorge J. Gomez Sanz (jjgomez@ucm.es)
 
 
 #Specific instructions for Status.NET install
